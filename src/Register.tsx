@@ -21,7 +21,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
 
   let handleRegister = () => {
-    fetch("http://localhost:8080/register", {
+    fetch("http://localhost:8080/auth/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

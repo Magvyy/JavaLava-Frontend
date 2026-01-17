@@ -26,7 +26,7 @@ export default function Login() {
   }
 
   let handleLogin = () => {
-    fetch("http://localhost:8080/login", {
+    fetch("http://localhost:8080/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -40,7 +40,12 @@ export default function Login() {
       if (!response.ok) {
         // Tell user through some state in the card
       } else {
-        window.location.href = "/";
+        response.text().then(token =>  {
+          localStorage.setItem("jwt", token); // Turn into cookie instead
+          window.location.href = "/";
+        }).catch(e => {
+          console.log(e);
+        })
       }
     }).catch(e => {
       console.log(e);
