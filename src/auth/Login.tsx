@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import './Register.css'
+import { use, useState } from 'react'
+import './Login.css'
 import {
   Card,
   CardAction,
@@ -16,12 +16,22 @@ import { Button } from "@/components/ui/button"
 
 
 
-export default function Register() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+export default function Login() {
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  
 
-  let handleRegister = () => {
-    fetch("http://localhost:8080/auth/register", {
+  let redirectToRegister = () => {
+    window.location.href = "/register";
+  }
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    handleLogin();
+  }
+
+  const handleLogin = () => {
+    fetch("http://localhost:8080/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -33,9 +43,23 @@ export default function Register() {
       })
     }).then(response => {
       if (!response.ok) {
-        // Tell user through some state in the card
+        response.json().then(error => {
+          let errorBox = document.getElementById("error-box");
+          if (errorBox) {
+            errorBox.innerHTML = error.message;
+            errorBox.classList.remove("hidden");
+            errorBox.classList.add("error-box");
+          }
+        }).catch(e => {
+          console.log(e);
+        })
       } else {
-        window.location.href = "/";
+        response.json().then(token =>  {
+          localStorage.setItem("jwt", token.jwt); // Turn into cookie instead
+          window.location.href = "/";
+        }).catch(e => {
+          console.log(e);
+        })
       }
     }).catch(e => {
       console.log(e);
@@ -45,10 +69,15 @@ export default function Register() {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
-        <CardTitle>Register</CardTitle>
+        <div id="login-card-header">
+          <CardTitle id="login-card-title">Login</CardTitle>
+          <CardAction>
+            <Button variant="link" onClick={redirectToRegister}>Sign Up</Button>
+          </CardAction>
+        </div>
       </CardHeader>
       <CardContent>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-6">
             <div className="grid gap-2">
               <Label htmlFor="user_name">Username</Label>
@@ -76,12 +105,14 @@ export default function Register() {
               />
             </div>
           </div>
+          <button type="submit" style={{display: "none"}}/>
         </form>
       </CardContent>
       <CardFooter className="flex-col gap-2">
-        <Button onClick={handleRegister} className="w-full">
-          Register
+        <Button onClick={handleLogin} className="w-full">
+          Login
         </Button>
+        <p id="error-box" className="hidden"></p>
       </CardFooter>
     </Card>
   )

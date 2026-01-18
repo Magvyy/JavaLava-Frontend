@@ -9,6 +9,21 @@
   gap: 50px;
 }
 
+.error-box {
+  color: #c51244;
+  background-color: #f8d7da;
+  border: 1px solid #c51244;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  display: block;
+}
+
+.hidden {
+  display: none;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

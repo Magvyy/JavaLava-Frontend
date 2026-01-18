@@ -2,8 +2,8 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import './App.css'
 
 import Home from "./Home"
-import Login from "./Login"
-import Register from './Register';
+import Login from "./auth/Login"
+import Register from './auth/Register';
 import Secret from "./Secret"
 
 
