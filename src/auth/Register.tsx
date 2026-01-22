@@ -2,9 +2,7 @@ import { useState } from 'react'
 import './Register.css'
 import {
   Card,
-  CardAction,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -13,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-
+import { APICall } from "@/js/APICalls.js";
 
 
 export default function Register() {
@@ -26,40 +24,19 @@ export default function Register() {
   }
 
   const handleRegister = () => {
-    fetch("http://localhost:8080/auth/register", {
-      method: "POST",
-      headers: {
+    APICall(
+      "/auth/register",
+      "POST",
+      {
         "Content-Type": "application/json",
         "Accept": "application/json"
       },
-      body: JSON.stringify({
+      JSON.stringify({
         "user_name": username,
         "password": password
-      })
-    }).then(response => {
-      if (!response.ok) {
-        console.log(response);
-        response.json().then(error => {
-          let errorBox = document.getElementById("error-box");
-          if (errorBox) {
-            errorBox.innerHTML = error.message;
-            errorBox.classList.remove("hidden");
-            errorBox.classList.add("error-box");
-          }
-        }).catch(e => {
-          console.log(e);
-        })
-      } else {
-        response.json().then(token =>  {
-          localStorage.setItem("jwt", token.jwt); // Turn into cookie instead
-          window.location.href = "/";
-        }).catch(e => {
-          console.log(e);
-        })
-      }
-    }).catch(e => {
-      console.log(e);
-    })
+      }),
+      "/"
+    );
   }
 
   return (

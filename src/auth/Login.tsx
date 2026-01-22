@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
+import { APICall } from "@/js/APICalls.js";
 
 
 
@@ -31,50 +32,31 @@ export default function Login() {
   }
 
   const handleLogin = () => {
-    fetch("http://localhost:8080/auth/login", {
-      method: "POST",
-      headers: {
+    APICall(
+      "/auth/login",
+      "POST",
+      {
         "Content-Type": "application/json",
         "Accept": "application/json"
       },
-      body: JSON.stringify({
+      JSON.stringify({
         "user_name": username,
         "password": password
-      })
-    }).then(response => {
-      if (!response.ok) {
-        response.json().then(error => {
-          let errorBox = document.getElementById("error-box");
-          if (errorBox) {
-            errorBox.innerHTML = error.message;
-            errorBox.classList.remove("hidden");
-            errorBox.classList.add("error-box");
-          }
-        }).catch(e => {
-          console.log(e);
-        })
-      } else {
-        response.json().then(token =>  {
-          localStorage.setItem("jwt", token.jwt); // Turn into cookie instead
-          window.location.href = "/";
-        }).catch(e => {
-          console.log(e);
-        })
-      }
-    }).catch(e => {
-      console.log(e);
-    })
+      }),
+      "/"
+    );
   }
 
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
-        <div id="login-card-header">
+        <CardTitle id="login-card-title">Login</CardTitle>
+        {/* <div id="login-card-header">
           <CardTitle id="login-card-title">Login</CardTitle>
           <CardAction>
             <Button variant="link" onClick={redirectToRegister}>Sign Up</Button>
           </CardAction>
-        </div>
+        </div> */}
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit}>
