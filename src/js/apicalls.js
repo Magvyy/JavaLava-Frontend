@@ -20,6 +20,7 @@ export async function APICall(endpoint, method, header, body, relocate) {
             response.json().then(resp => {
                 if (resp.jwt) {
                     localStorage.setItem("jwt", resp.jwt);
+                    localStorage.setItem("user_id", resp.user_id);
                 }
                 if (relocate != "") {
                     window.location.href = relocate;

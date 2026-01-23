@@ -3,11 +3,12 @@ import { useEffect, useState } from 'react';
 // export 
 
 export interface PostData {
+    id: number | null
+    userName: string,
+    userId: number | null
     content: string,
     published: string,
     visible: boolean,
-    userName: string,
-    userId: number | null
 }
 
 export interface PostState {
@@ -15,51 +16,60 @@ export interface PostState {
   error: string | null;
 }
 
-export const usePostData = (postId: number) => {
+export const usePostData = (postId: number | null) => {
     const [state, setState] = useState<PostState>({
         loading: true,
         error: null
     });
 
     const [data, setData] = useState<PostData>({
+        id: null,
+        userName: "",
+        userId: null,
         content: "",
         published: new Date().toLocaleDateString("en-CA"),
-        visible: false,
-        userName: "",
-        userId: null
+        visible: false
     });
 
     useEffect(() => {
         const fetchPostData = async () => {
             try {
+                let token = localStorage.getItem("jwt");
                 const response = await
-                fetch("http://localhost:8080/post/" + postId, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json"
-                    }
-                });
+                    fetch("http://localhost:8080/post/" + postId, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        }
+                    });
                 if (response.ok) {
-                    const postData = await response.json();
+                    const postDTO = await response.json();
                     setData({
-                        content: postData.content,
-                        published: postData.published,
-                        visible: postData.visible,
-                        userName: postData.user_name,
-                        userId: postData.user_id
+                        id: postDTO.id,
+                        userName: postDTO.user_name,
+                        userId: postDTO.user_id,
+                        content: postDTO.content,
+                        published: postDTO.published,
+                        visible: postDTO.visible
                     });
                     setState({
                         loading: false,
                         error: null
                     });
+                } else {
+                    setState({ loading: false, error: response.status.toString() });
                 }
             } catch (err: any) {
                 setState({ loading: false, error: err.message });
             }
         }
-        fetchPostData();
+        if (postId) {
+            fetchPostData();
+        } else {
+            setState({ loading: false, error: "Can't view post with null id" });
+        }
     }, []);
-
-    return { data, state };
+    return { postData: data, postState: state };
 }

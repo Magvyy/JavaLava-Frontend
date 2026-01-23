@@ -1,0 +1,64 @@
+
+
+
+.post-card {
+    width: 500px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    padding: 10px;
+}
+
+.post-card-form {
+    width: 100%;
+    height: 95%;
+}
+
+.post-card-content {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+}
+
+.post-card-textarea {
+    width: 100%;
+    height: 100%;
+    resize: none;
+}
+
+.post-card-footer {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-areas: "a b b c";
+    place-items: center;
+}
+
+#visible-checkbox {
+    display: flex;
+    flex-direction: column;
+}
+
+.post-card-svgs {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+}
+
+.post-card-svgs > img {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.post-card-button {
+    width: 80%;
+    grid-area: b;
+}
+
+#published {
+    grid-area: c;
+}
