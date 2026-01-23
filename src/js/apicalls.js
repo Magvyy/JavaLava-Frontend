@@ -1,5 +1,5 @@
 
-export function APICall(endpoint, method, header, body, relocate) {
+export async function APICall(endpoint, method, header, body, relocate) {
     fetch("http://localhost:8080" + endpoint, {
         method: method,
         headers: header,
@@ -21,7 +21,7 @@ export function APICall(endpoint, method, header, body, relocate) {
                 if (resp.jwt) {
                     localStorage.setItem("jwt", resp.jwt);
                 }
-                if (relocate) {
+                if (relocate != "") {
                     window.location.href = relocate;
                 }
             }).catch(e => {
