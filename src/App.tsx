@@ -18,7 +18,7 @@ export default function App() {
         <Link to="/login">login</Link> |{" "}
         <Link to="/register">Register</Link> |{" "}
         <Link to="/secret">secret</Link> |{" "}
-        <Link to="/post/view/1">post</Link> |{" "}
+        <Link to="/post/create">post</Link> |{" "}
         <Link to="/logout">logout</Link>
       </nav>
 
@@ -28,6 +28,7 @@ export default function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/secret" element={<Secret />} />
         <Route path="/post/:mode/:id" element={<PostCard />} />
+        <Route path="/post/:mode" element={<PostCard />} />
         <Route path="/logout" element={<Logout />} />
       </Routes>
     </BrowserRouter>

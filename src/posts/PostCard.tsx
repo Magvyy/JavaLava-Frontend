@@ -21,18 +21,26 @@ import remove from "../assets/remove.svg";
 import exit from "../assets/exit.svg";
 
 type onErrorFunc = (message: string) => void;
-interface PostCardEditProps {
+interface PostCardProps {
     postData: post.PostData,
     onError: onErrorFunc
 }
 
-interface PostCardViewProp {
-    postData: post.PostData,
+interface PostCardCreateProps {
     onError: onErrorFunc
 }
 
 export default function PostCard() {
     const { mode, id } = useParams();
+
+    const onPostCardError = (message: string) => {
+        setState({loading: false, error: message});
+    }
+
+    if (mode == "create") {
+        return <PostCardCreate onError={onPostCardError} />
+    }
+
     const { postData, postState } = post.usePostData(id as unknown as number);
     const [data, setData] = useState<post.PostData>(postData);
     const [state, setState] = useState<post.PostState>(postState);
@@ -46,18 +54,10 @@ export default function PostCard() {
         setState(postState);
     }, [postData, postState]);
 
-    const onPostCardError = (message: string) => {
-        setState({loading: false, error: message});
-    }
-
     if (state.error) {
         return (
             <p>{state.error}</p>
         )
-    }
-
-    if (mode == "create") {
-
     }
 
     if (state.loading) {
@@ -75,7 +75,88 @@ export default function PostCard() {
     }
 }
 
-function PostCardEdit({ postData, onError } : PostCardEditProps) {
+function PostCardCreate({ onError } : PostCardCreateProps) {
+    const [content, setContent] = useState<string>("");
+    const [visible, setVisible] = useState<boolean>(false);
+    const [published, setPublished] = useState<string>(new Date().toISOString().split("T")[0]);
+    const userId = localStorage.getItem("user_id");
+    
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        editPost();
+    }
+    
+    const editPost = async () => {
+        if (userId == null) {
+            onError("User ID missing");
+        }
+        try {
+            let token = localStorage.getItem("jwt");
+            const response = await
+                fetch("http://localhost:8080/post", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        "id": 0,
+                        "user_id": userId,
+                        "content": content,
+                        "published": published,
+                        "visible": visible
+                    })
+                });
+            if (response.ok) {
+                let postDTOResponse = await response.json();
+                let postId = postDTOResponse.id;
+                window.location.href = "/post/view/" + postId;
+            } else {
+                onError(response.status.toString());
+            }
+        } catch (err: any) {
+            onError(err.message);
+        }
+    }
+
+    return (
+        <Card className="post-card">
+            <form onSubmit={handleSubmit} className="post-card-form">
+                <CardContent className="post-card-content">
+                    <Textarea
+                        className="post-card-textarea"
+                        onChange={(e => {
+                            setContent(e.target.value);
+                        })}
+                        value={content}
+                    />
+                </CardContent>
+                <button type="submit" style={{display: "none"}}/>
+            </form>
+            <CardFooter className="post-card-footer">
+                <Field id="visible-checkbox" orientation="horizontal">
+                    <FieldLabel htmlFor="terms-checkbox-basic">
+                        Make post visible
+                    </FieldLabel>
+                    <Checkbox
+                        id="terms-checkbox-basic"
+                        name="terms-checkbox-basic"
+                        checked={visible}
+                        onCheckedChange={(value: boolean) => {
+                            setVisible(value);
+                        }}
+                    />
+                </Field>
+                <Button onClick={editPost} className="post-card-button">
+                    Create
+                </Button>
+            </CardFooter>
+        </Card>
+    )
+}
+
+function PostCardEdit({ postData, onError } : PostCardProps) {
     const [content, setContent] = useState<string>(postData.content);
     const [visible, setVisible] = useState<boolean>(postData.visible);
     const published: string = postData.published;
@@ -114,7 +195,6 @@ function PostCardEdit({ postData, onError } : PostCardEditProps) {
                         "visible": visible
                     })
                 });
-            console.log(id);
             if (response.ok) {
                 window.location.href = "/post/view/" + id;
             } else {
@@ -162,10 +242,8 @@ function PostCardEdit({ postData, onError } : PostCardEditProps) {
     )
 }
 
-function PostCardView({ postData, onError } : PostCardViewProp) {
+function PostCardView({ postData, onError } : PostCardProps) {
     const { id, userId, content, published, userName } = postData;
-
-    console.log(localStorage.getItem("user_id"));
     
     const deletePost = async (id: number | null) => {
         if (id == null) {
