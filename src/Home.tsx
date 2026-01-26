@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import './Home.css'
 
 import { Button } from "@/components/ui/button"
@@ -22,14 +22,21 @@ interface Post {
   post_id: number
 }
 
+import user from "./assets/user.svg";
+
 interface PostState {
   loading: boolean,
   error: string | null
 }
 
-export default function Secret() {
-  const { posts, state } = usePostData();
-  
+export default function Home() {
+  const [update, setUpdate] = useState<boolean>(true);
+  const { posts, state } = usePostData(update);
+  useScrollToEnd(() => {
+    if (update) setUpdate(false)
+    else setUpdate(true);
+  });
+
   if ( state.loading ) {
     return (
       <p>Loading...</p>
@@ -60,36 +67,53 @@ function Post(post: PostProps) {
 
 
   return (
-    <Card className="mx-auto w-full max-w-sm">
+    <Card className="mx-auto w-full max-w-sm post">
       <CardHeader>
-        <CardTitle>Small Card</CardTitle>
-        <CardDescription>
+        <CardTitle className="post-user">
+          <img src={user}/>
           {data.user_name}
-        </CardDescription>
+        </CardTitle>
       </CardHeader>
-      <CardContent>
-        <p>{data.content}</p>
+      <CardContent className="post-content">
+        {data.content}
       </CardContent>
-      <CardFooter>
+      <CardFooter className="post-published">
         {data.published}
       </CardFooter>
     </Card>
   )
 }
 
-export const usePostData = () => {
+export function useScrollToEnd(onEnd: () => void, offset = 0) {
+  useEffect(() => {
+    const handleScroll = () => {
+      const viewportBottom = window.scrollY + window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+
+      if (viewportBottom >= documentHeight - offset) {
+        onEnd();
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [onEnd, offset])
+}
+
+export const usePostData = (update: boolean) => {
     const [posts, setPosts] = useState<Post[]>([]);
     const [state, setState] = useState<PostState>({
         loading: true,
         error: null
     });
+    const [page, setPage] = useState<number>(0);
 
     useEffect(() => {
         const fetchPosts = async () => {
             try {
                 let token = localStorage.getItem("jwt");
                 const response = await
-                    fetch("http://localhost:8080/post/all?page=0", {
+                    fetch("http://localhost:8080/post/all?page=" + page, {
                         method: "GET",
                         headers: {
                             "Content-Type": "application/json",
@@ -99,11 +123,12 @@ export const usePostData = () => {
                     });
                 if (response.ok) {
                     const postsJSON = await response.json();
-                    setPosts(postsJSON);
+                    setPosts([...posts, ...postsJSON]);
                     setState({
                         loading: false,
                         error: null
                     });
+                    setPage(page + 1);
                 } else {
                     setState({ loading: false, error: response.status.toString() });
                 }
@@ -112,6 +137,6 @@ export const usePostData = () => {
             }
         }
         fetchPosts();
-    }, []);
+    }, [update]);
     return { posts, state };
 }
