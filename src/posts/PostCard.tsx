@@ -79,7 +79,6 @@ function PostCardCreate({ onError } : PostCardCreateProps) {
     const [content, setContent] = useState<string>("");
     const [visible, setVisible] = useState<boolean>(false);
     const [published, setPublished] = useState<string>(new Date().toISOString().split("T")[0]);
-    const userId = localStorage.getItem("user_id");
     
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -87,9 +86,6 @@ function PostCardCreate({ onError } : PostCardCreateProps) {
     }
     
     const editPost = async () => {
-        if (userId == null) {
-            onError("User ID missing");
-        }
         try {
             let token = localStorage.getItem("jwt");
             const response = await
@@ -102,7 +98,6 @@ function PostCardCreate({ onError } : PostCardCreateProps) {
                     },
                     body: JSON.stringify({
                         "id": 0,
-                        "user_id": userId,
                         "content": content,
                         "published": published,
                         "visible": visible
@@ -161,7 +156,6 @@ function PostCardEdit({ postData, onError } : PostCardProps) {
     const [visible, setVisible] = useState<boolean>(postData.visible);
     const published: string = postData.published;
     const userName: string = postData.userName;
-    const userId: number | null = postData.userId;
     const id: number | null = postData.id;
     
 
@@ -173,9 +167,6 @@ function PostCardEdit({ postData, onError } : PostCardProps) {
     const editPost = async () => {
         if (id == null) {
             onError("Post ID missing");
-        }
-        if (userId == null) {
-            onError("User ID missing");
         }
         try {
             let token = localStorage.getItem("jwt");
@@ -189,7 +180,6 @@ function PostCardEdit({ postData, onError } : PostCardProps) {
                     },
                     body: JSON.stringify({
                         "id": id,
-                        "user_id": userId,
                         "content": content,
                         "published": published,
                         "visible": visible
