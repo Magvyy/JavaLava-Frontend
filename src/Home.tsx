@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './Home.css'
 
 interface Post {
@@ -12,9 +12,14 @@ interface Post {
   post_id: number
 }
 
+interface PostState {
+  loading: boolean,
+  error: string | null
+}
 
 export default function Secret() {
   const [posts, setPosts] = useState<Post[]>([]);
+  
 
   return (
     <></>
@@ -31,14 +36,7 @@ export const usePostData = (postId: number | null) => {
         error: null
     });
 
-    const [data, setData] = useState<PostData>({
-        id: null,
-        userName: "",
-        userId: null,
-        content: "",
-        published: new Date().toLocaleDateString("en-CA"),
-        visible: false
-    });
+    const [posts, setPosts] = useState<Post>([]);
 
     useEffect(() => {
         const fetchPostData = async () => {
@@ -54,15 +52,9 @@ export const usePostData = (postId: number | null) => {
                         }
                     });
                 if (response.ok) {
-                    const postDTO = await response.json();
-                    setData({
-                        id: postDTO.id,
-                        userName: postDTO.user_name,
-                        userId: postDTO.user_id,
-                        content: postDTO.content,
-                        published: postDTO.published,
-                        visible: postDTO.visible
-                    });
+                    const postsJSON = await response.json();
+                    console.log(postsJSON);
+                    setPosts(postsJSON);
                     setState({
                         loading: false,
                         error: null
@@ -80,5 +72,5 @@ export const usePostData = (postId: number | null) => {
             setState({ loading: false, error: "Can't view post with null id" });
         }
     }, []);
-    return { postData: data, postState: state };
+    return { posts, state };
 }
