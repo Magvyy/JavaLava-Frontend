@@ -13,6 +13,7 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
+    cursor: pointer;
 }
 
 .post-user {
@@ -24,9 +25,68 @@
 .post-user > img {
     width: 40px;
     height: 40px;
-    border-radius: 20px;
+    /* border-radius: 20px; */
 }
 
-.post-published {
-    /* align-self: flex-end; */
+.post-user > .header-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.post-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#post-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+#post-modal-comment-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    padding: 20px;
+    padding-top: 0;
+    padding-bottom: 0;
+    gap: 5px;
+}
+
+.comment {
+    display: flex;
+    width: 100%;
+    height: 60px;
+    align-items: center;
+}
+
+.comment > img {
+    width: 40px;
+    height: 40px;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.content-container > .user-name {
+    font-size: 12px;
+}
+
+.content-container > .content {
+    font-size: 16px;
 }

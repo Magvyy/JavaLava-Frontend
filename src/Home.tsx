@@ -1,37 +1,20 @@
-import { use, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './Home.css'
 
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
 
-interface Post {
-  content: string,
-  published: string,
-  visible: boolean,
-  user_id: number,
-  user_name: string,
-  like_count: number,
-  comment_count: number,
-  post_id: number
-}
-
 import user from "./assets/user.svg";
 
-interface PostState {
-  loading: boolean,
-  error: string | null
-}
 
 export default function Home() {
   const [update, setUpdate] = useState<boolean>(true);
-  const { posts, state } = usePostData(update);
+  const { posts, state } = useHomePagePosts(update);
   useScrollToEnd(() => {
     if (update) setUpdate(false)
     else setUpdate(true);
@@ -48,7 +31,7 @@ export default function Home() {
       {posts.map(post => (
         <Post
           key={post.post_id}
-          post={post}
+          data={post}
         />
       ))}
     </div>
@@ -56,35 +39,124 @@ export default function Home() {
 }
 
 interface PostProps {
-  post: Post
+  data: Post
 }
 
-function Post(post: PostProps) {
-  let data = post.post;
-  const author = data.user_id;
-  const like_count = data.like_count;
-  const comment_count = data.comment_count;
+function formatDateStringToDDMonthYear(dateString: string): string {
+  const dateObj = new Date();
+  const parts = dateString.split(' ');
 
+  const dateParts = parts[0].split('-');
+  const day = parseInt(dateParts[0], 10);
+  const month = parseInt(dateParts[1], 10) - 1; 
+  const year = parseInt(dateParts[2], 10);
+  dateObj.setUTCFullYear(year, month, day);
+
+  const timeParts = parts[1].split(":");
+  const hour = parseInt(timeParts[0], 10) - 1;
+  const minute = parseInt(timeParts[1], 10);
+  dateObj.setUTCHours(hour, minute, 0, 0);
+
+  const options: Intl.DateTimeFormatOptions = {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: "numeric",
+    minute: "numeric"
+  };
+
+  const formattedDate = dateObj.toLocaleDateString('en-GB', options);
+
+  return formattedDate;
+}
+
+function Post(props: PostProps) {
+  const { content, published, user_name, like_count, comment_count, post_id } = props.data;
+  const [modal, setModal] = useState<boolean>(false);
+
+  if (modal) {
+    return (
+      <PostModal
+        data={props.data}
+        callback={() => {
+          setModal(false);
+        }}
+      />
+    )
+  }
 
   return (
-    <Card className="mx-auto w-full max-w-sm post">
-      <CardHeader>
-        <CardTitle className="post-user">
+    <Card className="mx-auto w-full max-w-sm post" onClick={() => setModal(true)}>
+      <CardContent >
+        <div className="post-user">
           <img src={user}/>
-          {data.user_name}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="post-content">
-        {data.content}
+          <div className="header-container">
+            <p className="user-name">{user_name}</p>
+            <p className="published">{formatDateStringToDDMonthYear(published)}</p>
+          </div>
+        </div>
+        <p className="post-content">{content}</p>
       </CardContent>
-      <CardFooter className="post-published">
-        {data.published}
+      <CardFooter>
       </CardFooter>
     </Card>
   )
 }
 
-export function useScrollToEnd(onEnd: () => void, offset = 0) {
+interface PostModalProps {
+  data: Post
+  callback: () => void
+}
+
+function PostModal(props: PostModalProps) {
+  const { content, published, user_name, like_count, comment_count, post_id } = props.data;
+  const [update, setUpdate] = useState<boolean>(true);
+  const { comments, state } = usePostComments(post_id, update);
+
+  return (
+    <div id="post-modal" onClick={() => props.callback()}>
+      <Card className="mx-auto w-1/2 post">
+        <CardContent >
+          <div className="post-user">
+            <img src={user}/>
+            <div className="header-container">
+              <p className="user-name">{user_name}</p>
+              <p className="published">{formatDateStringToDDMonthYear(published)}</p>
+            </div>
+          </div>
+          <p className="post-content">{content}</p>
+        </CardContent>
+        <CardFooter id="post-modal-comment-section">
+          {comments.map(comment => (
+            <Comment
+              key={comment.comment_id}
+              comment={comment}
+            />
+          ))}
+        </CardFooter>
+      </Card>
+    </div>
+  )
+}
+
+interface CommentProps {
+  comment: Comment
+}
+function Comment(comment: CommentProps) {
+  const data = comment.comment;
+  
+  return (
+    <div className="comment">
+      <img src={user}/>
+      <div className="content-container">
+        <p className="user-name">{data.user_name}</p>
+        <p className="content">{data.content}</p>
+      </div>
+    </div>
+  );
+}
+
+function useScrollToEnd(onEnd: () => void, offset = 0) {
   useEffect(() => {
     const handleScroll = () => {
       const viewportBottom = window.scrollY + window.innerHeight;
@@ -100,9 +172,22 @@ export function useScrollToEnd(onEnd: () => void, offset = 0) {
   }, [onEnd, offset])
 }
 
-export const usePostData = (update: boolean) => {
+
+interface State {
+  loading: boolean,
+  error: string | null
+}
+interface Post {
+  content: string,
+  published: string,
+  user_name: string,
+  like_count: number,
+  comment_count: number,
+  post_id: number
+}
+const useHomePagePosts = (update: boolean) => {
     const [posts, setPosts] = useState<Post[]>([]);
-    const [state, setState] = useState<PostState>({
+    const [state, setState] = useState<State>({
         loading: true,
         error: null
     });
@@ -139,4 +224,97 @@ export const usePostData = (update: boolean) => {
         fetchPosts();
     }, [update]);
     return { posts, state };
+}
+
+
+interface Comment {
+  content: string,
+  published: string,
+  user_id: number,
+  user_name: string,
+  comment_id: number
+}
+const usePostComments = (postId: number, update: boolean) => {
+    const [comments, setComments] = useState<Comment[]>([]);
+    const [state, setState] = useState<State>({
+        loading: true,
+        error: null
+    });
+    const [page, setPage] = useState<number>(0);
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+              console.log(localStorage.getItem("jwt"));
+                // setComments([...comments, ...[
+                //   {
+                //     content: "Hellooo",
+                //     published: "26-01-2026 13:57:24",
+                //     user_id: 1,
+                //     user_name: "Magvy",
+                //     comment_id: 1
+                //   },
+                //   {
+                //     content: "Hellooo",
+                //     published: "26-01-2026 13:57:24",
+                //     user_id: 1,
+                //     user_name: "Magvy",
+                //     comment_id: 2
+                //   },
+                //   {
+                //     content: "Hellooo",
+                //     published: "26-01-2026 13:57:24",
+                //     user_id: 1,
+                //     user_name: "Magvy",
+                //     comment_id: 3
+                //   },
+                //   {
+                //     content: "Hellooo",
+                //     published: "26-01-2026 13:57:24",
+                //     user_id: 1,
+                //     user_name: "Magvy",
+                //     comment_id: 4
+                //   },
+                //   {
+                //     content: "Hellooo",
+                //     published: "26-01-2026 13:57:24",
+                //     user_id: 1,
+                //     user_name: "Magvy",
+                //     comment_id: 5
+                //   }
+                // ]])
+                // setState({
+                //     loading: false,
+                //     error: null
+                // });
+                // setPage(page + 1);
+                // return;
+                let token = localStorage.getItem("jwt");
+                const response = await
+                    fetch("http://localhost:8080/comment/post/" + postId  + "?page=" + page, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        }
+                    });
+                if (response.ok) {
+                    const postsJSON = await response.json();
+                    setComments([...comments, ...postsJSON]);
+                    setState({
+                        loading: false,
+                        error: null
+                    });
+                    setPage(page + 1);
+                } else {
+                    setState({ loading: false, error: response.status.toString() });
+                }
+            } catch (err: any) {
+                setState({ loading: false, error: err.message });
+            }
+        }
+        fetchPosts();
+    }, [update]);
+    return { comments, state };
 }
