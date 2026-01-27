@@ -4,10 +4,10 @@ import './Home.css'
 import {
   Card,
   CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+  CardFooter
 } from "@/components/ui/card"
+
+import { Input } from "@/components/ui/input"
 
 import user from "./assets/user.svg";
 
@@ -111,11 +111,15 @@ interface PostModalProps {
 function PostModal(props: PostModalProps) {
   const { content, published, user_name, like_count, comment_count, post_id } = props.data;
   const [update, setUpdate] = useState<boolean>(true);
-  const { comments, state } = usePostComments(post_id, update);
+  const { comments, setComments, state } = usePostComments(post_id, update);
+
+  useEffect(() => {
+    console.log(comments);
+  }, [comments]);
 
   return (
     <div id="post-modal" onClick={() => props.callback()}>
-      <Card className="mx-auto w-1/2 post">
+      <Card className="mx-auto w-1/2 post" onClick={(e) => {e.stopPropagation();}}>
         <CardContent >
           <div className="post-user">
             <img src={user}/>
@@ -129,10 +133,16 @@ function PostModal(props: PostModalProps) {
         <CardFooter id="post-modal-comment-section">
           {comments.map(comment => (
             <Comment
-              key={comment.comment_id}
+              key={comment.id}
               comment={comment}
             />
           ))}
+          <AddComment
+            post_id={post_id}
+            callback={(comment: Comment) => {
+              setComments([...comments, comment]);
+            }}
+          />
         </CardFooter>
       </Card>
     </div>
@@ -152,6 +162,68 @@ function Comment(comment: CommentProps) {
         <p className="user-name">{data.user_name}</p>
         <p className="content">{data.content}</p>
       </div>
+    </div>
+  );
+}
+
+
+interface AddCommentProps {
+  post_id: number,
+  callback: (comment: Comment) => void
+}
+function AddComment(props: AddCommentProps) {
+  const [content, setContent] = useState<string>("");
+
+  function getPublished() {
+    const now = new Date();
+    return now.toLocaleString('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    }).replace(",", "")
+    .replaceAll("/", "-");
+  }
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log(JSON.stringify({
+        "content": content,
+        "published": getPublished(),
+        "post_id": props.post_id
+      }));
+    let token = localStorage.getItem("jwt");
+    let response = await fetch("http://localhost:8080/comment/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        "content": content,
+        "published": getPublished(),
+        "post_id": props.post_id
+      })
+    })
+    if (response.ok) {
+      let comment = await response.json();
+      props.callback(comment);
+    }
+  }
+  
+  return (
+    <div className="comment">
+      <form onSubmit={handleSubmit}>
+        <Input
+          placeholder="Write something..."
+          onChange={e => {setContent(e.target.value);}}
+        />
+        <button type="submit" style={{display: "none"}}/>
+      </form>
     </div>
   );
 }
@@ -232,7 +304,7 @@ interface Comment {
   published: string,
   user_id: number,
   user_name: string,
-  comment_id: number
+  id: number
 }
 const usePostComments = (postId: number, update: boolean) => {
     const [comments, setComments] = useState<Comment[]>([]);
@@ -245,50 +317,6 @@ const usePostComments = (postId: number, update: boolean) => {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-              console.log(localStorage.getItem("jwt"));
-                // setComments([...comments, ...[
-                //   {
-                //     content: "Hellooo",
-                //     published: "26-01-2026 13:57:24",
-                //     user_id: 1,
-                //     user_name: "Magvy",
-                //     comment_id: 1
-                //   },
-                //   {
-                //     content: "Hellooo",
-                //     published: "26-01-2026 13:57:24",
-                //     user_id: 1,
-                //     user_name: "Magvy",
-                //     comment_id: 2
-                //   },
-                //   {
-                //     content: "Hellooo",
-                //     published: "26-01-2026 13:57:24",
-                //     user_id: 1,
-                //     user_name: "Magvy",
-                //     comment_id: 3
-                //   },
-                //   {
-                //     content: "Hellooo",
-                //     published: "26-01-2026 13:57:24",
-                //     user_id: 1,
-                //     user_name: "Magvy",
-                //     comment_id: 4
-                //   },
-                //   {
-                //     content: "Hellooo",
-                //     published: "26-01-2026 13:57:24",
-                //     user_id: 1,
-                //     user_name: "Magvy",
-                //     comment_id: 5
-                //   }
-                // ]])
-                // setState({
-                //     loading: false,
-                //     error: null
-                // });
-                // setPage(page + 1);
-                // return;
                 let token = localStorage.getItem("jwt");
                 const response = await
                     fetch("http://localhost:8080/comment/post/" + postId  + "?page=" + page, {
@@ -316,5 +344,5 @@ const usePostComments = (postId: number, update: boolean) => {
         }
         fetchPosts();
     }, [update]);
-    return { comments, state };
+    return { comments, setComments, state };
 }
