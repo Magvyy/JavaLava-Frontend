@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import './App.css'
 
-import Home from "./Home"
-import Login from "./auth/Login"
-import Register from './auth/Register';
-import Secret from "./Secret"
+import Home from "./pages/home/Home"
+import Login from "./pages/auth/Login"
+import Register from './pages/auth/Register';
+import Secret from "./pages/secret/Secret"
 
 
 export default function App() {
