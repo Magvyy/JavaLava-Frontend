@@ -44,7 +44,7 @@ export const usePostComments = (postId: number, update: boolean) => {
             try {
                 let token = localStorage.getItem("jwt");
                 const response = await
-                    fetch("http://localhost:8080/comment/post/" + postId  + "?page=" + page, {
+                    fetch("http://localhost:8080/post/" + postId  + "/comments?page=" + page, {
                         method: "GET",
                         headers: {
                             "Content-Type": "application/json",
