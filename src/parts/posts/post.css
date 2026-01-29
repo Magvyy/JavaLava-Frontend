@@ -25,6 +25,7 @@
 }
 
 #terms-checkbox-basic {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
+    border-width: 1px;
 }
