@@ -1,4 +1,4 @@
-import type { CommentResponse, State } from "@/types/ApiResponses";
+import type { CommentResponse, PostRequest, State } from "@/types/ApiResponses";
 import { useEffect, useState } from "react";
 
 export function formatDateStringToDDMonthYear(dateString: string): string {
@@ -70,4 +70,8 @@ export const usePostComments = (postId: number, update: boolean) => {
         fetchPosts();
     }, [update]);
     return { comments, setComments, state };
+}
+
+export async function createPost(post: PostRequest) {
+    
 }

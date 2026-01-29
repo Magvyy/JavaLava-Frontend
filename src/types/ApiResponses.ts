@@ -17,9 +17,9 @@ export interface PostResponse {
 
 export interface PostRequest {
   id: number | null,
-  visible: boolean,
-  like_count: number,
-  comment_count: number
+  content: string,
+  published: string,
+  visible: boolean
 }
 
 export interface CommentResponse {
