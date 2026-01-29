@@ -24,7 +24,8 @@ export default function Home() {
     <div id="posts-container">
       <AddPost
         addPost={(post: PostResponse) => {
-          setPosts([...posts, post]);
+          setPosts([post, ...posts]);
+          console.log(posts);
         }}
       />
       {posts.map(post => (

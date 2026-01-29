@@ -76,18 +76,24 @@ export function AddPost(props: AddPostProps) {
 
   return (
     <Card className="mx-auto w-full max-w-sm post">
-      <form onSubmit={handleSubmit} className="post-adder-form">
-          <CardContent className="w-full">
-              <Textarea
-                  className="post-adder-textarea"
-                  onChange={(e => {
-                      setContent(e.target.value);
-                  })}
-                  value={content}
-              />
-          </CardContent>
-          <button type="submit" style={{display: "none"}}/>
-      </form>
+      <CardContent className="w-full">
+        <form onSubmit={handleSubmit} className="post-adder-form">
+            <Textarea
+              className="post-adder-textarea"
+              onChange={(e => {
+                  setContent(e.target.value);
+              })}
+              value={content}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  createPost(createPostRequest(), props.addPost);
+                  setContent("");
+                }
+              }}
+            />
+        </form>
+      </CardContent>
       <CardFooter className="w-full post-adder-footer">
           <Field id="visible-checkbox" orientation="horizontal">
               <Checkbox
@@ -102,7 +108,7 @@ export function AddPost(props: AddPostProps) {
                   Make post visible
               </FieldLabel>
           </Field>
-          <Button onClick={createPost(createPostRequest())} className="post-card-button">
+          <Button onClick={(event) => createPost(createPostRequest(), props.addPost)} className="post-card-button">
               Create
           </Button>
       </CardFooter>
