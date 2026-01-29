@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './Home.css'
 
 import { useHomePagePosts, useScrollToEnd } from "./functions";
-import { Post, AddPost } from '@/parts/posts/post';
+import { Post } from '@/parts/posts/post';
 import type { PostResponse } from '@/types/ApiResponses';
 
 export default function Home() {
@@ -14,24 +14,57 @@ export default function Home() {
     else setUpdate(true);
   });
 
+  useEffect(() => {
+
+  }, [posts, state]);
+
   if ( state.loading ) {
     return (
       <p>Loading...</p>
     )
   }
 
+  const onCreate = (post: PostResponse) => {
+    setPosts([post, ...posts]);
+  }
+
+  const onEdit = (edit: PostResponse) => {
+    let temp = posts.map(post => {
+      if (post.id === edit.id) {
+        return edit;
+      } else {
+        return post;
+      }
+    });
+    setPosts(temp);
+  }
+
+  const onDelete = (del: PostResponse) => {
+    let temp = posts.filter(post => {
+      if (post.id !== del.id) {
+        return post;
+      }
+    })
+    setPosts(temp);
+  }
+
   return (
     <div id="posts-container">
-      <AddPost
-        addPost={(post: PostResponse) => {
-          setPosts([post, ...posts]);
-          console.log(posts);
-        }}
+      <Post
+        post={null}
+        onCreate={onCreate}
+        onEdit={onEdit}
+        onDelete={onDelete}
+        onError={() => {}}
       />
       {posts.map(post => (
         <Post
+          post={post}
+          onCreate={onCreate}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          onError={() => {}}
           key={post.id}
-          data={post}
         />
       ))}
     </div>

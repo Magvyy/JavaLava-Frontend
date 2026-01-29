@@ -1,5 +1,5 @@
-import { use, useState } from "react";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { useState } from "react";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
@@ -12,63 +12,66 @@ import {
 import "./post.css"
 
 // POSTS
-import type { CommentResponse, PostRequest, PostResponse, UserI } from "@/types/ApiResponses";
+import type { CommentResponse, PostRequest, PostResponse, State, UserI } from "@/types/ApiResponses";
 interface PostProps {
-  data: PostResponse
+  post: PostResponse | null,
+  onCreate: (post: PostResponse) => void,
+  onEdit: (post: PostResponse) => void,
+  onDelete: (post: PostResponse) => void,
+  onError: ((message: string) => void) | null
 }
 export function Post(props: PostProps) {
-  const { content, published, user_name, like_count, comment_count, id } = props.data;
-  const [modal, setModal] = useState<boolean>(false);
-  const user: UserI = {
-    id: id,
-    user_name: user_name,
-    content: content
-  };
+  const onError = () => {
 
-  if (modal) {
+  }
+
+  if (props.post != null) {
     return (
-      <PostModal
-        data={props.data}
-        callback={() => {
-          setModal(false);
-        }}
+      <ReadPost 
+        post={props.post}
+        onEdit={props.onEdit}
+        onDelete={props.onDelete}
+        onError={onError}
       />
     )
   }
 
   return (
-    <Card className="mx-auto w-full max-w-sm post" onClick={() => setModal(true)}>
-      <CardContent >
-        <User
-          user={user}
-        />
-      </CardContent>
-      <CardFooter>
-      </CardFooter>
-    </Card>
+    <WritePost
+        post={props.post}
+        onCreate={props.onCreate}
+        onError={props.onError}
+    />
   )
 }
 
 
-import { createPost } from "./functions";
+import { createPost, editPost } from "./functions";
 import { getCurrentTime } from "../comments/functions";
-interface AddPostProps {
-  addPost: (post: PostResponse) => void
+interface WritePostProps {
+  post: PostResponse | null,
+  onCreate: (post: PostResponse) => void,
+  onError: ((message: string) => void) | null
 }
-export function AddPost(props: AddPostProps) {
-  const [content, setContent] = useState<string>("");
-  const [visible, setVisible] = useState<boolean>(false);
+export function WritePost(props: WritePostProps) {
+  let data = props.post;
+  const [content, setContent] = useState<string>((data != null) ? data.content : "");
+  const [visible, setVisible] = useState<boolean>((data != null) ? data.visible : false);
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    createPost(createPostRequest(), props.addPost);
+  function postData() {
+    let post = createPostRequest();
+    if (data == null) {
+      createPost(post, props.onCreate, props.onError);
+    } else {
+      editPost(post, props.onCreate, props.onError);
+    }
   }
 
   function createPostRequest() {
     let post: PostRequest = {
-      id: null,
+      id: (data != null) ? data.id : null,
       content: content,
-      published: getCurrentTime(),
+      published: (data != null) ? data.published : getCurrentTime(),
       visible: visible
     };
     return post;
@@ -77,7 +80,10 @@ export function AddPost(props: AddPostProps) {
   return (
     <Card className="mx-auto w-full max-w-sm post">
       <CardContent className="w-full">
-        <form onSubmit={handleSubmit} className="post-adder-form">
+        <form onSubmit={(event) => {
+          event.preventDefault();
+          postData();
+        }} className="post-adder-form">
             <Textarea
               className="post-adder-textarea"
               onChange={(e => {
@@ -87,7 +93,7 @@ export function AddPost(props: AddPostProps) {
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
-                  createPost(createPostRequest(), props.addPost);
+                  postData();
                   setContent("");
                 }
               }}
@@ -108,11 +114,91 @@ export function AddPost(props: AddPostProps) {
                   Make post visible
               </FieldLabel>
           </Field>
-          <Button onClick={(event) => createPost(createPostRequest(), props.addPost)} className="post-card-button">
+          <Button onClick={() => postData()} className="post-card-button">
               Create
           </Button>
       </CardFooter>
     </Card>
+  )
+}
+
+
+interface ReadPostProps {
+  post: PostResponse,
+  onDelete: (post: PostResponse) => void,
+  onEdit: (post: PostResponse) => void,
+  onError: ((message: string) => void) | null
+}
+export function ReadPost(props: ReadPostProps) {
+  const { content, published, user_name, user_id, like_count, comment_count, id } = props.post;
+  const [modal, setModal] = useState<boolean>(false);
+  const user: UserI = {
+    id: user_id,
+    user_name: user_name,
+    content: content
+  };
+
+  const svgCallback = () => {
+    props.onDelete(props.post);
+  }
+
+  if (modal) {
+    return (
+      <PostModal
+        post={props.post}
+        callback={() => {
+          setModal(false);
+        }}
+        svgCallback={svgCallback}
+      />
+    )
+  }
+
+  return (
+    <Card className="mx-auto w-full max-w-sm post" onClick={() => setModal(true)}>
+      <CardContent className="post-content">
+        <User
+          user={user}
+        />
+      </CardContent>
+      <CardFooter>
+      </CardFooter>
+    </Card>
+  )
+}
+
+
+import { deletePost } from "./functions";
+import edit from "../../assets/edit.svg";
+import remove from "../../assets/remove.svg";
+import exit from "../../assets/exit.svg";
+interface PostSvgProps {
+  callback: () => void,
+  userId: number,
+  postId: number,
+  onError: ((message: string) => void) | null,
+  modal: boolean
+}
+function PostSvgs(props: PostSvgProps) {
+  let userId = props.userId;
+  let postId = props.postId;
+  let localId = localStorage.getItem("user_id");
+
+  return (
+    <div className="post-svgs">
+        {(localId != null && userId == Number.parseInt(localId)) && <img src={edit} onClick={(e) => {
+          e.stopPropagation();
+          window.location.href = "/post/edit/" + postId;
+        }}/>}
+        {(localId != null && userId == Number.parseInt(localId)) && <img src={remove} onClick={(e) => {
+          e.stopPropagation();
+          deletePost(postId, props.callback, props.onError);
+        }}/>}
+        {(props.modal == true) && <img src={exit} onClick={(e) => {
+          e.stopPropagation();
+          window.location.href = "/";
+        }}/>}
+    </div>
   )
 }
 
@@ -121,15 +207,16 @@ import { usePostComments } from "./functions";
 import { Comment, AddComment } from '@/parts/comments/comment';
 import { User } from "../users/user";
 interface PostModalProps {
-  data: PostResponse
-  callback: () => void
+  post: PostResponse
+  callback: () => void,
+  svgCallback: () => void,
 }
 function PostModal(props: PostModalProps) {
-  const { content, published, user_name, like_count, comment_count, id } = props.data;
+  const { content, published, user_name, user_id, like_count, comment_count, id } = props.post;
   const [update, setUpdate] = useState<boolean>(true);
   const { comments, setComments, state } = usePostComments(id, update);
   const user: UserI = {
-    id: id,
+    id: user_id,
     user_name: user_name,
     content: content
   };
@@ -137,12 +224,19 @@ function PostModal(props: PostModalProps) {
   return (
     <div id="post-modal" onClick={() => props.callback()}>
       <Card className="mx-auto w-1/2 post" onClick={(e) => {e.stopPropagation();}}>
-        <CardContent id="post-modal-header-section">
+        <CardContent className="post-content">
+          <PostSvgs
+            callback={props.svgCallback}
+            userId={user_id}
+            postId={id}
+            onError={null}
+            modal={false}
+          />
           <User
             user={user}
           />
         </CardContent>
-        <CardFooter id="post-modal-comment-section">
+        <CardFooter className="post-modal-comment-section">
           {comments.map(comment => (
             <Comment
               key={comment.id}

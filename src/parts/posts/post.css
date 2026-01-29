@@ -1,3 +1,15 @@
+.post-svgs {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.post-svgs > img {
+    width: 20px;
+    height: 20px;
+}
 
 .post-adder-form {
     width: 100%;
@@ -17,6 +29,10 @@
     align-items: center;
 }
 
+.post-content {
+    width: 100%;
+}
+
 #visible-checkbox {
     display: flex;
     flex-direction: column;
@@ -26,4 +42,12 @@
 
 .post-card-button {
     width: 60%;
+}
+
+.post-modal-comment-section {
+    margin-top: 10px;
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }

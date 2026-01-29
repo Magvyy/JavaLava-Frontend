@@ -72,7 +72,7 @@ export const usePostComments = (postId: number, update: boolean) => {
     return { comments, setComments, state };
 }
 
-export async function createPost(post: PostRequest, addPost: (post: PostResponse) => void) {
+export async function createPost(post: PostRequest, callback: (post: PostResponse) => void, onError: ((message: string) => void) | null) {
     let token = localStorage.getItem("jwt");
     let response = await fetch("http://localhost:8080/post", {
             method: "POST",
@@ -85,8 +85,56 @@ export async function createPost(post: PostRequest, addPost: (post: PostResponse
         });
     if (response.ok) {
         let postDTOResponse = await response.json();
-        addPost(postDTOResponse);
+        callback(postDTOResponse);
     } else {
-        // onError(response.status.toString());
+        if (onError != null) {
+            onError(response.status.toString());
+        }
+    }
+}
+
+export async function editPost(post: PostRequest, callback: (post: PostResponse) => void, onError: ((message: string) => void) | null) {
+    let token = localStorage.getItem("jwt");
+    let response = await fetch("http://localhost:8080/post" + post.id, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(post)
+        });
+    if (response.ok) {
+        let postDTOResponse = await response.json();
+        callback(postDTOResponse);
+    } else {
+        if (onError != null) {
+            onError(response.status.toString());
+        }
+    }
+}
+
+
+export async function deletePost(id: number, callback: (() => void) | null, onError: ((message: string) => void) | null) {
+    let token = localStorage.getItem("jwt");
+    const response = await
+        fetch("http://localhost:8080/post/" + id, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+    if (response.ok) {
+        if (callback != null) {
+            callback();
+        } else {
+            window.location.href = "/";
+        }
+    } else {
+        if (onError != null) {
+            onError(response.status.toString());
+        }
     }
 }

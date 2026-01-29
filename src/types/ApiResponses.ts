@@ -4,7 +4,7 @@ export interface State {
   error: string | null
 }
 
-export interface PostResponse {
+export interface PostResponse extends PostRequest {
   id: number,
   user_name: string,
   user_id: number,
