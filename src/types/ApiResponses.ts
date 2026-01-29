@@ -38,8 +38,9 @@ export interface CommentRequest {
   post_id: number
 }
 
-export interface UserResponse {
+export interface UserI {
   id: number,
-  user_name: string
+  user_name: string,
+  content: string
 }
 

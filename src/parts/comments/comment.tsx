@@ -1,21 +1,24 @@
-
+import "./comment.css"
 
 // COMMENT
-import type { CommentRequest, CommentResponse } from "@/types/ApiResponses";
-import user from "../../assets/user.svg";
+import type { CommentRequest, CommentResponse, UserI } from "@/types/ApiResponses";
+import { User } from "../users/user";
 interface CommentProps {
   comment: CommentResponse
 }
 export function Comment(props: CommentProps) {
-  const { comment } = props;
+  const { id, content, published, user_id, user_name, post_id } = props.comment;
+  const user: UserI = {
+    id: user_id,
+    user_name: user_name,
+    content: content
+  };
   
   return (
     <div className="comment">
-      <img src={user}/>
-      <div className="content-container">
-        <p className="user-name">{comment.user_name}</p>
-        <p className="content">{comment.content}</p>
-      </div>
+      <User
+        user={user}
+      />
     </div>
   );
 }
