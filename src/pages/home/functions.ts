@@ -57,5 +57,5 @@ export const useHomePagePosts = (update: boolean) => {
         }
         fetchPosts();
     }, [update]);
-    return { posts, state };
+    return { posts, setPosts, state };
 }

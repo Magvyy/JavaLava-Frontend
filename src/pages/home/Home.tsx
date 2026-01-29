@@ -2,11 +2,12 @@ import { useState } from 'react'
 import './Home.css'
 
 import { useHomePagePosts, useScrollToEnd } from "./functions";
-import { Post } from '@/parts/posts/post';
+import { Post, AddPost } from '@/parts/posts/post';
+import type { PostResponse } from '@/types/ApiResponses';
 
 export default function Home() {
   const [update, setUpdate] = useState<boolean>(true);
-  const { posts, state } = useHomePagePosts(update);
+  const { posts, setPosts, state } = useHomePagePosts(update);
   
   useScrollToEnd(() => {
     if (update) setUpdate(false)
@@ -21,6 +22,11 @@ export default function Home() {
 
   return (
     <div id="posts-container">
+      <AddPost
+        addPost={(post: PostResponse) => {
+          setPosts([...posts, post]);
+        }}
+      />
       {posts.map(post => (
         <Post
           key={post.id}

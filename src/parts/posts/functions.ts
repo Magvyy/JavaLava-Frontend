@@ -1,4 +1,4 @@
-import type { CommentResponse, PostRequest, State } from "@/types/ApiResponses";
+import type { CommentResponse, PostRequest, PostResponse, State } from "@/types/ApiResponses";
 import { useEffect, useState } from "react";
 
 export function formatDateStringToDDMonthYear(dateString: string): string {
@@ -72,6 +72,21 @@ export const usePostComments = (postId: number, update: boolean) => {
     return { comments, setComments, state };
 }
 
-export async function createPost(post: PostRequest) {
-    
+export async function createPost(post: PostRequest, addPost: (post: PostResponse) => void) {
+    let token = localStorage.getItem("jwt");
+    let response = await fetch("http://localhost:8080/post", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(post)
+        });
+    if (response.ok) {
+        let postDTOResponse = await response.json();
+        addPost(postDTOResponse);
+    } else {
+        // onError(response.status.toString());
+    }
 }

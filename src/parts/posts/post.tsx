@@ -1,10 +1,14 @@
 import { use, useState } from "react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Field, FieldLabel } from "@/components/ui/field";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@radix-ui/react-checkbox";
+import { Textarea } from "@/components/ui/textarea";
+
+import "./post.css"
 
 // POSTS
 import type { CommentResponse, PostRequest, PostResponse, UserI } from "@/types/ApiResponses";
-import { formatDateStringToDDMonthYear } from "./functions";
-import user from "../../assets/user.svg";
 interface PostProps {
   data: PostResponse
 }
@@ -45,24 +49,22 @@ export function Post(props: PostProps) {
 import { createPost } from "./functions";
 import { getCurrentTime } from "../comments/functions";
 interface AddPostProps {
-  post_id: number,
   addPost: (post: PostResponse) => void
 }
 export function AddPost(props: AddPostProps) {
   const [content, setContent] = useState<string>("");
-  const [published, setPublished] = useState<string>(getCurrentTime());
   const [visible, setVisible] = useState<boolean>(false);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    createPost(createPostRequest());
+    createPost(createPostRequest(), props.addPost);
   }
 
   function createPostRequest() {
     let post: PostRequest = {
       id: null,
       content: content,
-      published: published,
+      published: getCurrentTime(),
       visible: visible
     };
     return post;
@@ -70,10 +72,10 @@ export function AddPost(props: AddPostProps) {
 
   return (
     <Card className="mx-auto w-full max-w-sm post">
-      <form onSubmit={handleSubmit}>
-          <CardContent className="post-card-content">
-              <textarea
-                  className="post-card-textarea"
+      <form onSubmit={handleSubmit} className="post-adder-form">
+          <CardContent className="w-full">
+              <Textarea
+                  className="post-adder-textarea"
                   onChange={(e => {
                       setContent(e.target.value);
                   })}
@@ -82,11 +84,8 @@ export function AddPost(props: AddPostProps) {
           </CardContent>
           <button type="submit" style={{display: "none"}}/>
       </form>
-      <CardFooter className="post-card-footer">
+      <CardFooter className="w-full post-adder-footer">
           <Field id="visible-checkbox" orientation="horizontal">
-              <FieldLabel htmlFor="terms-checkbox-basic">
-                  Make post visible
-              </FieldLabel>
               <Checkbox
                   id="terms-checkbox-basic"
                   name="terms-checkbox-basic"
@@ -95,6 +94,9 @@ export function AddPost(props: AddPostProps) {
                       setVisible(value);
                   }}
               />
+              <FieldLabel htmlFor="terms-checkbox-basic">
+                  Make post visible
+              </FieldLabel>
           </Field>
           {/* <Button onClick={createPost(createPostRequest())} className="post-card-button">
               Create
@@ -108,9 +110,6 @@ export function AddPost(props: AddPostProps) {
 import { usePostComments } from "./functions";
 import { Comment, AddComment } from '@/parts/comments/comment';
 import { User } from "../users/user";
-import { Field, FieldLabel } from "@/components/ui/field";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@radix-ui/react-checkbox";
 interface PostModalProps {
   data: PostResponse
   callback: () => void
