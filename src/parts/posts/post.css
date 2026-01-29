@@ -12,6 +12,16 @@
 
 .post-adder-footer {
     width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#visible-checkbox {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    width: 40%;
 }
 
 #terms-checkbox-basic {
