@@ -1,9 +1,13 @@
 import { use, useState } from "react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Field, FieldLabel } from "@/components/ui/field";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@radix-ui/react-checkbox";
-import { Textarea } from "@/components/ui/textarea";
+
+import { Button } from "@/components/ui/button"
+import { Textarea } from "@/components/ui/textarea"
+import { Checkbox } from "@/components/ui/checkbox"
+import {
+  Field,
+  FieldLabel
+} from "@/components/ui/field"
 
 import "./post.css"
 
@@ -98,9 +102,9 @@ export function AddPost(props: AddPostProps) {
                   Make post visible
               </FieldLabel>
           </Field>
-          {/* <Button onClick={createPost(createPostRequest())} className="post-card-button">
+          <Button onClick={createPost(createPostRequest())} className="post-card-button">
               Create
-          </Button> */}
+          </Button>
       </CardFooter>
     </Card>
   )
