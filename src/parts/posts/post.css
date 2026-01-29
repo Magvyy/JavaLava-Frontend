@@ -1,0 +1,29 @@
+
+.post-adder-form {
+    width: 100%;
+    height: 100%;
+}
+
+.post-adder-textarea {
+    width: 100%;
+    height: 100%;
+    resize: none;
+}
+
+.post-adder-footer {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#visible-checkbox {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    width: 40%;
+}
+
+.post-card-button {
+    width: 60%;
+}

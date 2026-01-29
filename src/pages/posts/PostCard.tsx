@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './PostCard.css'
 import {
   Card,
@@ -16,9 +16,11 @@ import {
 import * as post from "./PostData";
 import { useParams } from 'react-router-dom';
 
-import edit from "../assets/edit.svg";
-import remove from "../assets/remove.svg";
-import exit from "../assets/exit.svg";
+import edit from "../../assets/edit.svg";
+import remove from "../../assets/remove.svg";
+import exit from "../../assets/exit.svg";
+import { AddPost } from '@/parts/posts/post'
+import type { PostResponse } from '@/types/ApiResponses'
 
 type onErrorFunc = (message: string) => void;
 interface PostCardProps {
@@ -116,38 +118,9 @@ function PostCardCreate({ onError } : PostCardCreateProps) {
     }
 
     return (
-        <Card className="post-card">
-            <form onSubmit={handleSubmit} className="post-card-form">
-                <CardContent className="post-card-content">
-                    <Textarea
-                        className="post-card-textarea"
-                        onChange={(e => {
-                            setContent(e.target.value);
-                        })}
-                        value={content}
-                    />
-                </CardContent>
-                <button type="submit" style={{display: "none"}}/>
-            </form>
-            <CardFooter className="post-card-footer">
-                <Field id="visible-checkbox" orientation="horizontal">
-                    <FieldLabel htmlFor="terms-checkbox-basic">
-                        Make post visible
-                    </FieldLabel>
-                    <Checkbox
-                        id="terms-checkbox-basic"
-                        name="terms-checkbox-basic"
-                        checked={visible}
-                        onCheckedChange={(value: boolean) => {
-                            setVisible(value);
-                        }}
-                    />
-                </Field>
-                <Button onClick={editPost} className="post-card-button">
-                    Create
-                </Button>
-            </CardFooter>
-        </Card>
+        <AddPost
+            addPost={(post: PostResponse) => {}}
+        />
     )
 }
 

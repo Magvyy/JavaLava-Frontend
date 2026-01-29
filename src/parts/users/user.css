@@ -1,0 +1,32 @@
+
+
+
+.user-container {
+    font: 1em sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.user-container > div {
+    padding: 0;
+    margin: 0;
+}
+
+.user-profile-picture {
+    height: 100%;
+}
+
+.user-profile-picture > img {
+    max-height: 100%;
+}
+
+.user-content {
+    font: 1em sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-around;
+    width: calc(100% - (50px + 5px));
+    height: 100%;
+}
