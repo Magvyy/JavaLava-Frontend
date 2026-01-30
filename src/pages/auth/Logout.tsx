@@ -11,6 +11,7 @@ export default function Logout() {
 
   const handleLogout = () => {
     localStorage.removeItem("jwt");
+    localStorage.removeItem("user_id");
     window.location.href = "/";
   }
 

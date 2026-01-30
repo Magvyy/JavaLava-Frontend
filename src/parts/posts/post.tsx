@@ -161,7 +161,8 @@ export function ReadPost(props: ReadPostProps) {
           user={user}
         />
       </CardContent>
-      <CardFooter>
+      <CardFooter className="post-footer">
+        <PostFooter/>
       </CardFooter>
     </Card>
   )
@@ -251,6 +252,26 @@ function PostModal(props: PostModalProps) {
           />
         </CardFooter>
       </Card>
+    </div>
+  )
+}
+
+import comment from "../../assets/comment.svg";
+import like from "../../assets/like.svg";
+interface PostFooterProps {
+  
+}
+function PostFooter(props: PostFooterProps) {
+  const [liked, setLiked] = useState<boolean>(false);
+
+  return (
+    <div className="post-footer-svgs">
+      <img src={like} onClick={(e) => {
+        
+      }}/>
+      <img src={comment} onClick={(e) => {
+
+      }}/>
     </div>
   )
 }
