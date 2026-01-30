@@ -16,7 +16,6 @@ export function getCurrentTime() {
 
 export async function createComment(commentRequest: CommentRequest, addComment: (comment: CommentResponse) => void) {
     let token = localStorage.getItem("jwt");
-    console.log(JSON.stringify(commentRequest));
     let response = await fetch("http://localhost:8080/post/" + commentRequest.post_id + "/comments", {
       method: "POST",
       headers: {
