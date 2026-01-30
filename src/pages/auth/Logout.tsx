@@ -1,11 +1,6 @@
 import {
   Card,
-  CardAction,
-  CardContent,
-  CardDescription,
   CardFooter,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card"
 
 import { Button } from "@/components/ui/button"
@@ -16,6 +11,7 @@ export default function Logout() {
 
   const handleLogout = () => {
     localStorage.removeItem("jwt");
+    localStorage.removeItem("user_id");
     window.location.href = "/";
   }
 

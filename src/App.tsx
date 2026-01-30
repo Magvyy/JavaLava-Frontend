@@ -1,12 +1,12 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import './App.css'
 
-import Home from "./Home"
-import Login from "./auth/Login"
-import Register from './auth/Register';
-import Secret from "./Secret"
-import PostCard from "./posts/PostCard"
-import Logout from "./auth/Logout"
+import Home from "./pages/home/Home"
+import Login from "./pages/auth/Login"
+import Register from './pages/auth/Register';
+import Secret from "./pages/secret/Secret"
+import PostCard from "./pages/posts/PostCard"
+import Logout from "./pages/auth/Logout"
 
 
 export default function App() {
