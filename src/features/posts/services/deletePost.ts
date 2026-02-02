@@ -1,6 +1,5 @@
 
-
-export async function deletePost(id: number, callback: (() => void) | null, onError: ((message: string) => void) | null) {
+export async function deletePost(id: number, onDelete: ((id: number) => void), onError: ((message: string) => void) | null) {
     let token = localStorage.getItem("jwt");
     const response = await
         fetch("http://localhost:8080/post/" + id, {
@@ -12,11 +11,7 @@ export async function deletePost(id: number, callback: (() => void) | null, onEr
             }
         });
     if (response.ok) {
-        if (callback != null) {
-            callback();
-        } else {
-            window.location.href = "/";
-        }
+        onDelete(id);
     } else {
         if (onError != null) {
             onError(response.status.toString());

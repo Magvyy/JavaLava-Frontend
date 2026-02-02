@@ -9,11 +9,11 @@ import { Checkbox } from "@radix-ui/react-checkbox";
 import { Button } from "@/components/ui/button";
 
 
-interface CreatePostProps {
+interface PostAdderProps {
   onCreate: (post: PostResponse) => void,
   onError: ((message: string) => void) | null
 }
-export function CreatePost(props: CreatePostProps) {
+export function PostAdder(props: PostAdderProps) {
   let { onCreate, onError } = props;
   const [content, setContent] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);

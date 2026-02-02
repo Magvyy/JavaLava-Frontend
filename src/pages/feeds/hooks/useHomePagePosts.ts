@@ -2,7 +2,7 @@ import type { PostResponse, State } from "@/types/ApiResponses";
 import { useEffect, useState } from "react";
 
 
-export const useHomePagePosts = (update: boolean) => {
+export const useHomePagePosts = (update: boolean, endpoint: string) => {
     const [posts, setPosts] = useState<PostResponse[]>([]);
     const [state, setState] = useState<State>({
         loading: true,
@@ -15,7 +15,7 @@ export const useHomePagePosts = (update: boolean) => {
             try {
                 let token = localStorage.getItem("jwt");
                 const response = await
-                    fetch("http://localhost:8080/post/all?page=" + page, {
+                    fetch("http://localhost:8080/post/" + endpoint + "?page=" + page, {
                         method: "GET",
                         headers: {
                             "Content-Type": "application/json",

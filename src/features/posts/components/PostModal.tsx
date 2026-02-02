@@ -1,4 +1,4 @@
-import { User, type UserType } from "@/features/users";
+import { User } from "@/features/users";
 import type { CommentResponse, PostResponse } from "@/types/ApiResponses";
 import { useState } from "react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -10,33 +10,28 @@ import { usePostComments } from "../hooks/usePostComments";
 
 interface PostModalProps {
   post: PostResponse
-  callback: () => void,
-  svgCallback: () => void,
+  onClick: () => void,
+  onDelete: (id: number) => void,
 }
-export function PostModal(props: PostModalProps) {
-  const { content, published, user_name, user_id, like_count, comment_count, id } = props.post;
+export function PostModal({ post, onClick, onDelete }: PostModalProps) {
+  const { id, user, content, published, like_count, comment_count } = post;
   const [update, setUpdate] = useState<boolean>(true);
   const { comments, setComments, state } = usePostComments(id, update);
-  const user: UserType = {
-    id: user_id,
-    user_name: user_name,
-    content: content
-  };
 
   return (
-    <div id="post-modal" onClick={() => props.callback()}>
+    <div id="post-modal" onClick={() => onClick()}>
       <Card className="mx-auto w-1/2 post" onClick={(e) => {e.stopPropagation();}}>
         <CardContent className="post-content">
           <PostHeader
-            callback={props.svgCallback}
-            userId={user_id}
+            onDelete={onDelete}
+            userId={user.id}
             postId={id}
             onError={null}
-            modal={false}
           />
           <User
             user={user}
           />
+          <p>{content}</p>
         </CardContent>
         <CardFooter className="post-modal-comment-section">
           {comments.map(comment => (

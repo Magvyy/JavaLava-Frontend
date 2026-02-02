@@ -1,5 +1,9 @@
 .post {
-    padding-bottom: 0px;
+    padding: 0px;
+}
+
+.post * {
+    padding: 0px;
 }
 
 .post-svgs {
@@ -35,6 +39,8 @@
 
 .post-content {
     width: 100%;
+    padding: 10px;
+    padding-left: 20px;
 }
 
 #visible-checkbox {

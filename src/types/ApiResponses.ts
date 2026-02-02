@@ -4,10 +4,14 @@ export interface State {
   error: string | null
 }
 
-export interface PostResponse extends PostRequest {
+export interface UserResponse {
   id: number,
-  user_name: string,
-  user_id: number,
+  user_name: string
+}
+
+export interface PostResponse {
+  id: number,
+  user: UserResponse,
   content: string,
   published: string,
   visible: boolean,
@@ -24,10 +28,9 @@ export interface PostRequest {
 
 export interface CommentResponse {
   id: number,
+  user: UserResponse,
   content: string,
   published: string,
-  user_id: number,
-  user_name: string,
   post_id: number,
 }
 
@@ -36,11 +39,5 @@ export interface CommentRequest {
   content: string,
   published: string,
   post_id: number
-}
-
-export interface UserI {
-  id: number,
-  user_name: string,
-  content: string
 }
 

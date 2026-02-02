@@ -5,15 +5,12 @@ import edit from "./assets/edit.svg";
 import remove from "./assets/remove.svg";
 import exit from "./assets/exit.svg";
 interface PostHeaderProps {
-  callback: () => void,
+  onDelete: (id: number) => void,
   userId: number,
   postId: number,
-  onError: ((message: string) => void) | null,
-  modal: boolean
+  onError: ((message: string) => void) | null
 }
-export function PostHeader(props: PostHeaderProps) {
-  let userId = props.userId;
-  let postId = props.postId;
+export function PostHeader({ onDelete, userId, postId, onError }: PostHeaderProps) {
   let localId = localStorage.getItem("user_id");
 
   return (
@@ -24,9 +21,10 @@ export function PostHeader(props: PostHeaderProps) {
         }}/>}
         {(localId != null && userId == Number.parseInt(localId)) && <img src={remove} onClick={(e) => {
           e.stopPropagation();
-          deletePost(postId, props.callback, props.onError);
+          deletePost(postId, onDelete, onError);
+          window.location.href = "/";
         }}/>}
-        {(props.modal == true) && <img src={exit} onClick={(e) => {
+        {<img src={exit} onClick={(e) => {
           e.stopPropagation();
           window.location.href = "/";
         }}/>}

@@ -1,13 +1,12 @@
-import type { UserType } from "@/features/users";
+import type { UserResponse } from "@/types/ApiResponses";
 import "./user.css";
 
 import user_img from "./assets/user.svg";
 
 interface UserProps {
-  user: UserType
+  user: UserResponse
 }
-export function User(props: UserProps) {
-    const { user } = props;
+export function User({ user }: UserProps) {
 
     return (
         <div className="user-container">

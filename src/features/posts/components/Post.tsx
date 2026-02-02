@@ -1,37 +1,30 @@
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import "./post.css"
 
 
 import type { PostResponse } from "@/types/ApiResponses";
-import { ReadPost } from "./ReadPost";
-import { EditPost } from "./EditPost";
-import { CreatePost } from "./CreatePost";
+import { User } from "@/features/users";
+import { PostFooter } from "./PostFooter";
 interface PostProps {
-  post: PostResponse | null,
-  onCreate: (post: PostResponse) => void,
+  post: PostResponse,
   onEdit: (post: PostResponse) => void,
   onDelete: (post: PostResponse) => void,
-  onError: ((message: string) => void) | null
+  onError: ((message: string) => void) | null,
+  onClick: (post: PostResponse) => void
 }
-export function Post(props: PostProps) {
-  const onError = () => {
-
-  }
-
-  if (props.post != null) {
-    return (
-      <ReadPost
-        post={props.post}
-        onEdit={props.onEdit}
-        onDelete={props.onDelete}
-        onError={onError}
-      />
-    )
-  }
+export function Post({ post, onEdit, onDelete, onError, onClick }: PostProps) {
 
   return (
-    <CreatePost
-        onCreate={props.onCreate}
-        onError={props.onError}
-    />
+    <Card className="mx-auto w-full max-w-sm post" onClick={() => onClick(post)}>
+      <CardContent className="post-content">
+        <User
+          user={post.user}
+        />
+        <p>{post.content}</p>
+      </CardContent>
+      <CardFooter className="post-footer">
+        <PostFooter/>
+      </CardFooter>
+    </Card>
   )
 }

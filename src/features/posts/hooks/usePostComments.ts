@@ -23,8 +23,8 @@ export const usePostComments = (postId: number, update: boolean) => {
                         }
                     });
                 if (response.ok) {
-                    const postsJSON = await response.json();
-                    setComments([...comments, ...postsJSON]);
+                    const commentsJSON = await response.json();
+                    setComments([...comments, ...commentsJSON]);
                     setState({
                         loading: false,
                         error: null
