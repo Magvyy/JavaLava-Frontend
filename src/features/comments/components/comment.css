@@ -1,0 +1,17 @@
+
+
+.user-container {
+    height: 50px;
+}
+
+.comment {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 10px
+}
+
+.comment-content {
+    display: flex;
+    flex-direction: row;
+}
