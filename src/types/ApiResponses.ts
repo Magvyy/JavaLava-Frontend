@@ -12,6 +12,7 @@ export interface UserResponse {
 export interface PostResponse {
   id: number,
   user: UserResponse,
+  liked: boolean,
   content: string,
   published: string,
   visible: boolean,

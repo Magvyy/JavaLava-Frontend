@@ -1,4 +1,5 @@
 
+import "./post-header.css"
 
 import { deletePost } from "../services/deletePost";
 import edit from "./assets/edit.svg";

@@ -22,8 +22,11 @@ export function Post({ post, onEdit, onDelete, onError, onClick }: PostProps) {
         />
         <p>{post.content}</p>
       </CardContent>
-      <CardFooter className="post-footer">
-        <PostFooter/>
+      <CardFooter className="w-full">
+        <PostFooter
+          post_id={post.id}
+          liked={post.liked}
+        />
       </CardFooter>
     </Card>
   )

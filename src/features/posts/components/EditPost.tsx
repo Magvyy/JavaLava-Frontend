@@ -1,4 +1,6 @@
 import type { PostRequest, PostResponse } from "@/types/ApiResponses";
+import "./edit-post.css"
+
 import { useState } from "react";
 import { createPost } from "../services/createPost";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";

@@ -1,4 +1,6 @@
 import type { PostRequest, PostResponse } from "@/types/ApiResponses";
+import "./create-post.css"
+
 import { useState } from "react";
 import { createPost } from "../services/createPost";
 import { getCurrentTime } from "../services/getCurrentTime";
