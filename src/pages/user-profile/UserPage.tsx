@@ -25,7 +25,7 @@ export function UserPage() {
 	const { posts, setPosts, state } = useUserPosts(resolvedUserId, update);
 	const [modal, setModal] = useState<boolean>(false);
 	const [modalPost, setModalPost] = useState<PostResponse | null>(null);
-	const { profileUser, profileLoading } = useProfileUser(resolvedUserId);
+	const { profileUser, profileLoading, profileError: error } = useProfileUser(resolvedUserId);
 	const [requestSent, setRequestSent] = useState<boolean>(false);
 	const [requestLoading, setRequestLoading] = useState<boolean>(false);
 
@@ -83,11 +83,12 @@ export function UserPage() {
 
 	const showEmptyState = !state.loading && posts.length === 0 && profileUser != null;
 	const showLoadingState = state.loading && posts.length === 0;
+    
 
 	const profileHeader = (
 		<div className="profile-header">
 			{profileUser && <User user={profileUser} />}
-			{!isSelf && resolvedUserId != null && (
+			{!isSelf && profileUser && (
 				<Button onClick={onAddFriend} disabled={requestLoading || requestSent}>
 					{requestSent ? "Request sent" : "Add Friend"}
 				</Button>
@@ -96,12 +97,13 @@ export function UserPage() {
 	);
 
 	const profileState = (
-		<div className="profile-state">
-			{profileLoading && <p>Loading profile...</p>}
-			{!profileLoading && showLoadingState && <p>Loading posts...</p>}
-			{showEmptyState && <p>@{profileUser?.user_name} hasn’t posted yet.</p>}
-		</div>
-	);
+        <div className="profile-state">
+            {profileLoading && <p>Loading profile...</p>}
+            {!profileLoading && error === "not-found" && <p>User does not exist.</p>}
+            {!profileLoading && !error && showLoadingState && <p>Loading posts...</p>}
+            {showEmptyState && <p>@{profileUser?.user_name} hasn’t posted yet.</p>}
+        </div>
+    );
 
 	const profileFeed = (
 		<>

@@ -3,68 +3,62 @@ import { useEffect, useState } from "react";
 
 export const useProfileUser = (userId: number | null) => {
     const [profileUser, setProfileUser] = useState<UserResponse | null>(null);
-    const [profileLoading, setProfileLoading] = useState<boolean>(true);
-    const [profileError, setProfileError] = useState<string | null>(null);
+    const [profileLoading, setProfileLoading] = useState<boolean>(userId !== null);
+    const [profileError, setProfileError] = useState<string | null>(userId === null ? "missing-user" : null);
 
     useEffect(() => {
-        let ignore = false;
-
-        if (userId == null) {
-            queueMicrotask(() => {
-                setProfileUser(null);
-                setProfileLoading(false);
-                setProfileError("missing-user");
-            });
-            return () => {
-                ignore = true;
-            };
-        }
+        if (userId == null) return;
 
         queueMicrotask(() => {
             setProfileLoading(true);
             setProfileError(null);
         });
 
+        const controller = new AbortController();
+        const signal = controller.signal;
+
         const fetchUser = async () => {
             try {
                 const token = localStorage.getItem("jwt");
-                const response = await fetch("http://localhost:8080/users/" + userId, {
+                const response = await fetch(`http://localhost:8080/users/${userId}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
                         "Accept": "application/json",
                         "Authorization": `Bearer ${token}`
-                    }
+                    },
+                    signal
                 });
+
                 if (!response.ok) {
-                    if (!ignore) {
-                        setProfileLoading(false);
+                    if (response.status === 404) {
+                        setProfileError("not-found");
+                    } else {
                         setProfileError(response.status.toString());
                     }
+                    setProfileUser(null);
+                    setProfileLoading(false);
                     return;
                 }
+
                 const userJSON = await response.json();
-                if (!ignore) {
-                    setProfileUser(userJSON);
-                    setProfileLoading(false);
-                }
+                setProfileUser(userJSON);
+                setProfileLoading(false);
             } catch (err) {
-                if (!ignore) {
-                    setProfileLoading(false);
-                    if (err instanceof Error) {
-                        setProfileError(err.message);
-                    } else {
-                        setProfileError("unknown-error");
-                    }
+                if (signal.aborted) return;
+                setProfileLoading(false);
+                if (err instanceof Error) {
+                    setProfileError(err.message);
+                } else {
+                    setProfileError("unknown-error");
                 }
             }
         };
 
         fetchUser();
-        return () => {
-            ignore = true;
-        };
+
+        return () => controller.abort();
     }, [userId]);
 
-    return { profileUser, setProfileUser, profileLoading, profileError };
+    return { profileUser, profileLoading, profileError };
 };
