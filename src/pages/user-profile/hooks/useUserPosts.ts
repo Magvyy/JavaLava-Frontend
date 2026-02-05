@@ -18,21 +18,18 @@ export const useUserPosts = (userId: number | null, update: boolean) => {
             pageRef.current = 0;
             fetchedRef.current.clear();
             inFlightRef.current.clear();
-            queueMicrotask(() => {
-                setPosts([]);
-                setState({ loading: true, error: null });
-            });
+            setPosts([]);
+            setState({ loading: true, error: null });
+            
         }
 
-        if (userId == null) {
-            queueMicrotask(() => {
-                setState({ loading: false, error: "missing-user" });
-            });
+        if (!userId) {
+            setPosts([]);
+            setState({ loading: false, error: "missing-user" });
             return;
         }
         const fetchPosts = async () => {
             let pageKey = "";
-            let inFlightAdded = false;
             try {
                 const token = localStorage.getItem("jwt");
                 const currentPage = pageRef.current;
@@ -41,7 +38,6 @@ export const useUserPosts = (userId: number | null, update: boolean) => {
                     return;
                 }
                 inFlightRef.current.add(pageKey);
-                inFlightAdded = true;
                 const response = await fetch(
                     "http://localhost:8080/post/user/" + userId + "?page=" + currentPage,
                     {
@@ -55,17 +51,10 @@ export const useUserPosts = (userId: number | null, update: boolean) => {
                 );
                 if (response.ok) {
                     const postsJSON = await response.json();
-                    setPosts((prev) => {
-                        const seen = new Set(prev.map((post) => post.id));
-                        const merged = [...prev];
-                        for (const post of postsJSON as PostResponse[]) {
-                            if (!seen.has(post.id)) {
-                                merged.push(post);
-                                seen.add(post.id);
-                            }
-                        }
-                        return merged;
-                    });
+                    setPosts(prev => [
+                        ...prev,
+                        ...(postsJSON as PostResponse[]).filter(post => !prev.some(p => p.id === post.id))
+                    ]);
                     setState({ loading: false, error: null });
                     pageRef.current = currentPage + 1;
                     fetchedRef.current.add(pageKey);
@@ -79,9 +68,8 @@ export const useUserPosts = (userId: number | null, update: boolean) => {
                     setState({ loading: false, error: "unknown-error" });
                 }
             } finally {
-                if (inFlightAdded && pageKey) {
-                    inFlightRef.current.delete(pageKey);
-                }
+                inFlightRef.current.delete(pageKey);
+                
             }
         };
         fetchPosts();
