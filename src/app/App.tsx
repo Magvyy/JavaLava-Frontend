@@ -12,7 +12,8 @@ export default function App() {
       <nav>
         <Link to="/">Home</Link> |{" "}
         <Link to="/login">login</Link> |{" "}
-        <Link to="/register">Register</Link>
+        <Link to="/register">Register</Link> |{" "}
+        <Link to="/profile">Profile</Link>
       </nav>
 
       <Routes>
