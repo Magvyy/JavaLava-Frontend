@@ -3,6 +3,7 @@ import './App.css'
 import { HomePage } from '@/pages/feeds/HomePage';
 import { LoginPage } from '@/pages/auth/LoginPage';
 import { RegisterPage } from '@/pages/auth/RegisterPage';
+import { UserPage } from '@/pages/user-profile/UserPage';
 
 export default function App() {
 
@@ -18,6 +19,8 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/profile" element={<UserPage />} />
+        <Route path="/user/:userId" element={<UserPage />} />
       </Routes>
     </BrowserRouter>
   )
