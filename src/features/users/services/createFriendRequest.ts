@@ -1,5 +1,4 @@
 export async function createFriendRequest(userId: number) {
-    const token = localStorage.getItem("jwt");
     const response = await fetch("http://localhost:8080/friends/requests/" + userId, {
         credentials: "include",
         method: "POST",
