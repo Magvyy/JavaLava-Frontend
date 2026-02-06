@@ -31,7 +31,6 @@ export const useUserPosts = (userId: number | null, update: boolean) => {
         const fetchPosts = async () => {
             let pageKey = "";
             try {
-                const token = localStorage.getItem("jwt");
                 const currentPage = pageRef.current;
                 pageKey = `${userId}-${currentPage}`;
                 if (fetchedRef.current.has(pageKey) || inFlightRef.current.has(pageKey)) {

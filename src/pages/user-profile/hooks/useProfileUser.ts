@@ -19,8 +19,8 @@ export const useProfileUser = (userId: number | null) => {
 
         const fetchUser = async () => {
             try {
-                const token = localStorage.getItem("jwt");
                 const response = await fetch(`http://localhost:8080/users/profile/${userId}`, {
+                    credentials: "include",
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
