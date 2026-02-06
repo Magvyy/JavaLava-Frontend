@@ -60,5 +60,5 @@ export const useProfileUser = (userId: number | null) => {
         return () => controller.abort();
     }, [userId]);
 
-    return { profileUser, profileLoading, profileError };
+    return { profileUser, setProfileUser, profileLoading, profileError };
 };

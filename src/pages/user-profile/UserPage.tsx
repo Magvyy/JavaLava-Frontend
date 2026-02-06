@@ -11,6 +11,7 @@ import { createFriendRequest } from "@/features/users/services/createFriendReque
 import { acceptFriendRequest } from "@/features/users/services/acceptFriendRequest";
 import "./UserPage.css";
 import { useAuthenticateMe } from "@/shared/hooks/useAuthenticateMe";
+import { CreatePost } from "@/features/posts";
 
 export function UserPage() {
 	const { userId } = useParams();
@@ -21,15 +22,18 @@ export function UserPage() {
 
 	const isSelf = authUserId != null && authUserId === profileId;
 	const [update, setUpdate] = useState<boolean>(true);
-	const { posts, setPosts, state } = useUserPosts(profileId, update);
-	const { profileUser, profileLoading, profileError: error } = useProfileUser(profileId);
-	const [requestSent, setRequestSent] = useState<boolean>(false);
+	const { posts, setPosts, state, resetPosts } = useUserPosts(profileId, update);
+	const { profileUser, setProfileUser, profileLoading, profileError: error } = useProfileUser(profileId);
 	const [requestLoading, setRequestLoading] = useState<boolean>(false);
 
 	useScrollToEnd(() => {
 		if (update) setUpdate(false)
 		else setUpdate(true);
 	});
+
+	const onCreate = (post: PostResponse) => {
+        setPosts([post, ...posts]);
+    }
 
 	const onEdit = (edit: PostResponse) => {
 		const temp = posts.map(post => {
@@ -57,26 +61,11 @@ export function UserPage() {
         window.location.href = "/post/" + post.id;
     }
 
-	const onAddFriend = async () => {
-		if (isSelf || requestLoading || requestSent) return;
-		setRequestLoading(true);
-		const ok = await createFriendRequest(profileId);
-		setRequestLoading(false);
-		if (ok) setRequestSent(true);
-	};
-
-	const onAcceptFriendRequest = async (userId: number) => {
-		if (isSelf || requestLoading || requestSent) return;
-		setRequestLoading(true);
-		const ok = await acceptFriendRequest(userId);
-		setRequestLoading(false);
-		if (ok) setRequestSent(true);
-	};
 
 	const showEmptyState = !state.loading && posts.length === 0 && profileUser != null;
 	const showLoadingState = state.loading && posts.length === 0;
-	console.log(profileUser);
-	console.log(profileUser?.friend_status);
+	
+	
 	const buttonConfig = (() => {
 	switch (profileUser?.friend_status) {
 		case "FRIENDS":
@@ -94,12 +83,24 @@ export function UserPage() {
 	}
 	})();
 
-	const onButtonClick = () => {
-	if (profileUser?.friend_status === "REQUESTED") {
-		onAcceptFriendRequest(profileUser.id);
-	} else {
-		onAddFriend();
-	}
+	const onButtonClick = async () => {
+		if (requestLoading || isSelf) return;
+
+		setRequestLoading(true);
+
+		if (profileUser?.friend_status === "REQUESTED") {
+			const ok = await acceptFriendRequest(profileUser!.id);
+			if (ok){
+				setProfileUser({ ...profileUser, friend_status: "FRIENDS" });
+				resetPosts();
+				setUpdate(prev => !prev); 
+			}
+		} else if (profileUser?.friend_status === "NOT_FRIENDS") {
+			const ok = await createFriendRequest(profileUser!.id);
+			if (ok) setProfileUser({ ...profileUser, friend_status: "PENDING" });
+		}
+
+		setRequestLoading(false);
 	};
 
 	const profileHeader = (
@@ -130,6 +131,7 @@ export function UserPage() {
 		<>
 			{profileHeader}
 			{profileState}
+			{isSelf &&  <CreatePost onCreate={onCreate}/>}
 			<Feed
 				onEdit={onEdit}
 				onDelete={onDelete}
