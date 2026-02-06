@@ -3,7 +3,7 @@ import { useAuthenticateMe } from "@/shared/hooks/useAuthenticateMe";
 
 export function isOwner(userId: number) {
   const { user } = useAuthenticateMe();
-    if (user === null) {
+    if (!user) {
         return false;
     }
     return userId === user.id;

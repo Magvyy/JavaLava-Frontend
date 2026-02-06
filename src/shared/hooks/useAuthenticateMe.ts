@@ -2,7 +2,7 @@ import type { State, UserResponse } from "@/types/ApiResponses";
 import { useEffect, useState } from "react";
 
 export const useAuthenticateMe = () => {
-    const [user, setUser] = useState<UserResponse | null>(null);
+    const [user, setUser] = useState<UserResponse | undefined>();
     const [state, setState] = useState<State>({
         loading: true,
         error: null

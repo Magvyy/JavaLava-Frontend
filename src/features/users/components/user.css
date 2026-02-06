@@ -3,9 +3,6 @@
 
 .user-container {
     font: 1em sans-serif;
-}
-
-.user-container > div {
     padding: 0;
     margin: 0;
     height: 100%;
