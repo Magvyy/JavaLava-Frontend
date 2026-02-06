@@ -13,6 +13,7 @@ import "./UserPage.css";
 import { useAuthenticateMe } from "@/shared/hooks/useAuthenticateMe";
 import { CreatePost } from "@/features/posts";
 import { declineFriendRequest } from "@/features/users/services/declineFriendRequest";
+import { removeFriend } from "@/features/users/services/removeFriend";
 
 export function UserPage() {
 	const { userId } = useParams();
@@ -92,6 +93,7 @@ export function UserPage() {
 		const ok = await acceptFriendRequest(profileUser.id);
 		if (ok) {
 			setProfileUser({ ...profileUser, friend_status: "FRIENDS" });
+			//new posts may be visible now
 			resetPosts();
 			setUpdate(prev => !prev);
 		}
@@ -108,6 +110,25 @@ export function UserPage() {
 		if (ok) {
 			// back to not friends
 			setProfileUser({ ...profileUser, friend_status: "NOT_FRIENDS" });
+		}
+
+		setRequestLoading(false);
+	};
+	const onRemoveFriendClick = async () => {
+		if (!profileUser || requestLoading) return;
+
+		const confirmed = window.confirm(
+			`Remove ${profileUser.user_name} from your friends?`
+		);
+		if (!confirmed) return;
+
+		setRequestLoading(true);
+
+		const ok = await removeFriend(profileUser.id);
+		if (ok) {
+			setProfileUser({ ...profileUser, friend_status: "NOT_FRIENDS" });
+			resetPosts();
+			setUpdate(prev => !prev);
 		}
 
 		setRequestLoading(false);
@@ -132,34 +153,47 @@ export function UserPage() {
 		{profileUser && <User user={profileUser} />}
 
 		{!isSelf && profileUser && (
-    <>
-        {profileUser.friend_status === "REQUESTED" ? (
-            <div className="friend-actions">
-                <Button
-                    onClick={onAcceptClick}
-                    disabled={requestLoading}
-                >
-                    Accept
-                </Button>
+		<>
+			{profileUser.friend_status === "REQUESTED" && (
+				<div className="friend-actions">
+					<Button
+						onClick={onAcceptClick}
+						disabled={requestLoading}
+					>
+						Accept
+					</Button>
 
-                <Button
-                    variant="outline"
-                    onClick={onDeclineClick}
-                    disabled={requestLoading}
-                >
-                    Decline
-                </Button>
-            </div>
-        ) : (
-            <Button
-                onClick={onButtonClick}
-                disabled={requestLoading || buttonConfig.disabled}
-            >
-                {buttonConfig.label}
-            </Button>
-        )}
-    </>
-)}
+					<Button
+						variant="outline"
+						onClick={onDeclineClick}
+						disabled={requestLoading}
+					>
+						Decline
+					</Button>
+				</div>
+			)}
+
+			{profileUser.friend_status === "FRIENDS" && (
+				<Button
+					variant="outline"
+					onClick={onRemoveFriendClick}
+					disabled={requestLoading}
+				>
+					Remove friend
+				</Button>
+			)}
+
+			{profileUser.friend_status !== "REQUESTED" &&
+			profileUser.friend_status !== "FRIENDS" && (
+				<Button
+					onClick={onButtonClick}
+					disabled={requestLoading || buttonConfig.disabled}
+				>
+					{buttonConfig.label}
+				</Button>
+			)}
+		</>
+	)}
 	</div>
 	);
 
