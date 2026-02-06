@@ -83,17 +83,46 @@ export function UserPage() {
 
 	const showEmptyState = !state.loading && posts.length === 0 && profileUser != null;
 	const showLoadingState = state.loading && posts.length === 0;
-    
+	console.log(profileUser);
+	console.log(profileUser?.friend_status);
+	const buttonConfig = (() => {
+	switch (profileUser?.friend_status) {
+		case "FRIENDS":
+		return { label: "Friends", disabled: true };
+
+		case "PENDING":
+		return { label: "Request sent", disabled: true };
+
+		case "REQUESTED":
+		return { label: "Accept request", disabled: false };
+
+		case "NOT_FRIENDS":
+		default:
+		return { label: "Add Friend", disabled: false };
+	}
+	})();
+
+	const onButtonClick = () => {
+	if (profileUser?.friend_status === "REQUESTED") {
+		acceptFriendRequest(profileUser.id);
+	} else {
+		onAddFriend();
+	}
+	};
 
 	const profileHeader = (
-		<div className="profile-header">
-			{profileUser && <User user={profileUser} />}
-			{!isSelf && profileUser && (
-				<Button onClick={onAddFriend} disabled={requestLoading || requestSent}>
-					{requestSent ? "Request sent" : "Add Friend"}
-				</Button>
-			)}
-		</div>
+	<div className="profile-header">
+		{profileUser && <User user={profileUser} />}
+
+		{!isSelf && profileUser && (
+		<Button
+			onClick={onButtonClick}
+			disabled={requestLoading || buttonConfig.disabled}
+		>
+			{buttonConfig.label}
+		</Button>
+		)}
+	</div>
 	);
 
 	const profileState = (

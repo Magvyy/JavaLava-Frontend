@@ -1,8 +1,8 @@
-import type { UserResponse } from "@/types/ApiResponses";
+import type { ProfileUserResponse} from "@/types/ApiResponses";
 import { useEffect, useState } from "react";
 
 export const useProfileUser = (userId: number | null) => {
-    const [profileUser, setProfileUser] = useState<UserResponse | null>(null);
+    const [profileUser, setProfileUser] = useState<ProfileUserResponse | null>(null);
     const [profileLoading, setProfileLoading] = useState<boolean>(userId !== null);
     const [profileError, setProfileError] = useState<string | null>(userId === null ? "missing-user" : null);
 
@@ -20,7 +20,7 @@ export const useProfileUser = (userId: number | null) => {
         const fetchUser = async () => {
             try {
                 const token = localStorage.getItem("jwt");
-                const response = await fetch(`http://localhost:8080/users/${userId}`, {
+                const response = await fetch(`http://localhost:8080/users/profile/${userId}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
