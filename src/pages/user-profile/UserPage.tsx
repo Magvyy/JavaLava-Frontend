@@ -54,7 +54,7 @@ export function UserPage() {
     }
 
 	const onAddFriend = async () => {
-		if (!isSelf || requestLoading || requestSent) return;
+		if (isSelf || requestLoading || requestSent) return;
 		setRequestLoading(true);
 		const ok = await createFriendRequest(profileId);
 		setRequestLoading(false);
