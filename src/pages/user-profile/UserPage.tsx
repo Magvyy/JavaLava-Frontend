@@ -8,6 +8,7 @@ import Feed from "@/features/feed/components/Feed";
 import { User } from "@/features/users";
 import { Button } from "@/components/ui/button";
 import { createFriendRequest } from "@/features/users/services/createFriendRequest";
+import { acceptFriendRequest } from "@/features/users/services/acceptFriendRequest";
 import "./UserPage.css";
 import { useAuthenticateMe } from "@/shared/hooks/useAuthenticateMe";
 
@@ -64,6 +65,14 @@ export function UserPage() {
 		if (ok) setRequestSent(true);
 	};
 
+	const onAcceptFriendRequest = async (userId: number) => {
+		if (isSelf || requestLoading || requestSent) return;
+		setRequestLoading(true);
+		const ok = await acceptFriendRequest(userId);
+		setRequestLoading(false);
+		if (ok) setRequestSent(true);
+	};
+
 	const showEmptyState = !state.loading && posts.length === 0 && profileUser != null;
 	const showLoadingState = state.loading && posts.length === 0;
 	console.log(profileUser);
@@ -87,7 +96,7 @@ export function UserPage() {
 
 	const onButtonClick = () => {
 	if (profileUser?.friend_status === "REQUESTED") {
-		acceptFriendRequest(profileUser.id);
+		onAcceptFriendRequest(profileUser.id);
 	} else {
 		onAddFriend();
 	}
