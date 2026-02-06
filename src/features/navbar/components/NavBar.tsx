@@ -19,16 +19,16 @@ export function NavBar() {
         <NavigationMenu id="navbar">
             <NavigationMenuList>
                 <NavigationMenuItem>
-                    <NavigationMenuLink><a href="/">Home</a></NavigationMenuLink>
+                    <NavigationMenuLink href="/">Home</NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                    <NavigationMenuLink><a href={"/user/" + localId}>Profile</a></NavigationMenuLink>
+                    <NavigationMenuLink href={"/user/" + localId}>Profile</NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                    <NavigationMenuLink><a href="/login">Login</a></NavigationMenuLink>
+                    <NavigationMenuLink href="/login">Login</NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                    <NavigationMenuLink><a href="/register">Register</a></NavigationMenuLink>
+                    <NavigationMenuLink href="/register">Register</NavigationMenuLink>
                 </NavigationMenuItem>
             </NavigationMenuList>
         </NavigationMenu>
