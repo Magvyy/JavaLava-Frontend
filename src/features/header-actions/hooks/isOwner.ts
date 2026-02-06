@@ -1,10 +1,10 @@
+import { useAuthenticateMe } from "@/shared/hooks/usePostComments";
 
 
 export function isOwner(userId: number) {
-    let oAuth = localStorage.getItem("user_id");
-    if (oAuth === null) {
+  const { user } = useAuthenticateMe();
+    if (user === null) {
         return false;
     }
-    let localId = Number.parseInt(oAuth);
-    return userId === localId;
+    return userId === user.id;
 }
