@@ -73,5 +73,13 @@ export const useUserPosts = (userId: number | null, update: boolean) => {
         fetchPosts();
     }, [update, userId]);
 
-    return { posts, setPosts, state };
+    const resetPosts = () => {
+        setPosts([]);
+        pageRef.current = 0;
+        fetchedRef.current.clear();
+        inFlightRef.current.clear();
+        setState({ loading: true, error: null });
+    };
+
+    return { posts, setPosts, state, resetPosts };
 };
