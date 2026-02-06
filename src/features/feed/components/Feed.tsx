@@ -18,7 +18,6 @@ export default function Feed({ onEdit, onDelete, onClick, posts } : FeedProps) {
           post={post}
           onEdit={onEdit}
           onDelete={onDelete}
-          onError={() => {}}
           onClick={onClick}
           key={post.id}
         />
