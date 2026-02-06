@@ -1,12 +1,12 @@
 
 export async function likePostAPI(post_id: number, callback: (bool: boolean) => void) {
-    let token = localStorage.getItem("jwt");
     let response = await fetch("http://localhost:8080/likes/like/post/" + post_id, {
+            credentials: "include",
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
-                "Authorization": `Bearer ${token}`
+                "Access-Control-Allow-Credentials": "true"
             }
         });
     if (response.ok) {

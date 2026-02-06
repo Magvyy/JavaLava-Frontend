@@ -5,9 +5,10 @@ import { LoginPage } from '@/pages/auth/LoginPage';
 import { RegisterPage } from '@/pages/auth/RegisterPage';
 import { PostPage } from '@/pages/posts/PostPage';
 import { UserPage } from '@/pages/user-profile/UserPage';
+import { useAuthenticateMe } from '@/shared/hooks/useAuthenticateMe';
 
 export default function App() {
-	const localId = localStorage.getItem("user_id");
+  const { user } = useAuthenticateMe();
 
   return (
     <BrowserRouter>
@@ -15,7 +16,7 @@ export default function App() {
         <Link to="/">Home</Link> |{" "}
         <Link to="/login">login</Link> |{" "}
         <Link to="/register">Register</Link> |{" "}
-        {(localId) && <Link to={"/user/" + localId}>Profile</Link>}
+        {(user) && <Link to={"/user/" + user.id}>Profile</Link>}
       </nav>
 
       <Routes>

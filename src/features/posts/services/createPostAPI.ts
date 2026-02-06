@@ -2,13 +2,13 @@ import type { PostRequest, PostResponse } from "@/types/ApiResponses";
 
 
 export async function createPostAPI(post: PostRequest, callback: (post: PostResponse) => void, onError: ((message: string) => void) | null) {
-    let token = localStorage.getItem("jwt");
     let response = await fetch("http://localhost:8080/post", {
+            credentials: "include",
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
-                "Authorization": `Bearer ${token}`
+                "Access-Control-Allow-Credentials": "true"
             },
             body: JSON.stringify(post)
         });

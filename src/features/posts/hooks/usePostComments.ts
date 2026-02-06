@@ -12,14 +12,14 @@ export const usePostComments = (postId: number, update: boolean) => {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                let token = localStorage.getItem("jwt");
                 const response = await
                     fetch("http://localhost:8080/post/" + postId  + "/comments?page=" + page, {
+                        credentials: "include",
                         method: "GET",
                         headers: {
                             "Content-Type": "application/json",
                             "Accept": "application/json",
-                            "Authorization": `Bearer ${token}`
+                            "Access-Control-Allow-Credentials": "true"
                         }
                     });
                 if (response.ok) {
