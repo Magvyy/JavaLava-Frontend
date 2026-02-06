@@ -9,7 +9,7 @@ import { User } from "@/features/users";
 import { Button } from "@/components/ui/button";
 import { createFriendRequest } from "@/features/users/services/createFriendRequest";
 import "./UserPage.css";
-import { useAuthenticateMe } from "@/shared/hooks/usePostComments";
+import { useAuthenticateMe } from "@/shared/hooks/useAuthenticateMe";
 
 export function UserPage() {
 	const { userId } = useParams();

@@ -5,7 +5,7 @@ import { LoginPage } from '@/pages/auth/LoginPage';
 import { RegisterPage } from '@/pages/auth/RegisterPage';
 import { PostPage } from '@/pages/posts/PostPage';
 import { UserPage } from '@/pages/user-profile/UserPage';
-import { useAuthenticateMe } from '@/shared/hooks/usePostComments';
+import { useAuthenticateMe } from '@/shared/hooks/useAuthenticateMe';
 
 export default function App() {
   const { user } = useAuthenticateMe();

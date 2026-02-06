@@ -1,4 +1,4 @@
-import { useAuthenticateMe } from "@/shared/hooks/usePostComments";
+import { useAuthenticateMe } from "@/shared/hooks/useAuthenticateMe";
 
 
 export function isOwner(userId: number) {
