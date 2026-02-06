@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css'
 import { HomePage } from '@/pages/feeds/HomePage';
 import { LoginPage } from '@/pages/auth/LoginPage';
@@ -8,7 +8,6 @@ import { UserPage } from '@/pages/user-profile/UserPage';
 import { NavBar } from '@/features/navbar';
 
 export default function App() {
-
   return (
     <BrowserRouter>
       <NavBar/>

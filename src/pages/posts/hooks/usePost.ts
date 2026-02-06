@@ -24,14 +24,14 @@ export const usePost = (id: number) => {
     useEffect(() => {
         const fetchPost = async () => {
             try {
-                let token = localStorage.getItem("jwt");
                 const response = await
                     fetch("http://localhost:8080/post/" + id, {
+                        credentials: "include",
                         method: "GET",
                         headers: {
                             "Content-Type": "application/json",
                             "Accept": "application/json",
-                            "Authorization": `Bearer ${token}`
+                            "Access-Control-Allow-Credentials": "true"
                         }
                     });
                 if (response.ok) {

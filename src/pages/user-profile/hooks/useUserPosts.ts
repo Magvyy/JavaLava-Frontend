@@ -38,14 +38,13 @@ export const useUserPosts = (userId: number | null, update: boolean) => {
                     return;
                 }
                 inFlightRef.current.add(pageKey);
-                const response = await fetch(
-                    "http://localhost:8080/post/user/" + userId + "?page=" + currentPage,
-                    {
+                const response = await fetch("http://localhost:8080/post/user/" + userId + "?page=" + currentPage, {
+                        credentials: "include",
                         method: "GET",
                         headers: {
                             "Content-Type": "application/json",
                             "Accept": "application/json",
-                            "Authorization": `Bearer ${token}`
+                            "Access-Control-Allow-Credentials": "true"
                         }
                     }
                 );

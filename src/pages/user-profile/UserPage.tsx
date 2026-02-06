@@ -9,11 +9,14 @@ import { User } from "@/features/users";
 import { Button } from "@/components/ui/button";
 import { createFriendRequest } from "@/features/users/services/createFriendRequest";
 import "./UserPage.css";
+import { useAuthenticateMe } from "@/shared/hooks/useAuthenticateMe";
 
 export function UserPage() {
 	const { userId } = useParams();
 	const profileId = Number(userId);
-	const authUserId = Number(localStorage.getItem("user_id"));
+	
+	const { user } = useAuthenticateMe();
+	const authUserId = (user) ? user.id : null
 
 	const isSelf = authUserId != null && authUserId === profileId;
 	const [update, setUpdate] = useState<boolean>(true);

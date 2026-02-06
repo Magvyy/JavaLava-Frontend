@@ -1,19 +1,18 @@
-import type { CommentResponse, State } from "@/types/ApiResponses";
+import type { State, UserResponse } from "@/types/ApiResponses";
 import { useEffect, useState } from "react";
 
-export const usePostComments = (postId: number) => {
-    const [comments, setComments] = useState<CommentResponse[]>([]);
+export const useAuthenticateMe = () => {
+    const [user, setUser] = useState<UserResponse | null>(null);
     const [state, setState] = useState<State>({
         loading: true,
         error: null
     });
-    const [page, setPage] = useState<number>(0);
 
     useEffect(() => {
         const fetchPosts = async () => {
             try {
                 const response = await
-                    fetch("http://localhost:8080/post/" + postId  + "/comments?page=" + page, {
+                    fetch("http://localhost:8080/auth/me", {
                         credentials: "include",
                         method: "GET",
                         headers: {
@@ -23,13 +22,12 @@ export const usePostComments = (postId: number) => {
                         }
                     });
                 if (response.ok) {
-                    const commentsJSON = await response.json();
-                    setComments([...comments, ...commentsJSON]);
+                    const userJSON = await response.json();
+                    setUser(userJSON);
                     setState({
                         loading: false,
                         error: null
                     });
-                    setPage(page + 1);
                 } else {
                     setState({ loading: false, error: response.status.toString() });
                 }
@@ -39,5 +37,5 @@ export const usePostComments = (postId: number) => {
         }
         fetchPosts();
     }, []);
-    return { comments, setComments, state };
+    return { user, state };
 }
