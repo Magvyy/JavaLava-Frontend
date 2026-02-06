@@ -12,6 +12,7 @@ import { acceptFriendRequest } from "@/features/users/services/acceptFriendReque
 import "./UserPage.css";
 import { useAuthenticateMe } from "@/shared/hooks/useAuthenticateMe";
 import { CreatePost } from "@/features/posts";
+import { declineFriendRequest } from "@/features/users/services/declineFriendRequest";
 
 export function UserPage() {
 	const { userId } = useParams();
@@ -83,19 +84,42 @@ export function UserPage() {
 	}
 	})();
 
+	const onAcceptClick = async () => {
+		if (requestLoading || !profileUser) return;
+
+		setRequestLoading(true);
+
+		const ok = await acceptFriendRequest(profileUser.id);
+		if (ok) {
+			setProfileUser({ ...profileUser, friend_status: "FRIENDS" });
+			resetPosts();
+			setUpdate(prev => !prev);
+		}
+
+		setRequestLoading(false);
+	};
+
+	const onDeclineClick = async () => {
+		if (requestLoading || !profileUser) return;
+
+		setRequestLoading(true);
+
+		const ok = await declineFriendRequest(profileUser.id);
+		if (ok) {
+			// back to not friends
+			setProfileUser({ ...profileUser, friend_status: "NOT_FRIENDS" });
+		}
+
+		setRequestLoading(false);
+	};
+
 	const onButtonClick = async () => {
 		if (requestLoading || isSelf) return;
 
 		setRequestLoading(true);
 
-		if (profileUser?.friend_status === "REQUESTED") {
-			const ok = await acceptFriendRequest(profileUser!.id);
-			if (ok){
-				setProfileUser({ ...profileUser, friend_status: "FRIENDS" });
-				resetPosts();
-				setUpdate(prev => !prev); 
-			}
-		} else if (profileUser?.friend_status === "NOT_FRIENDS") {
+		
+		if (profileUser?.friend_status === "NOT_FRIENDS") {
 			const ok = await createFriendRequest(profileUser!.id);
 			if (ok) setProfileUser({ ...profileUser, friend_status: "PENDING" });
 		}
@@ -108,13 +132,34 @@ export function UserPage() {
 		{profileUser && <User user={profileUser} />}
 
 		{!isSelf && profileUser && (
-		<Button
-			onClick={onButtonClick}
-			disabled={requestLoading || buttonConfig.disabled}
-		>
-			{buttonConfig.label}
-		</Button>
-		)}
+    <>
+        {profileUser.friend_status === "REQUESTED" ? (
+            <div className="friend-actions">
+                <Button
+                    onClick={onAcceptClick}
+                    disabled={requestLoading}
+                >
+                    Accept
+                </Button>
+
+                <Button
+                    variant="outline"
+                    onClick={onDeclineClick}
+                    disabled={requestLoading}
+                >
+                    Decline
+                </Button>
+            </div>
+        ) : (
+            <Button
+                onClick={onButtonClick}
+                disabled={requestLoading || buttonConfig.disabled}
+            >
+                {buttonConfig.label}
+            </Button>
+        )}
+    </>
+)}
 	</div>
 	);
 
