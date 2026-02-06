@@ -3,6 +3,7 @@
 export function useAuth() { 
     const authenticate = async (username: string, password: string, endpoint: string) => {
         let response = await fetch("http://localhost:8080" + endpoint, {
+            credentials: "include",
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -22,9 +23,6 @@ export function useAuth() {
                 errorBox.classList.add("error-box");
             }
         } else {
-            let data = await response.json();
-            localStorage.setItem("jwt", data.jwt);
-            localStorage.setItem("user_id", data.user_id);
             window.location.href = "/";
         }
   }
