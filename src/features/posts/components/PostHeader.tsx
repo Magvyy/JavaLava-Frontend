@@ -1,34 +1,38 @@
 
-import "./post-header.css"
+import { CardHeader, CardTitle } from "@/components/ui/card";
+import "./css/post-header.css"
 
-import { deletePost } from "../services/deletePost";
-import edit from "./assets/edit.svg";
-import remove from "./assets/remove.svg";
-import exit from "./assets/exit.svg";
+import HeaderActions from "@/features/header-actions/components/HeaderActions";
+import { User } from "@/features/users";
+import type { UserResponse } from "@/types/ApiResponses";
 interface PostHeaderProps {
-  onDelete: (id: number) => void,
-  userId: number,
-  postId: number,
-  onError: ((message: string) => void) | null
+  editPost: () => void,
+  deletePost: () => void,
+  user: UserResponse,
+  onError?: ((message: string) => void) | null
 }
-export function PostHeader({ onDelete, userId, postId, onError }: PostHeaderProps) {
-  let localId = localStorage.getItem("user_id");
+export function PostHeader({ editPost, deletePost, user, onError }: PostHeaderProps) {
+
+  const editCallback = () => {
+    editPost();
+  }
+
+  const deleteCallback = () => {
+    deletePost();
+  }
 
   return (
-    <div className="post-svgs">
-        {(localId != null && userId == Number.parseInt(localId)) && <img src={edit} onClick={(e) => {
-          e.stopPropagation();
-          window.location.href = "/post/edit/" + postId;
-        }}/>}
-        {(localId != null && userId == Number.parseInt(localId)) && <img src={remove} onClick={(e) => {
-          e.stopPropagation();
-          deletePost(postId, onDelete, onError);
-          window.location.href = "/";
-        }}/>}
-        {<img src={exit} onClick={(e) => {
-          e.stopPropagation();
-          window.location.href = "/";
-        }}/>}
-    </div>
+    <CardHeader className="post-header-actions">
+      <CardTitle>
+        <User
+            user={user}
+        />
+      </CardTitle>
+      <HeaderActions
+        userId={user.id}
+        deleteCallback={deleteCallback}
+        editCallback={editCallback}
+      />
+    </CardHeader>
   )
 }

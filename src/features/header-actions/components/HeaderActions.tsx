@@ -10,6 +10,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { isOwner } from "../hooks/isOwner";
 
+import "./css/header-actions.css";
+
+import dots from "./assets/dots.svg";
+
 interface HeaderActionProps {
     userId: number,
     editCallback: () => void,
@@ -24,13 +28,19 @@ export default function HeaderActions({ userId, editCallback, deleteCallback }: 
 
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="outline">...</Button>
+            <DropdownMenuTrigger asChild className="header-actions">
+                <Button variant="outline"><img src={dots}/></Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuGroup>
-                    <DropdownMenuItem onClick={() => editCallback()}>edit</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => deleteCallback()}>delete</DropdownMenuItem>
+                    <DropdownMenuItem onClick={(event) => {
+                        event.stopPropagation();
+                        editCallback();
+                    }}>edit</DropdownMenuItem>
+                    <DropdownMenuItem onClick={(event) => {
+                        event.stopPropagation();
+                        deleteCallback()
+                    }}>delete</DropdownMenuItem>
                 </DropdownMenuGroup>
             </DropdownMenuContent>
         </DropdownMenu>
