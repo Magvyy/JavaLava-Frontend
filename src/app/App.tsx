@@ -5,18 +5,13 @@ import { LoginPage } from '@/pages/auth/LoginPage';
 import { RegisterPage } from '@/pages/auth/RegisterPage';
 import { PostPage } from '@/pages/posts/PostPage';
 import { UserPage } from '@/pages/user-profile/UserPage';
+import { NavBar } from '@/features/navbar';
 
 export default function App() {
-	const localId = localStorage.getItem("user_id");
 
   return (
     <BrowserRouter>
-      <nav>
-        <Link to="/">Home</Link> |{" "}
-        <Link to="/login">login</Link> |{" "}
-        <Link to="/register">Register</Link> |{" "}
-        {(localId) && <Link to={"/user/" + localId}>Profile</Link>}
-      </nav>
+      <NavBar/>
 
       <Routes>
         <Route path="/" element={<HomePage />} />
