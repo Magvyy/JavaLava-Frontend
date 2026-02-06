@@ -1,10 +1,10 @@
 import type { PostRequest, PostResponse } from "@/types/ApiResponses";
 
 
-export async function editPost(post: PostRequest, callback: (post: PostResponse) => void, onError: ((message: string) => void) | null) {
+export async function createPostAPI(post: PostRequest, callback: (post: PostResponse) => void, onError: ((message: string) => void) | null) {
     let token = localStorage.getItem("jwt");
-    let response = await fetch("http://localhost:8080/post" + post.id, {
-            method: "PUT",
+    let response = await fetch("http://localhost:8080/post", {
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json",

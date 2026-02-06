@@ -1,0 +1,10 @@
+
+
+.comment-section {
+    overflow-y: auto;
+    scrollbar-width: none;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}

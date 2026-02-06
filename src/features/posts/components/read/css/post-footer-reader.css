@@ -1,0 +1,41 @@
+
+.post-footer {
+    width: 100%;
+    padding: 0;
+    border-width: 1px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.post-footer-svgs {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 5px;
+}
+
+.post-footer-svgs > img {
+    width: 25px;
+    height: 25px;
+}
+
+.liked {
+    animation: like 0.2s;
+}
+
+@keyframes like {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}

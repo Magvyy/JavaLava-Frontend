@@ -1,5 +1,5 @@
 import { User } from "@/features/users";
-import "./comment.css"
+import "./css/comment.css"
 
 
 import type { CommentResponse } from "@/types/ApiResponses";
