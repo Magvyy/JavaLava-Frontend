@@ -8,8 +8,15 @@ interface UserProps {
 }
 export function User({ user }: UserProps) {
 
+    const onClick = () => {
+        window.location.href = "/user/" + user.id;
+    }
+
     return (
-        <div className="user-container">
+        <div className="user-container" onClick={(event) => {
+            event.stopPropagation();
+            onClick();
+        }}>
             <div>
                 <img src={user_img}/>
                 <p>{user.user_name}</p>

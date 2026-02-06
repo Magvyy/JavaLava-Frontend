@@ -25,7 +25,7 @@ export const useProfileUser = (userId: number | null) => {
                     headers: {
                         "Content-Type": "application/json",
                         "Accept": "application/json",
-                        "Authorization": `Bearer ${token}`
+                        "Access-Control-Allow-Credentials": "true"
                     },
                     signal
                 });

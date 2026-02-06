@@ -1,0 +1,12 @@
+
+
+.header-actions {
+    width: fit-content;
+    height: fit-content;
+    padding: 5px;
+}
+
+.header-actions > img {
+    width: 10px;
+    height: 10px;
+}

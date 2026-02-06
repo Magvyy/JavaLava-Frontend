@@ -1,5 +1,7 @@
 import type { CommentRequest, CommentResponse } from "@/types/ApiResponses";
-import { useState } from "react";
+import "./css/comment-adder.css";
+
+import { useEffect, useState } from "react";
 import { getCurrentTime } from "../services/getCurrentTime";
 import { createComment } from "../services/createComment";
 import { Input } from "@/components/ui/input";
@@ -14,6 +16,10 @@ export function AddComment(props: AddCommentProps) {
   const [content, setContent] = useState<string>("");
   const [published, setPublished] = useState<string>(getCurrentTime());
 
+  useEffect(() => {
+    
+  }, [content]);
+
   const submit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     let commentRequest: CommentRequest = {
@@ -27,7 +33,7 @@ export function AddComment(props: AddCommentProps) {
   }
   
   return (
-    <div className="comment">
+    <div id="comment-adder" className="comment">
       <form onSubmit={submit}>
         <Input
           placeholder="Write something..."

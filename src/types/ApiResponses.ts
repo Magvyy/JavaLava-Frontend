@@ -15,6 +15,7 @@ export interface ProfileUserResponse extends UserResponse {
 export interface PostResponse {
   id: number,
   user: UserResponse,
+  liked: boolean,
   content: string,
   published: string,
   visible: boolean,

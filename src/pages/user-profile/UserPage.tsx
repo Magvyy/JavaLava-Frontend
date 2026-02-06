@@ -1,31 +1,27 @@
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import type { PostResponse } from "@/types/ApiResponses";
 import { useScrollToEnd } from "@/pages/feeds/hooks/useScrollToEnd";
 import { useUserPosts } from "./hooks/useUserPosts";
 import { useProfileUser } from "./hooks/useProfileUser";
 import Feed from "@/features/feed/components/Feed";
-import { PostModal } from "@/features/posts";
 import { User } from "@/features/users";
 import { Button } from "@/components/ui/button";
 import { createFriendRequest } from "@/features/users/services/createFriendRequest";
 import "./UserPage.css";
+import { useAuthenticateMe } from "@/shared/hooks/useAuthenticateMe";
 
 export function UserPage() {
-	const { userId: routeUserId } = useParams();
-	const authUserId = localStorage.getItem("user_id");
-	const resolvedUserId = useMemo(() => {
-		if (routeUserId) return Number.parseInt(routeUserId);
-		if (authUserId) return Number.parseInt(authUserId);
-		return null;
-	}, [routeUserId, authUserId]);
+	const { userId } = useParams();
+	const profileId = Number(userId);
+	
+	const { user } = useAuthenticateMe();
+	const authUserId = (user) ? user.id : null
 
-	const isSelf = authUserId != null && resolvedUserId != null && Number.parseInt(authUserId) === resolvedUserId;
+	const isSelf = authUserId != null && authUserId === profileId;
 	const [update, setUpdate] = useState<boolean>(true);
-	const { posts, setPosts, state } = useUserPosts(resolvedUserId, update);
-	const [modal, setModal] = useState<boolean>(false);
-	const [modalPost, setModalPost] = useState<PostResponse | null>(null);
-	const { profileUser, profileLoading, profileError: error } = useProfileUser(resolvedUserId);
+	const { posts, setPosts, state } = useUserPosts(profileId, update);
+	const { profileUser, profileLoading, profileError: error } = useProfileUser(profileId);
 	const [requestSent, setRequestSent] = useState<boolean>(false);
 	const [requestLoading, setRequestLoading] = useState<boolean>(false);
 
@@ -33,16 +29,6 @@ export function UserPage() {
 		if (update) setUpdate(false)
 		else setUpdate(true);
 	});
-
-	useEffect(() => {
-        const timer = setTimeout(() => {
-            setRequestSent(false);
-            setRequestLoading(false);
-            setModal(false);
-        }, 0);
-
-        return () => clearTimeout(timer);
-    }, [resolvedUserId]);
 
 	const onEdit = (edit: PostResponse) => {
 		const temp = posts.map(post => {
@@ -66,17 +52,14 @@ export function UserPage() {
 		setPosts(temp);
 	};
 
-	const onClickPost = (post: PostResponse) => {
-        setModalPost(post);
-        setModal(true);
-    };
-
-    const onClickModal = () => setModal(false);
+    const onClickPost = (post: PostResponse) => {
+        window.location.href = "/post/" + post.id;
+    }
 
 	const onAddFriend = async () => {
-		if (resolvedUserId == null || requestLoading || requestSent) return;
+		if (isSelf || requestLoading || requestSent) return;
 		setRequestLoading(true);
-		const ok = await createFriendRequest(resolvedUserId);
+		const ok = await createFriendRequest(profileId);
 		setRequestLoading(false);
 		if (ok) setRequestSent(true);
 	};
@@ -149,16 +132,8 @@ export function UserPage() {
 
 	return (
     <>
-        {modal && modalPost && (
-        <PostModal
-            post={modalPost}
-            onClick={onClickModal}
-            onDelete={onDelete}
-        />
-        )}
-
         <div className="profile-page">
-        {profileFeed}
+			{profileFeed}
         </div>
     </>
     );
