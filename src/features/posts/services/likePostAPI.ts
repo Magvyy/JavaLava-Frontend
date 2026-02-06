@@ -1,5 +1,5 @@
 
-export async function likePost(post_id: number, callback: (bool: boolean) => void) {
+export async function likePostAPI(post_id: number, callback: (bool: boolean) => void) {
     let token = localStorage.getItem("jwt");
     let response = await fetch("http://localhost:8080/likes/like/post/" + post_id, {
             method: "POST",

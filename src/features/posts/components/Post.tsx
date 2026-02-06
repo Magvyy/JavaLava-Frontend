@@ -1,33 +1,52 @@
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import "./post.css"
+import "./css/post.css"
 
 
-import type { PostResponse } from "@/types/ApiResponses";
-import { User } from "@/features/users";
-import { PostFooter } from "./PostFooter";
+import type { CommentResponse, PostResponse } from "@/types/ApiResponses";
+import { deletePostAPI } from "../services/deletePostAPI";
+import { useState } from "react";
+import { EditPost } from "./edit/EditPost";
+import { ReadPost } from "./read/ReadPost";
+
+
 interface PostProps {
   post: PostResponse,
-  onEdit: (post: PostResponse) => void,
+  comments?: CommentResponse[],
   onDelete: (post: PostResponse) => void,
-  onError: ((message: string) => void) | null,
-  onClick: (post: PostResponse) => void
+  onEdit: (post: PostResponse) => void,
+  onError?: ((message: string) => void),
+  onClick?: (post: PostResponse) => void
 }
-export function Post({ post, onEdit, onDelete, onError, onClick }: PostProps) {
+export function Post({ post, comments, onDelete, onEdit, onError, onClick }: PostProps) {
+  const [editing, setEditing] = useState<boolean>(false);
+
+  const editPost = () => {
+    setEditing(true);
+  }
+
+  const deletePost = () => {
+    deletePostAPI(post, onDelete, null);
+  }
+
+  if (editing) {
+    return (
+      <EditPost
+        post={post}
+        editPost={editPost}
+        deletePost={deletePost}
+        onEdit={onEdit}
+        onError={onError}
+      />
+    )
+  }
 
   return (
-    <Card className="mx-auto w-full max-w-sm post" onClick={() => onClick(post)}>
-      <CardContent className="post-content">
-        <User
-          user={post.user}
-        />
-        <p>{post.content}</p>
-      </CardContent>
-      <CardFooter className="w-full">
-        <PostFooter
-          post_id={post.id}
-          liked={post.liked}
-        />
-      </CardFooter>
-    </Card>
+    <ReadPost
+      post={post}
+      editPost={editPost}
+      deletePost={deletePost}
+      onError={onError}
+      onClick={onClick}
+      comments={comments}
+    />
   )
 }
