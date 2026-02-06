@@ -7,6 +7,7 @@ import { PostPage } from '@/pages/posts/PostPage';
 import { UserPage } from '@/pages/user-profile/UserPage';
 
 export default function App() {
+	const localId = localStorage.getItem("user_id");
 
   return (
     <BrowserRouter>
@@ -14,7 +15,7 @@ export default function App() {
         <Link to="/">Home</Link> |{" "}
         <Link to="/login">login</Link> |{" "}
         <Link to="/register">Register</Link> |{" "}
-        <Link to="/profile">Profile</Link>
+        {(localId) && <Link to={"/user/" + localId}>Profile</Link>}
       </nav>
 
       <Routes>
