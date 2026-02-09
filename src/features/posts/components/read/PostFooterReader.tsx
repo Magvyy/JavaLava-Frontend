@@ -8,9 +8,6 @@ import { likePostAPI } from "../../services/likePostAPI";
 import { unlikePostAPI } from "../../services/unlikePostAPI";
 import { CardFooter } from "@/components/ui/card";
 import type { CommentResponse } from "@/types/ApiResponses";
-import CommentSection from "@/features/comments/components/CommentSection";
-import { AddComment } from "@/features/comments";
-import Comments from "@/features/comments/components/Comments";
 
 
 interface PostFooterReaderProps {
