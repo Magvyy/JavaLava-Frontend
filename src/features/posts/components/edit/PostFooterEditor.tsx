@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 
 interface PostFooterEditorProps {
   submitCallback: () => void,
-  onVisibleChange: (value: boolean) => void,
   visible: boolean,
+  setVisible: (value: boolean) => void
   className?: string
 }
-export function PostFooterEditor({ submitCallback, onVisibleChange, visible, className }: PostFooterEditorProps) {
+export function PostFooterEditor({ submitCallback, visible, setVisible, className }: PostFooterEditorProps) {
   return (
       <CardFooter className={className ? className : "w-full p-[10px] border-1 rounded-br-[10px] rounded-bl-[10px]"}>
         <Field className="flex flex-col gap-[1px] w-4/10" orientation="horizontal">
@@ -19,7 +19,7 @@ export function PostFooterEditor({ submitCallback, onVisibleChange, visible, cla
                 name="terms-checkbox-basic"
                 checked={visible}
                 onCheckedChange={(value: boolean) => {
-                  onVisibleChange(value);
+                  setVisible(value);
                 }}
             />
             <FieldLabel htmlFor="terms-checkbox-basic">

@@ -1,8 +1,8 @@
-import type { PostResponse } from "@/types/ApiResponses";
 
-export async function deletePostAPI(post: PostResponse, onDelete: ((post: PostResponse) => void), onError: ((message: string) => void) | null) {
+
+export async function deletePostAPI(id: number, onDelete: ((id: number) => void), onError: ((message: string) => void) | null) {
     const response = await
-        fetch("http://localhost:8080/post/" + post.id, {
+        fetch("http://localhost:8080/post/" + id, {
             credentials: "include",
             method: "DELETE",
             headers: {
@@ -12,7 +12,7 @@ export async function deletePostAPI(post: PostResponse, onDelete: ((post: PostRe
             }
         });
     if (response.ok) {
-        onDelete(post);
+        onDelete(id);
     } else {
         if (onError != null) {
             onError(response.status.toString());

@@ -3,12 +3,12 @@ import { Textarea } from "@/components/ui/textarea";
 
 
 interface PostContentEditorProps {
-    submitCallback: () => void,
-    onContentChange: (value: string) => void,
-    content: string,
+    submitCallback: () => void
+    content: string
+    setContent: (value: string) => void
     className?: string
 }
-export function PostContentEditor({ submitCallback, onContentChange, content, className }: PostContentEditorProps) {
+export function PostContentEditor({ submitCallback, content, setContent, className }: PostContentEditorProps) {
     
     return (
         <CardContent className={className ? className : "w-full p-[10px]"}>
@@ -21,14 +21,14 @@ export function PostContentEditor({ submitCallback, onContentChange, content, cl
                 <Textarea
                     className="resize-none p-[10px]"
                     onChange={(e => {
-                        onContentChange(e.target.value);
+                        setContent(e.target.value);
                     })}
                     value={content}
                     onKeyDown={(e) => {
                         if (e.key === "Enter" && !e.shiftKey) {
                         e.preventDefault();
                         submitCallback();
-                        onContentChange("");
+                        setContent("");
                         }
                     }}
                 />

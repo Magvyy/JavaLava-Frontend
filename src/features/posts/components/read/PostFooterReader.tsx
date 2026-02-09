@@ -14,11 +14,11 @@ import CommentSection from "@/features/comments/components/CommentSection";
 interface PostFooterReaderProps {
   post_id: number,
   liked: boolean,
-  setLiked: (liked: boolean) => void,
   comments?: CommentResponse[],
   className?: string
 }
-export function PostFooterReader({ post_id, liked, setLiked, comments, className }: PostFooterReaderProps) {
+export function PostFooterReader({ post_id, comments, className, ...props }: PostFooterReaderProps) {
+  const [liked, setLiked] = useState<boolean>(props.liked);
 
   return (
       <CardFooter className={className ? className : "w-full p-0 border-[1px] rounded-br-[10px] rounded-bl-[10px] flex flex-col"}>

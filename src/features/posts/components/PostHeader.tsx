@@ -4,23 +4,24 @@ import HeaderActions from "@/features/header-actions/components/HeaderActions";
 
 import { User } from "@/features/users";
 import type { UserResponse } from "@/types/ApiResponses";
+import { deletePostAPI } from "../services/deletePostAPI";
 
 
 interface PostHeaderProps {
-  editPost: () => void,
-  deletePost: () => void,
-  user: UserResponse,
-  onError?: ((message: string) => void) | null,
+  post_id: number
+  onDelete: (id: number) => void
+  user: UserResponse
+  onError?: ((message: string) => void) | null
   className?: string
 }
-export function PostHeader({ editPost, deletePost, user, onError, className }: PostHeaderProps) {
+export function PostHeader({ post_id, onDelete, user, onError, className }: PostHeaderProps) {
 
-  const editCallback = () => {
-    editPost();
+  const editPost = () => {
+    window.location.href = "/post/edit/" + post_id;
   }
 
-  const deleteCallback = () => {
-    deletePost();
+  const deletePost = async () => {
+      await deletePostAPI(post_id, onDelete, null);
   }
 
   return (
@@ -32,8 +33,8 @@ export function PostHeader({ editPost, deletePost, user, onError, className }: P
       </CardTitle>
       <HeaderActions
         userId={user.id}
-        deleteCallback={deleteCallback}
-        editCallback={editCallback}
+        deletePost={deletePost}
+        editPost={editPost}
       />
     </CardHeader>
   )
