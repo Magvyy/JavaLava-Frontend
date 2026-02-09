@@ -99,6 +99,7 @@ export function UserPage() {
 					<ReadPost
 						key={post.id}
 						post={post}
+						onClick={onClickPost}
 						headerChild={
 							<PostHeader
 								post_id={post.id}

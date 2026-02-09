@@ -66,12 +66,17 @@ export function HomePage() {
         setPosts(temp);
     }
 
+    const onClickPost = (post: PostResponse) => {
+        window.location.href = "/post/" + post.id;
+    }
+
     return (
         <div className="flex flex-col items-center gap-[20px] w-8/10">
             {posts.map(post => (
                 <ReadPost
                     key={post.id}
                     post={post}
+                    onClick={onClickPost}
                     headerChild={
                         <PostHeader
                             post_id={post.id}
