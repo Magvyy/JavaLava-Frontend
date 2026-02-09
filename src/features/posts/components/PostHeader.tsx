@@ -16,7 +16,7 @@ interface PostHeaderProps {
 }
 export function PostHeader({ post_id, onDelete, user, onError, className }: PostHeaderProps) {
 
-  const editPost = () => {
+  const editPostRedirect = () => {
     window.location.href = "/post/edit/" + post_id;
   }
 
@@ -33,8 +33,8 @@ export function PostHeader({ post_id, onDelete, user, onError, className }: Post
       </CardTitle>
       <HeaderActions
         userId={user.id}
+        editPostRedirect={editPostRedirect}
         deletePost={deletePost}
-        editPost={editPost}
       />
     </CardHeader>
   )

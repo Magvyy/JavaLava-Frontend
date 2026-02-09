@@ -15,11 +15,11 @@ import "./css/header-actions.css";
 import dots from "./assets/dots.svg";
 
 interface HeaderActionProps {
-    userId: number,
-    editCallback: () => void,
-    deleteCallback: () => void
+    userId: number
+    editPostRedirect: () => void
+    deletePost: () => void
 }
-export default function HeaderActions({ userId, editCallback, deleteCallback }: HeaderActionProps) {
+export default function HeaderActions({ userId, editPostRedirect, deletePost }: HeaderActionProps) {
     const owner = isOwner(userId);
 
     if (!owner) {
@@ -35,11 +35,11 @@ export default function HeaderActions({ userId, editCallback, deleteCallback }: 
                 <DropdownMenuGroup>
                     <DropdownMenuItem onClick={(event) => {
                         event.stopPropagation();
-                        editCallback();
+                        editPostRedirect();
                     }}>edit</DropdownMenuItem>
                     <DropdownMenuItem onClick={(event) => {
                         event.stopPropagation();
-                        deleteCallback()
+                        deletePost()
                     }}>delete</DropdownMenuItem>
                 </DropdownMenuGroup>
             </DropdownMenuContent>
