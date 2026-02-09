@@ -5,8 +5,7 @@ import { useScrollToEnd } from "@/pages/feeds/hooks/useScrollToEnd";
 import { useUserPosts } from "./hooks/useUserPosts";
 import { useProfileUser } from "./hooks/useProfileUser";
 import { User } from "@/features/users";
-import { Button } from "@/components/ui/button";
-import { createFriendRequest } from "@/features/users/services/createFriendRequest";
+import { FriendActions } from "@/features/users/components/FriendActions";
 import "./UserPage.css";
 import { useAuthenticateMe } from "@/shared/hooks/useAuthenticateMe";
 import { ReadPost } from "@/features/posts";
@@ -23,15 +22,17 @@ export function UserPage() {
 
 	const isSelf = authUserId != null && authUserId === profileId;
 	const [update, setUpdate] = useState<boolean>(true);
-	const { posts, setPosts, state } = useUserPosts(profileId, update);
-	const { profileUser, profileLoading, profileError: error } = useProfileUser(profileId);
-	const [requestSent, setRequestSent] = useState<boolean>(false);
-	const [requestLoading, setRequestLoading] = useState<boolean>(false);
+	const { posts, setPosts, state, resetPosts } = useUserPosts(profileId, update);
+	const { profileUser, setProfileUser, profileLoading, profileError: error } = useProfileUser(profileId);
 
 	useScrollToEnd(() => {
 		if (update) setUpdate(false)
 		else setUpdate(true);
 	});
+
+	const onCreate = (post: PostResponse) => {
+        setPosts([post, ...posts]);
+    }
 
 	const onEdit = (edit: PostResponse) => {
 		const temp = posts.map(post => {
@@ -59,26 +60,28 @@ export function UserPage() {
         window.location.href = "/post/" + post.id;
     }
 
-	const onAddFriend = async () => {
-		if (isSelf || requestLoading || requestSent) return;
-		setRequestLoading(true);
-		const ok = await createFriendRequest(profileId);
-		setRequestLoading(false);
-		if (ok) setRequestSent(true);
-	};
 
 	const showEmptyState = !state.loading && posts.length === 0 && profileUser != null;
 	const showLoadingState = state.loading && posts.length === 0;
 
 	const profileHeader = (
-		<div className="profile-header">
-			{profileUser && <User user={profileUser} />}
-			{!isSelf && profileUser && (
-				<Button onClick={onAddFriend} disabled={requestLoading || requestSent}>
-					{requestSent ? "Request sent" : "Add Friend"}
-				</Button>
-			)}
-		</div>
+	<div className="profile-header">
+		{profileUser && <User user={profileUser} />}
+
+		{profileUser && (
+			<FriendActions
+				profileUser={profileUser}
+				isSelf={isSelf}
+				onFriendStatusChange={(status) =>
+					setProfileUser({ ...profileUser, friend_status: status })
+				}
+				onVisibilityChange={() => {
+					resetPosts();
+					setUpdate(prev => !prev);
+				}}
+			/>
+		)}
+	</div>
 	);
 
 	const profileState = (
