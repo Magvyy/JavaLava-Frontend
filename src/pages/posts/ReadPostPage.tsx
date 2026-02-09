@@ -46,6 +46,7 @@ export function ReadPostPage() {
                     post_id={post.id}
                     liked={post.liked}
                     comments={comments}
+                    setComments={setComments}
                 />
             }
         />
