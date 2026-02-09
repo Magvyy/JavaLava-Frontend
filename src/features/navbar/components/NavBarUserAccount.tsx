@@ -1,7 +1,5 @@
 import type { UserResponse } from "@/types/ApiResponses";
 
-import "./css/navbar-user-account.css";
-
 import { useState } from "react";
 import { UserAccountModal } from "./UserAccountModal";
 import { UserAccount } from "./UserAccount";
@@ -16,33 +14,26 @@ export function NavBarUserAccount({ user }: NavBarUserAccountProps) {
     return (
         <NavigationMenuItem>
             <div
-                id="navbar-user-account"
+                className="relative flex"
                 onMouseEnter={() => setIsHovering(true)}
                 onMouseLeave={() => setIsHovering(false)}
             >
-                <NavigationMenuLink id="user-account-link" href={"/user/" + user.id}>
+                <NavigationMenuLink
+                    className="absolute w-fit h-fit z-1 right-0 -bottom-[18px]"
+                    href={"/user/" + user.id}
+                >
                     <UserAccount
                         user={user}
                     />
                 </NavigationMenuLink>
-                <div
-                    style={{
-                        position: "absolute",
-                        bottom: "-25px",
-                        height: "50px",
-                        width: "10px",
-                        right: "36px",
-                        background: "transparent",
-                    }}
-                />
                 {(isHovering) &&
                     <UserAccountModal
                         user={user}
                     />
                 }
-                    <UserAccountModal
-                        user={user}
-                    />
+                <div
+                    className="absolute -bottom-[25px] right-[36px] bg-transparent h-[50px] w-[10px]"
+                />
             </div>
         </NavigationMenuItem>
     )
