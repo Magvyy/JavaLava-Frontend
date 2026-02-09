@@ -1,29 +1,17 @@
-import type { CommentResponse } from "@/types/ApiResponses";
-import { AddComment } from "./CommentAdder";
-import { Comment } from "./Comment";
-import "./css/comment-section.css"
+import type { ReactNode } from "react";
 
 
 interface CommentSectionProps {
-    post_id: number,
-    comments: CommentResponse[],
-    addComment: (comment: CommentResponse) => void,
+    adderChild: ReactNode
+    commentsChild: ReactNode
 }
 
-export default function CommentSection({ post_id, comments, addComment }: CommentSectionProps) {
+export default function CommentSection({ adderChild, commentsChild }: CommentSectionProps) {
     
     return (
-      <div className="comment-section">
-        {comments.map(comment => (
-          <Comment
-            key={comment.id}
-            comment={comment}
-          />
-        ))}
-        <AddComment
-          post_id={post_id}
-          addComment={addComment}
-        />
+      <div className="flex flex-col items-center w-8/10 gap-[10px] p-[10px] no-scrollbars">
+        {adderChild}
+        {commentsChild}
       </div>
     )
 }
