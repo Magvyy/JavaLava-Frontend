@@ -1,5 +1,5 @@
-export async function createFriendRequest(userId: number) {
-    const response = await fetch("http://localhost:8080/friends/requests/" + userId, {
+export async function acceptFriendRequest(userId: number) {
+    const response = await fetch("http://localhost:8080/friends/requests/" + userId + "/accept", {
         credentials: "include",
         method: "POST",
         headers: {
