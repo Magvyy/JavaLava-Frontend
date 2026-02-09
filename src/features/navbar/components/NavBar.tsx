@@ -1,25 +1,20 @@
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 
-import "./css/navbar.css";
 import { useAuthenticateMe } from "@/shared/hooks/useAuthenticateMe";
 import { NavBarUserAccount } from "./NavBarUserAccount";
 
-interface NavBarProps {
-    
-}
+
 export function NavBar() {
     const { user, state } = useAuthenticateMe();
 
     if (state.loading) {
         return (
-            <NavigationMenu id="navbar">
+            <NavigationMenu>
                 Loading...
             </NavigationMenu>
         )

@@ -10,16 +10,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { isOwner } from "../hooks/isOwner";
 
-import "./css/header-actions.css";
 
 import dots from "./assets/dots.svg";
 
 interface HeaderActionProps {
-    userId: number,
-    editCallback: () => void,
-    deleteCallback: () => void
+    userId: number
+    editPostRedirect: () => void
+    deletePost: () => void
 }
-export default function HeaderActions({ userId, editCallback, deleteCallback }: HeaderActionProps) {
+export default function HeaderActions({ userId, editPostRedirect, deletePost }: HeaderActionProps) {
     const owner = isOwner(userId);
 
     if (!owner) {
@@ -28,18 +27,23 @@ export default function HeaderActions({ userId, editCallback, deleteCallback }: 
 
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger asChild className="header-actions">
-                <Button variant="outline"><img src={dots}/></Button>
+            <DropdownMenuTrigger asChild className="w-fit h-fit p-[5px]">
+                <Button variant="outline">
+                    <img
+                        src={dots}
+                        className="h-[10px] w-[10px]"
+                    />
+                </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuGroup>
                     <DropdownMenuItem onClick={(event) => {
                         event.stopPropagation();
-                        editCallback();
+                        editPostRedirect();
                     }}>edit</DropdownMenuItem>
                     <DropdownMenuItem onClick={(event) => {
                         event.stopPropagation();
-                        deleteCallback()
+                        deletePost()
                     }}>delete</DropdownMenuItem>
                 </DropdownMenuGroup>
             </DropdownMenuContent>

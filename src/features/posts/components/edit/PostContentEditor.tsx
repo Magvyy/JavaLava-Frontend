@@ -1,34 +1,34 @@
 import { CardContent } from "@/components/ui/card";
-
-import "./css/post-content-editor.css";
 import { Textarea } from "@/components/ui/textarea";
 
+
 interface PostContentEditorProps {
-    submitCallback: () => void,
-    onContentChange: (value: string) => void,
+    submitCallback: () => void
     content: string
+    setContent: (value: string) => void
+    className?: string
 }
-export function PostContentEditor({ submitCallback, onContentChange, content }: PostContentEditorProps) {
+export function PostContentEditor({ submitCallback, content, setContent, className }: PostContentEditorProps) {
     
     return (
-        <CardContent className="post-content-editor">
+        <CardContent className={className ? className : "w-full p-[10px]"}>
             <form
                 onSubmit={(event) => {
                     event.preventDefault();
                     submitCallback();
                 }}
-                className="post-adder-form">
+                >
                 <Textarea
-                    className="post-adder-textarea"
+                    className="resize-none p-[10px]"
                     onChange={(e => {
-                        onContentChange(e.target.value);
+                        setContent(e.target.value);
                     })}
                     value={content}
                     onKeyDown={(e) => {
                         if (e.key === "Enter" && !e.shiftKey) {
                         e.preventDefault();
                         submitCallback();
-                        onContentChange("");
+                        setContent("");
                         }
                     }}
                 />

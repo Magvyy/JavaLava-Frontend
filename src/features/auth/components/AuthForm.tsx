@@ -11,7 +11,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 
-import './auth-form.css'
 import { useAuth } from '../hooks/useAuth'
 
 interface AuthFormProps {
@@ -32,7 +31,7 @@ export default function AuthForm({isLoading = false, endpoint, name}: AuthFormPr
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
-        <CardTitle id="auth-card-title">{name}</CardTitle>
+        <CardTitle>{name}</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit}>

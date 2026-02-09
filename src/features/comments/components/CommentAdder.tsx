@@ -1,5 +1,4 @@
 import type { CommentRequest, CommentResponse } from "@/types/ApiResponses";
-import "./css/comment-adder.css";
 
 import { useEffect, useState } from "react";
 import { getCurrentTime } from "../services/getCurrentTime";
@@ -12,7 +11,7 @@ interface AddCommentProps {
   post_id: number,
   addComment: (comment: CommentResponse) => void
 }
-export function AddComment(props: AddCommentProps) {
+export function AddComment({ post_id, addComment }: AddCommentProps) {
   const [content, setContent] = useState<string>("");
   const [published, setPublished] = useState<string>(getCurrentTime());
 
@@ -26,14 +25,14 @@ export function AddComment(props: AddCommentProps) {
         id: null,
         content: content,
         published: getCurrentTime(),
-        post_id: props.post_id
+        post_id: post_id
     };
-    createComment(commentRequest, props.addComment);
+    createComment(commentRequest, addComment);
     setContent("");
   }
   
   return (
-    <div id="comment-adder" className="comment">
+    <div className="w-full p-[5px]">
       <form onSubmit={submit}>
         <Input
           placeholder="Write something..."

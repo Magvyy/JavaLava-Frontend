@@ -4,12 +4,14 @@ import type { PostResponse } from "@/types/ApiResponses";
 import { useScrollToEnd } from "@/pages/feeds/hooks/useScrollToEnd";
 import { useUserPosts } from "./hooks/useUserPosts";
 import { useProfileUser } from "./hooks/useProfileUser";
-import Feed from "@/features/feed/components/Feed";
 import { User } from "@/features/users";
 import { FriendActions } from "@/features/users/components/FriendActions";
 import "./UserPage.css";
 import { useAuthenticateMe } from "@/shared/hooks/useAuthenticateMe";
-import { CreatePost } from "@/features/posts";
+import { ReadPost } from "@/features/posts";
+import { PostHeader } from "@/features/posts/components/PostHeader";
+import { PostContentReader } from "@/features/posts/components/read/PostContentReader";
+import { PostFooterReader } from "@/features/posts/components/read/PostFooterReader";
 
 export function UserPage() {
 	const { userId } = useParams();
@@ -95,13 +97,33 @@ export function UserPage() {
 		<>
 			{profileHeader}
 			{profileState}
-			{isSelf &&  <CreatePost onCreate={onCreate}/>}
-			<Feed
-				onEdit={onEdit}
-				onDelete={onDelete}
-				onClick={onClickPost}
-				posts={posts}
-			/>
+			<div className="flex flex-col items-center gap-[20px] w-8/10">
+				{posts.map(post => (
+					<ReadPost
+						key={post.id}
+						post={post}
+						onClick={onClickPost}
+						headerChild={
+							<PostHeader
+								post_id={post.id}
+								onDelete={onDelete}
+								user={post.user}
+							/>
+						}
+						contentChild={
+							<PostContentReader
+								post={post}
+							/>
+						}
+						footerChild={
+							<PostFooterReader
+								post_id={post.id}
+								liked={post.liked}
+							/>
+						}
+					/>
+				))}
+			</div>
 		</>
 	);
 

@@ -1,28 +1,31 @@
-
 import { CardHeader, CardTitle } from "@/components/ui/card";
-import "./css/post-header.css"
-
 import HeaderActions from "@/features/header-actions/components/HeaderActions";
+
+
 import { User } from "@/features/users";
 import type { UserResponse } from "@/types/ApiResponses";
-interface PostHeaderProps {
-  editPost: () => void,
-  deletePost: () => void,
-  user: UserResponse,
-  onError?: ((message: string) => void) | null
-}
-export function PostHeader({ editPost, deletePost, user, onError }: PostHeaderProps) {
+import { deletePostAPI } from "../services/deletePostAPI";
 
-  const editCallback = () => {
-    editPost();
+
+interface PostHeaderProps {
+  post_id: number
+  onDelete: (id: number) => void
+  user: UserResponse
+  onError?: ((message: string) => void) | null
+  className?: string
+}
+export function PostHeader({ post_id, onDelete, user, onError, className }: PostHeaderProps) {
+
+  const editPostRedirect = () => {
+    window.location.href = "/post/edit/" + post_id;
   }
 
-  const deleteCallback = () => {
-    deletePost();
+  const deletePost = async () => {
+      await deletePostAPI(post_id, onDelete, null);
   }
 
   return (
-    <CardHeader className="post-header-actions">
+    <CardHeader className={className ? className : "w-full flex justify-between p-[10px] pl-[30px]"}>
       <CardTitle>
         <User
             user={user}
@@ -30,8 +33,8 @@ export function PostHeader({ editPost, deletePost, user, onError }: PostHeaderPr
       </CardTitle>
       <HeaderActions
         userId={user.id}
-        deleteCallback={deleteCallback}
-        editCallback={editCallback}
+        editPostRedirect={editPostRedirect}
+        deletePost={deletePost}
       />
     </CardHeader>
   )

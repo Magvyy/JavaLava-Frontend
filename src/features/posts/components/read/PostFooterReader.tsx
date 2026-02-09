@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import "./css/post-footer-reader.css"
-
 
 import comment from "../assets/comment.svg";
 import heart from "../assets/heart.svg";
@@ -9,44 +8,45 @@ import { likePostAPI } from "../../services/likePostAPI";
 import { unlikePostAPI } from "../../services/unlikePostAPI";
 import { CardFooter } from "@/components/ui/card";
 import type { CommentResponse } from "@/types/ApiResponses";
-import CommentSection from "@/features/comments/components/CommentSection";
 
 
 interface PostFooterReaderProps {
-  className?: string,
-  post_id: number,
-  liked: boolean,
+  post_id: number
+  liked: boolean
   comments?: CommentResponse[]
+  setComments?: (comment: CommentResponse[]) => void
+  commentSectionChild?: ReactNode
+  className?: string
 }
-export function PostFooterReader(props: PostFooterReaderProps) {
+export function PostFooterReader({ post_id, comments, setComments, commentSectionChild, className, ...props }: PostFooterReaderProps) {
   const [liked, setLiked] = useState<boolean>(props.liked);
 
   return (
-      <CardFooter className={(props.className) ? "post-footer " + props.className : "post-footer"}>
-        <div className="post-footer-svgs">
-          <img src={(liked) ? likedIcon : heart} className={(liked) ? "liked" : ""} onClick={(e) => {
-            e.stopPropagation();
-            (liked) ? setLiked(false) : setLiked(true);
-            if (liked) {
-              unlikePostAPI(props.post_id, () => {});
-            } else {
-              likePostAPI(props.post_id, () => {});
-            }
-
-
+      <CardFooter className={className ? className : "w-full p-0 border-[1px] rounded-br-[10px] rounded-bl-[10px] flex flex-col"}>
+        <div className="w-full flex items-center justify-around p-[5px]">
+          <img
+            className={(liked) ? "liked w-[25px] h-[25px]" : "w-[25px] h-[25px]"}
+            src={(liked) ? likedIcon : heart}
+            onClick={(e) => {
+              e.stopPropagation();
+              (liked) ? setLiked(false) : setLiked(true);
+              if (liked) {
+                unlikePostAPI(post_id, () => {});
+              } else {
+                likePostAPI(post_id, () => {});
+              }
           }}/>
-          <img src={comment} onClick={(e) => {
+          <img
+            className="w-[25px] h-[25px]"
+            src={comment}
+            onClick={(e) => {
             // e.stopPropagation();
           }}/>
         </div>
-        {props.comments && (
+        {comments && setComments && (
           <>
             <hr className="w-full"/>
-            <CommentSection
-              post_id={props.post_id}
-              comments={props.comments}
-              addComment={() => () => {}}
-            />
+            {commentSectionChild}
           </>
         )}
       </CardFooter>
