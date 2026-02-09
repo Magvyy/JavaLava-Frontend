@@ -12,6 +12,7 @@ export interface UserResponse {
 export interface ProfileUserResponse extends UserResponse {
   friend_status : "NOT_FRIENDS" | "FRIENDS" | "PENDING" | "REQUESTED"
 }
+
 export interface PostResponse {
   id: number,
   user: UserResponse,
