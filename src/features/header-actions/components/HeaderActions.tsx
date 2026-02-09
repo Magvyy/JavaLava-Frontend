@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { isOwner } from "../hooks/isOwner";
 
-import "./css/header-actions.css";
 
 import dots from "./assets/dots.svg";
 
@@ -28,8 +27,13 @@ export default function HeaderActions({ userId, editPostRedirect, deletePost }: 
 
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger asChild className="header-actions">
-                <Button variant="outline"><img src={dots}/></Button>
+            <DropdownMenuTrigger asChild className="w-fit h-fit p-[5px]">
+                <Button variant="outline">
+                    <img
+                        src={dots}
+                        className="h-[10px] w-[10px]"
+                    />
+                </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuGroup>
