@@ -40,6 +40,9 @@ export function NavBarUserAccount({ user }: NavBarUserAccountProps) {
                         user={user}
                     />
                 }
+                    <UserAccountModal
+                        user={user}
+                    />
             </div>
         </NavigationMenuItem>
     )
