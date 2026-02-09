@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import "./css/post-footer-reader.css"
 
 import comment from "../assets/comment.svg";
@@ -9,15 +9,19 @@ import { unlikePostAPI } from "../../services/unlikePostAPI";
 import { CardFooter } from "@/components/ui/card";
 import type { CommentResponse } from "@/types/ApiResponses";
 import CommentSection from "@/features/comments/components/CommentSection";
+import { AddComment } from "@/features/comments";
+import Comments from "@/features/comments/components/Comments";
 
 
 interface PostFooterReaderProps {
-  post_id: number,
-  liked: boolean,
-  comments?: CommentResponse[],
+  post_id: number
+  liked: boolean
+  comments?: CommentResponse[]
+  setComments?: (comment: CommentResponse[]) => void
+  commentSectionChild?: ReactNode
   className?: string
 }
-export function PostFooterReader({ post_id, comments, className, ...props }: PostFooterReaderProps) {
+export function PostFooterReader({ post_id, comments, setComments, commentSectionChild, className, ...props }: PostFooterReaderProps) {
   const [liked, setLiked] = useState<boolean>(props.liked);
 
   return (
@@ -42,14 +46,10 @@ export function PostFooterReader({ post_id, comments, className, ...props }: Pos
             // e.stopPropagation();
           }}/>
         </div>
-        {comments && (
+        {comments && setComments && (
           <>
             <hr className="w-full"/>
-            <CommentSection
-              post_id={post_id}
-              comments={comments}
-              addComment={() => () => {}}
-            />
+            {commentSectionChild}
           </>
         )}
       </CardFooter>

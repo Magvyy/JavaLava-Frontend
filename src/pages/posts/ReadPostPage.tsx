@@ -6,6 +6,10 @@ import { useEffect } from "react";
 import { PostHeader } from "@/features/posts/components/PostHeader";
 import { PostContentReader } from "@/features/posts/components/read/PostContentReader";
 import { PostFooterReader } from "@/features/posts/components/read/PostFooterReader";
+import CommentSection from "@/features/comments/components/CommentSection";
+import { AddComment } from "@/features/comments";
+import type { CommentResponse } from "@/types/ApiResponses";
+import Comments from "@/features/comments/components/Comments";
 
 
 
@@ -47,6 +51,21 @@ export function ReadPostPage() {
                     liked={post.liked}
                     comments={comments}
                     setComments={setComments}
+                    commentSectionChild={
+                        <CommentSection
+                            adderChild={
+                                <AddComment
+                                    post_id={post.id}
+                                    addComment={(comment: CommentResponse) => setComments([comment, ...comments])}
+                                />
+                            }
+                            commentsChild={
+                                <Comments
+                                    comments={comments}
+                                />
+                            }
+                        />
+                    }
                 />
             }
         />
