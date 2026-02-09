@@ -1,17 +1,19 @@
-
 import { CardHeader, CardTitle } from "@/components/ui/card";
-import "./css/post-header.css"
-
 import HeaderActions from "@/features/header-actions/components/HeaderActions";
+
+
 import { User } from "@/features/users";
 import type { UserResponse } from "@/types/ApiResponses";
+
+
 interface PostHeaderProps {
   editPost: () => void,
   deletePost: () => void,
   user: UserResponse,
-  onError?: ((message: string) => void) | null
+  onError?: ((message: string) => void) | null,
+  className?: string
 }
-export function PostHeader({ editPost, deletePost, user, onError }: PostHeaderProps) {
+export function PostHeader({ editPost, deletePost, user, onError, className }: PostHeaderProps) {
 
   const editCallback = () => {
     editPost();
@@ -22,7 +24,7 @@ export function PostHeader({ editPost, deletePost, user, onError }: PostHeaderPr
   }
 
   return (
-    <CardHeader className="post-header-actions">
+    <CardHeader className={className ? className : "w-full flex justify-between p-[10px] pl-[30px]"}>
       <CardTitle>
         <User
             user={user}

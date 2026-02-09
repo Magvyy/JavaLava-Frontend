@@ -1,4 +1,3 @@
-import "./css/post.css"
 
 
 import type { CommentResponse, PostResponse } from "@/types/ApiResponses";
@@ -14,9 +13,13 @@ interface PostProps {
   onDelete: (post: PostResponse) => void,
   onEdit: (post: PostResponse) => void,
   onError?: ((message: string) => void),
-  onClick?: (post: PostResponse) => void
+  onClick?: (post: PostResponse) => void,
+  className?: string,
+  headerClassName?: string,
+  contentClassName?: string,
+  footerClassName?: string
 }
-export function Post({ post, comments, onDelete, onEdit, onError, onClick }: PostProps) {
+export function Post({ post, comments, onDelete, onEdit, onError, onClick, className }: PostProps) {
   const [editing, setEditing] = useState<boolean>(false);
 
   const editPost = () => {
@@ -35,6 +38,7 @@ export function Post({ post, comments, onDelete, onEdit, onError, onClick }: Pos
         deletePost={deletePost}
         onEdit={onEdit}
         onError={onError}
+        className={className}
       />
     )
   }
@@ -47,6 +51,7 @@ export function Post({ post, comments, onDelete, onEdit, onError, onClick }: Pos
       onError={onError}
       onClick={onClick}
       comments={comments}
+      className={className}
     />
   )
 }

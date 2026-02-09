@@ -1,5 +1,4 @@
 import type { PostResponse } from "@/types/ApiResponses";
-import "./css/create-post.css"
 
 import { useState } from "react";
 import { getCurrentTime } from "../../services/getCurrentTime";
@@ -11,9 +10,13 @@ import { createPostAPI } from "../../services/createPostAPI";
 
 interface CreatePostProps {
   onCreate: (post: PostResponse) => void,
-  onError?: ((message: string) => void)
+  onError?: ((message: string) => void),
+  className?: string,
+  headerClassName?: string,
+  contentClassName?: string,
+  footerClassName?: string
 }
-export function CreatePost({ onCreate, onError }: CreatePostProps) {
+export function CreatePost({ onCreate, onError, className, headerClassName, contentClassName, footerClassName }: CreatePostProps) {
   const [content, setContent] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
 
@@ -33,22 +36,25 @@ export function CreatePost({ onCreate, onError }: CreatePostProps) {
   
 
   return (
-    <Card className="mx-auto w-full max-w-sm post">
+    <Card className={className ? className : "mx-auto w-full max-w-sm p-0"}>
       {/* <PostHeader
         editPost={editPost}
         deletePost={deletePost}
         user={post.user}
         onError={onError}
+        className={headerClassName}
       /> */}
       <PostContentCreator
         submitCallback={submitCallback}
         content={content}
         setContent={setContent}
+        className={contentClassName}
       />
       <PostFooterCreator
         submitCallback={submitCallback}
         visible={visible}
         setVisible={setVisible}
+        className={footerClassName}
       />
     </Card>
   )
