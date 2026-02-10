@@ -1,15 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-#root {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 50px;
-  padding: 2rem;
-}
-
 .error-box {
   color: #c51244;
   background-color: #f8d7da;
@@ -19,10 +10,6 @@
   border-radius: 4px;
   font-size: 0.9em;
   display: block;
-}
-
-.hidden {
-  display: none !important;
 }
 
 @custom-variant dark (&:is(.dark *));
