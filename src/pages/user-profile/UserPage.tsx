@@ -76,7 +76,7 @@ export function UserPage() {
 						}}
 					/>
 				}
-				className="flex flex-col gap-[10px]"
+				className="flex flex-col gap-[10px] text-center"
 			/>
 		}
 
