@@ -7,6 +7,7 @@ import {
 
 import { useAuthenticateMe } from "@/shared/hooks/useAuthenticateMe";
 import { NavBarUserAccount } from "./NavBarUserAccount";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 
 export function NavBar() {
@@ -21,11 +22,17 @@ export function NavBar() {
     }
 
     return (
-        <NavigationMenu>
-            <NavigationMenuList className="justify-between w-screen px-9">
-                <NavigationMenuItem>
-                    <NavigationMenuLink href="/">Home</NavigationMenuLink>
-                </NavigationMenuItem>
+        <NavigationMenu className="w-full max-w-full" id="navbar">
+            <NavigationMenuList className="flex justify-between w-full max-w-full p-1">
+                <div className="flex items-center justify-center mr-auto">
+                    {/* <SidebarTrigger /> */}
+                    <NavigationMenuItem>
+                        <NavigationMenuLink href="/">Home</NavigationMenuLink>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        <NavigationMenuLink href="/empty">Empty</NavigationMenuLink>
+                    </NavigationMenuItem>
+                </div>
                 {(user) ? (
                     <NavBarUserAccount
                         user={user}
