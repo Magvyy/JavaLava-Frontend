@@ -5,18 +5,18 @@ import { useState } from "react";
 export const useAuthenticate = (endpoint: string) => {
     const [username, setUsername] = useState<string>("")
     const [password, setPassword] = useState<string>("")
-    const { state, handleApiCall } = useApiCall<string>({
-        credentials: true,
-        endpoint: "http://localhost:8080" + endpoint,
-        method: "POST",
-        body: JSON.stringify({
-            "user_name": username,
-            "password": password
-        }),
-    })
+    const { state, handleApiCall } = useApiCall<string>()
 
     const authenticate = () => {
-        handleApiCall();
+        handleApiCall({
+            credentials: true,
+            endpoint: "http://localhost:8080" + endpoint,
+            method: "POST",
+            body: JSON.stringify({
+                "user_name": username,
+                "password": password
+            }),
+        });
     }
 
     if (state.called) {
