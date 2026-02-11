@@ -1,5 +1,4 @@
-import type { UserResponse } from "./ApiResponses"
-
+import type { UserResponse } from "./UserApi"
 
 export interface PostResponse {
   id: number
