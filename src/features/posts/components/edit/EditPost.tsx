@@ -5,17 +5,13 @@ import { Card } from "@/components/ui/card";
 interface EditPostProps {
   onError?: ((message: string) => void)
   className?: string
-  headerChild: ReactNode
-  contentChild: ReactNode
-  footerChild: ReactNode
+  children: ReactNode
 }
-export function EditPost({ onError, className, headerChild, contentChild, footerChild }: EditPostProps) {
+export function EditPost({ onError, className, children}: EditPostProps) {
 
   return (
-    <Card className={className ? className : "mx-auto w-full max-w-sm p-0"}>
-      {headerChild}
-      {contentChild}
-      {footerChild}
+    <Card className={className ? className : "w-full max-w-sm p-0"}>
+      {children}
     </Card>
   )
 }
