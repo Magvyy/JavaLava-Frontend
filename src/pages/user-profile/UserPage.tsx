@@ -109,7 +109,7 @@ export function UserPage() {
 		<>
 			{profileHeader}
 			{profileState}
-			<div className="flex flex-col items-center gap-[20px] w-8/10">
+			<div className="flex flex-col items-center gap-[20px] w-3/5">
 				{posts.map(post => (
 					<ReadPost
 						key={post.id}
