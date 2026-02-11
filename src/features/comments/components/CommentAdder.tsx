@@ -1,4 +1,4 @@
-import type { CommentRequest, CommentResponse } from "@/types/ApiResponses";
+import type { CommentRequest, CommentResponse } from "@/shared/types/CommentApi";
 
 import { useEffect, useState } from "react";
 import { getCurrentTime } from "../services/getCurrentTime";

@@ -1,8 +1,8 @@
+import type { CommentResponse } from "@/shared/types/CommentApi";
 import { User } from "@/features/users";
 import { ProfilePic } from "@/features/users/components/ProfilePic";
 
 
-import type { CommentResponse } from "@/types/ApiResponses";
 interface CommentProps {
   comment: CommentResponse
 }
