@@ -1,6 +1,6 @@
 import { CreatePost } from "@/features/posts";
 import { useState } from "react";
-import type { PostResponse } from "@/types/ApiResponses";
+import type { PostResponse } from "@/shared/types/PostApi";
 import { editPostAPI } from "@/features/posts/services/editPostAPI";
 import { getCurrentTime } from "@/features/comments/services/getCurrentTime";
 import { PostContentCreator } from "@/features/posts/components/create/PostContentCreator";

@@ -1,15 +1,14 @@
-import { ReadPost} from "@/features/posts";
-import { usePost } from "./hooks/usePost";
-import { usePostComments } from "./hooks/usePostComments";
+import { ReadPost, usePostComments} from "@/features/posts";
+import { useReadPost } from "./hooks/useReadPost";
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
 import { PostHeader } from "@/features/posts/components/PostHeader";
 import { PostContentReader } from "@/features/posts/components/read/PostContentReader";
 import { PostFooterReader } from "@/features/posts/components/read/PostFooterReader";
 import CommentSection from "@/features/comments/components/CommentSection";
 import { AddComment } from "@/features/comments";
-import type { CommentResponse } from "@/types/ApiResponses";
+import type { CommentResponse } from "@/shared/types/CommentApi";
 import Comments from "@/features/comments/components/Comments";
+import { Loader } from "@/shared/components/Loader";
 
 
 
@@ -20,55 +19,48 @@ export function ReadPostPage() {
         window.location.href = "/";
     }
 
-    const { post, setPost } = usePost(Number(id));
-    const { comments, setComments } = usePostComments(Number(id));
+    const { state: postState } = useReadPost(Number(id));
+    const { comments, setComments, page, setPage, state: commentsState } = usePostComments(Number(id));
 
     const onDelete = (id: number) => {
         window.location.href = "/";
     }
 
-    useEffect(() => {
-    }, [post, comments]);
-
     return (
-        <ReadPost
-            post={post}
-            className="mx-auto w-full max-w-1/2 p-0"
-            headerChild={
-                <PostHeader
-                    post_id={post.id}
-                    onDelete={onDelete}
-                    user={post.user}
-                />
+        <Loader state={postState} className="w-full max-w-1/2 p-4">
+            {(post) =>
+                <ReadPost post={post} className="w-full max-w-1/2 p-0">
+                    <PostHeader
+                        post_id={post.id}
+                        onDelete={onDelete}
+                        user={post.user}
+                    />
+                    <PostContentReader
+                        post={post}
+                    />
+                    <PostFooterReader
+                        post_id={post.id}
+                        liked={post.liked}
+                        comments={comments}
+                        setComments={setComments}
+                        commentSectionChild={
+                            <CommentSection
+                                adderChild={
+                                    <AddComment
+                                        post_id={post.id}
+                                        addComment={(comment: CommentResponse) => setComments([comment, ...comments])}
+                                    />
+                                }
+                                commentsChild={
+                                    <Comments
+                                        comments={comments}
+                                    />
+                                }
+                            />
+                        }
+                    />
+                </ReadPost>
             }
-            contentChild={
-                <PostContentReader
-                    post={post}
-                />
-            }
-            footerChild={
-                <PostFooterReader
-                    post_id={post.id}
-                    liked={post.liked}
-                    comments={comments}
-                    setComments={setComments}
-                    commentSectionChild={
-                        <CommentSection
-                            adderChild={
-                                <AddComment
-                                    post_id={post.id}
-                                    addComment={(comment: CommentResponse) => setComments([comment, ...comments])}
-                                />
-                            }
-                            commentsChild={
-                                <Comments
-                                    comments={comments}
-                                />
-                            }
-                        />
-                    }
-                />
-            }
-        />
+        </Loader>
     )
 }

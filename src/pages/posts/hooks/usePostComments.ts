@@ -1,43 +1,31 @@
-import type { CommentResponse, State } from "@/types/ApiResponses";
+import { useApiCall } from "@/shared/hooks/useApiCall";
+import type { CommentResponse } from "@/shared/types/CommentApi";
 import { useEffect, useState } from "react";
 
 export const usePostComments = (postId: number) => {
-    const [comments, setComments] = useState<CommentResponse[]>([]);
-    const [state, setState] = useState<State>({
-        loading: true,
-        error: null
-    });
     const [page, setPage] = useState<number>(0);
+    const [comments, setComments] = useState<CommentResponse[]>([]);
+    const { state, handleApiCall } = useApiCall<CommentResponse[]>();
 
     useEffect(() => {
-        const fetchPosts = async () => {
-            try {
-                const response = await
-                    fetch("http://localhost:8080/post/" + postId  + "/comments?page=" + page, {
-                        credentials: "include",
-                        method: "GET",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Accept": "application/json",
-                            "Access-Control-Allow-Credentials": "true"
-                        }
-                    });
-                if (response.ok) {
-                    const commentsJSON = await response.json();
-                    setComments([...comments, ...commentsJSON]);
-                    setState({
-                        loading: false,
-                        error: null
-                    });
-                    setPage(page + 1);
-                } else {
-                    setState({ loading: false, error: response.status.toString() });
-                }
-            } catch (err: any) {
-                setState({ loading: false, error: err.message });
-            }
+        let data = state.result?.data;
+        if (data) {
+            let commentsToAdd: CommentResponse[] = [];
+            data.forEach(add => {
+                if (!comments.some(comment => comment.id == add.id)) commentsToAdd.push(add);
+            })
+            setComments([...commentsToAdd, ...comments])
+            setPage(page + 1);
         }
-        fetchPosts();
-    }, []);
-    return { comments, setComments, state };
+    }, [state])
+    
+    useEffect(() => {
+        handleApiCall({
+            endpoint: "http://localhost:8080/post/" + postId  + "/comments?page=" + page,
+            credentials: true,
+            method: "GET",
+        });
+    }, [])
+
+    return { comments, setComments, page, setPage, state };
 }
