@@ -8,7 +8,7 @@ interface SideBarConversationsProps {
 
 export function SideBarConversations({  }: SideBarConversationsProps) {
     const [update, setUpdate] = useState<boolean>(false);
-    const { conversations, setConversations, State } = useConversations(update);
+    const { state } = useConversations(update);
 
     return (
         <div className="flex flex-col gap-[10px] w-full">

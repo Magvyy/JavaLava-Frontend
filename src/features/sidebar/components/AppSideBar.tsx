@@ -7,9 +7,9 @@ interface AppSideBarProps {
 }
 
 export function AppSideBar({  }: AppSideBarProps) {
-    const { user } = useAuthenticateMe();
+    const { user, state } = useAuthenticateMe();
     
-    const conversations = (user === undefined)
+    const conversations = (!user)
     ? (
     <SidebarGroup>
         <SidebarGroupLabel>Messages</SidebarGroupLabel>
