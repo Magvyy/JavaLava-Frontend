@@ -1,10 +1,31 @@
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader, SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu } from "@/components/ui/sidebar";
+import { SideBarConversations } from "./SideBarConversations";
+import { useAuthenticateMe } from "@/shared/hooks/useAuthenticateMe";
 
 interface AppSideBarProps {
 
 }
 
 export function AppSideBar({  }: AppSideBarProps) {
+    const { user } = useAuthenticateMe();
+    
+    const conversations = (user === undefined)
+    ? (
+    <SidebarGroup>
+        <SidebarGroupLabel>Messages</SidebarGroupLabel>
+        <SidebarGroupContent className="p-2 text-center">
+            Get some friends dawg
+        </SidebarGroupContent>
+    </SidebarGroup>
+    ) : (
+    <SidebarGroup>
+        <SidebarGroupLabel>Messages</SidebarGroupLabel>
+        <SidebarGroupContent>
+            <SideBarConversations/>
+        </SidebarGroupContent>
+    </SidebarGroup>
+    )
+
     return (
         <Sidebar>
             <SidebarHeader>
@@ -12,8 +33,7 @@ export function AppSideBar({  }: AppSideBarProps) {
                 </SidebarMenu>
             </SidebarHeader>
             <SidebarContent>
-                <SidebarGroup>
-                </SidebarGroup>
+                {conversations}
             </SidebarContent>
             <SidebarFooter>
             </SidebarFooter>
