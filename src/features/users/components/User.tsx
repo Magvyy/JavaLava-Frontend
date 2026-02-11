@@ -1,4 +1,4 @@
-import type { UserResponse } from "@/types/ApiResponses";
+import type { UserResponse } from "@/shared/types/UserApi";
 
 import type { ReactNode } from "react";
 

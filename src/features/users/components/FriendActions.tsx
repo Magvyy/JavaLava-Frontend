@@ -4,8 +4,8 @@ import { createFriendRequest } from "@/features/users/services/createFriendReque
 import { declineFriendRequest } from "@/features/users/services/declineFriendRequest";
 import { removeFriend } from "@/features/users/services/removeFriend";
 import { useState } from "react";
-import type { ProfileUserResponse } from "@/types/ApiResponses";
 import { useAuthenticateMe } from "@/shared/hooks/useAuthenticateMe";
+import type { ProfileUserResponse } from "@/shared/types/UserApi";
 
 type Props = {
     profileUser: ProfileUserResponse;
