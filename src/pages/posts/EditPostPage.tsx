@@ -7,6 +7,7 @@ import { PostHeader } from "@/features/posts/components/PostHeader";
 import { editPostAPI } from "@/features/posts/services/editPostAPI";
 import { PostContentEditor } from "@/features/posts/components/edit/PostContentEditor";
 import { PostFooterEditor } from "@/features/posts/components/edit/PostFooterEditor";
+import { Loader } from "@/shared/components/Loader";
 
 
 export function EditPostPage() {
@@ -41,8 +42,6 @@ export function EditPostPage() {
             setVisible(data.visible);
         }
     }, [state])
-
-    if (!post) return null;
       
     function createPostRequest(post: PostResponse) {
         return {
@@ -67,28 +66,26 @@ export function EditPostPage() {
     }
 
     return (
-        <EditPost
-            headerChild={
-                <PostHeader
-                    post_id={post.id}
-                    onDelete={onDelete}
-                    user={post.user}
-                />
+        <Loader state={state}>
+            {(post) => 
+                <EditPost>
+                    <PostHeader
+                        post_id={post.id}
+                        onDelete={onDelete}
+                        user={post.user}
+                    />
+                    <PostContentEditor
+                        content={post.content}
+                        setContent={setContent}
+                        submitCallback={editPost}
+                    />
+                    <PostFooterEditor
+                        visible={post.visible}
+                        setVisible={setVisible}
+                        submitCallback={editPost}
+                    />
+                </EditPost>
             }
-            contentChild={
-                <PostContentEditor
-                    content={content}
-                    setContent={setContent}
-                    submitCallback={editPost}
-                />
-            }
-            footerChild={
-                <PostFooterEditor
-                    visible={visible}
-                    setVisible={setVisible}
-                    submitCallback={editPost}
-                />
-            }
-        />
+        </Loader>
     )
 }
