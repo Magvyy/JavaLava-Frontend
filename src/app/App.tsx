@@ -14,17 +14,19 @@ export default function App() {
   return (
     <BrowserRouter>
       <Layout>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/profile" element={<UserPage />} />
-          <Route path="/user/:userId" element={<UserPage />} />
-          <Route path="/post/:id" element={<ReadPostPage />} />
-          <Route path="/post/edit/:id" element={<EditPostPage />} />
-          <Route path="/post/create" element={<CreatePostPage />} />
-          <Route path="/empty" element={<Secret />} />
-        </Routes>
+        <div id="page-content" className="py-5 w-full">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/profile" element={<UserPage />} />
+            <Route path="/user/:userId" element={<UserPage />} />
+            <Route path="/post/:id" element={<ReadPostPage />} />
+            <Route path="/post/edit/:id" element={<EditPostPage />} />
+            <Route path="/post/create" element={<CreatePostPage />} />
+            <Route path="/empty" element={<Secret />} />
+          </Routes>
+        </div>
       </Layout>
     </BrowserRouter>
   )

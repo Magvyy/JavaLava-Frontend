@@ -3,6 +3,13 @@
   width: 100%;
 }
 
+#page-content > * {
+  margin-left: calc((100% - 192px) / 2);
+  transform: translateX(-50%);
+}
+
+/* Sidebar + w-1/2 ||| ((w - sidebar) * 2 + sidebar) / 2 */
+
 .logo {
   height: 6em;
   padding: 1.5em;
