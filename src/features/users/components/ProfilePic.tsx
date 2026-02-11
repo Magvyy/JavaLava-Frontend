@@ -11,7 +11,7 @@ export function ProfilePic({ onClick, className }: ProfilePicProps) {
 
     return (
         <img
-            className={className ? className : "3-[30px] h-[30px] rounded-[50%]"}
+            className={className ? className : "w-[30px] h-[30px] rounded-[50%]"}
             src={user_img}
             onClick={(e) => onClick?.(e)}
         />
