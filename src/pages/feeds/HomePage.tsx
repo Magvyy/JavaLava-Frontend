@@ -71,7 +71,7 @@ export function HomePage() {
     }
 
     return (
-        <div className="flex flex-col items-center gap-[20px] w-8/10">
+        <div className="flex flex-col items-center gap-[20px] w-2/5">
             {posts.map(post => (
                 <ReadPost
                     key={post.id}
