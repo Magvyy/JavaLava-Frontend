@@ -3,7 +3,7 @@ import HeaderActions from "@/features/header-actions/components/HeaderActions";
 
 
 import { ProfilePic, User } from "@/features/users";
-import type { UserResponse } from "@/types/ApiResponses";
+import type { UserResponse } from "@/shared/types/UserApi";
 import { deletePostAPI } from "../services/deletePostAPI";
 
 
