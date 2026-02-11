@@ -1,8 +1,8 @@
 import { useApiCall } from "@/shared/hooks/useApiCall";
 import type { MessageResponse } from "@/shared/types/MessageApi";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-export const useConversations = (update: boolean) => {
+export const useConversations = () => {
     const [submit, setSubmit] = useState<boolean>(false);
     const { state, handleApiCall } = useApiCall<MessageResponse[]>();
     if (!submit) {
