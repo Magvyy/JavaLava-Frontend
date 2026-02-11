@@ -7,7 +7,7 @@ import {
 
 import { useAuthenticateMe } from "@/shared/hooks/useAuthenticateMe";
 import { NavBarUserAccount } from "./NavBarUserAccount";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Logout } from "@/features/auth/components/Logout";
 
 
 export function NavBar() {
@@ -22,8 +22,8 @@ export function NavBar() {
     }
 
     return (
-        <NavigationMenu className="w-full max-w-full" id="navbar">
-            <NavigationMenuList className="flex justify-between w-full max-w-full p-1">
+        <NavigationMenu className="w-full max-w-full border-b" id="navbar">
+            <NavigationMenuList className="flex justify-between w-full max-w-full p-4">
                 <div className="flex items-center justify-center mr-auto">
                     {/* <SidebarTrigger /> */}
                     <NavigationMenuItem>
@@ -33,20 +33,29 @@ export function NavBar() {
                         <NavigationMenuLink href="/empty">Empty</NavigationMenuLink>
                     </NavigationMenuItem>
                 </div>
+                <div className="flex flex-1 justify-end">
                 {(user) ? (
-                    <NavBarUserAccount
-                        user={user}
-                    />
+                    <>
+                        <NavigationMenuItem className="right-[46px]">
+                            <Logout/>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavBarUserAccount
+                                user={user}
+                            />
+                        </NavigationMenuItem>
+                    </>
                 ) : (
-                    <div className="flex flex-1 justify-end">
+                    <>
                         <NavigationMenuItem>
                             <NavigationMenuLink href="/login">Login</NavigationMenuLink>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
                             <NavigationMenuLink href="/register">Register</NavigationMenuLink>
                         </NavigationMenuItem>
-                    </div>
+                    </>
                 )}
+                </div>
             </NavigationMenuList>
         </NavigationMenu>
     )
