@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
 import { useHomePagePosts } from "./hooks/useHomePagePosts";
 import { useScrollToEnd } from "./hooks/useScrollToEnd";
-import type { PostRequest, PostResponse } from "@/types/ApiResponses";
 import { ReadPost } from "@/features/posts";
 import { PostHeader } from "@/features/posts/components/PostHeader";
 import { PostContentReader } from "@/features/posts/components/read/PostContentReader";
@@ -9,27 +7,17 @@ import { PostFooterReader } from "@/features/posts/components/read/PostFooterRea
 import { deletePostAPI } from "@/features/posts/services/deletePostAPI";
 import { createPostAPI } from "@/features/posts/services/createPostAPI";
 import { editPostAPI } from "@/features/posts/services/editPostAPI";
+import { TailSpin } from "react-loader-spinner";
+import type { PostRequest, PostResponse } from "@/shared/types/PostApi";
 
 
 export function HomePage() {
-    const [update, setUpdate] = useState<boolean>(true);
-    const { posts, setPosts, state } = useHomePagePosts(update, "all");
+    let { posts, setPosts, page, setPage, state } = useHomePagePosts("all");
   
     useScrollToEnd(() => {
-        if (update) setUpdate(false)
-        else setUpdate(true);
+        if (!state.loading) setPage(page + 1);
     });
 
-    useEffect(() => {
-
-    }, [posts, state]);
-
-    if ( state.loading ) {
-        return (
-            <p>Loading...</p>
-        )
-    }
- 
     const createPost = async (post: PostRequest) => {
         await createPostAPI(post, onCreate, null);
     }
@@ -97,6 +85,15 @@ export function HomePage() {
                     }
                 />
             ))}
+            {state.loading && (
+                <TailSpin
+                    height="40"
+                    width="40"
+                    color="#4fa94d"
+                    ariaLabel="loading"
+                />
+
+            )}
         </div>
     )
 }
