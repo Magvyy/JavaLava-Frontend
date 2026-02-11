@@ -1,23 +1,26 @@
 import { useConversations } from "../hooks/useConversations";
-import { useState } from "react";
 import { SideBarConversation } from "./SideBarConversation";
+import { Loader } from "@/shared/components/Loader";
 
 interface SideBarConversationsProps {
 
 }
 
 export function SideBarConversations({  }: SideBarConversationsProps) {
-    const [update, setUpdate] = useState<boolean>(false);
-    const { state } = useConversations(update);
+    const { state } = useConversations();
 
     return (
-        <div className="flex flex-col gap-[10px] w-full">
-            {conversations.map(conversation => (
-                <SideBarConversation
-                    key={conversation.id}
-                    message={conversation}
-                />
-            ))}
-        </div>
+        <Loader state={state} className="w-full p-4">
+            {(conversations) => 
+                <div className="flex flex-col gap-[10px] w-full">
+                    {conversations.map(conversation => (
+                        <SideBarConversation
+                            key={conversation.id}
+                            message={conversation}
+                        />
+                    ))}
+                </div>
+            }
+        </Loader>
     )
 }
