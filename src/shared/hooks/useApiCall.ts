@@ -6,16 +6,15 @@ interface HandleApiResponseProps {
     credentials?: boolean
     method: string
     body?: string
-    authenticate?: boolean
 }
-export const useApiCall = <T> ({ endpoint, credentials, method, body }: HandleApiResponseProps) => {
+export const useApiCall = <T> () => {
     const [state, setState] = useState<ApiState<T>>({
         called: false,
         loading: false,
-        result: null
+        result: undefined
     });
 
-    const handleApiCall = async () => {
+    const handleApiCall = async ({ endpoint, credentials, method, body }: HandleApiResponseProps) => {
         try {
             const response = (credentials)
                 ? await fetch(endpoint, {
@@ -43,7 +42,7 @@ export const useApiCall = <T> ({ endpoint, credentials, method, body }: HandleAp
                     loading: false,
                     result: {
                         data: responseJSON,
-                        error: null
+                        error: undefined
                     }
                 });
             } else {
@@ -51,7 +50,7 @@ export const useApiCall = <T> ({ endpoint, credentials, method, body }: HandleAp
                     called: true,
                     loading: false,
                     result: {
-                        data: null,
+                        data: undefined,
                         error: response.status.toString()
                     }
                 });
@@ -61,7 +60,7 @@ export const useApiCall = <T> ({ endpoint, credentials, method, body }: HandleAp
                 called: true,
                 loading: false,
                 result: {
-                    data: null,
+                    data: undefined,
                     error: err.message
                 }
             });
