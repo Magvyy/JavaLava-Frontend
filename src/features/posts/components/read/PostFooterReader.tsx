@@ -7,7 +7,7 @@ import likedIcon from "../assets/liked.svg";
 import { likePostAPI } from "../../services/likePostAPI";
 import { unlikePostAPI } from "../../services/unlikePostAPI";
 import { CardFooter } from "@/components/ui/card";
-import type { CommentResponse } from "@/types/ApiResponses";
+import type { CommentResponse } from "@/shared/types/CommentApi";
 
 
 interface PostFooterReaderProps {

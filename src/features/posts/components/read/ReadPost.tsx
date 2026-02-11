@@ -1,6 +1,6 @@
 import { Card} from "@/components/ui/card";
 
-import type { PostResponse } from "@/types/ApiResponses";
+import type { PostResponse } from "@/shared/types/PostApi";
 import { type ReactNode } from "react";
 
 
