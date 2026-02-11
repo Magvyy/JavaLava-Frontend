@@ -1,5 +1,5 @@
 
 
 export * from "./components/AuthForm";
-export * from "./hooks/useAuth";
+export * from "./hooks/useAuthenticate";
 export * from "./types";
