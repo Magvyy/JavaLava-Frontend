@@ -1,4 +1,4 @@
-import type { PostRequest, PostResponse } from "@/types/ApiResponses";
+import type { PostRequest, PostResponse } from "@/shared/types/ApiResponses";
 
 
 export async function editPostAPI(post: PostRequest, onEdit: (post: PostResponse) => void, onError: ((message: string) => void) | null) {

@@ -8,18 +8,13 @@ interface ReadPostProps {
   post: PostResponse
   onError?: ((message: string) => void) | null
   onClick?: (post: PostResponse) => void
-  headerChild: ReactNode
-  contentChild: ReactNode
-  footerChild: ReactNode
+  children: ReactNode
   className?: string
 }
-export function ReadPost({ post, onError, onClick, headerChild, contentChild, footerChild, className }: ReadPostProps) {
-
-  return (
-    <Card className={className ? className : "w-full min-w-sm p-0"} onClick={() => (onClick ? onClick(post) : {})}>
-      {headerChild}
-      {contentChild}
-      {footerChild}
-    </Card>
-  )
+export function ReadPost({ post, onError, onClick, children, className }: ReadPostProps) {
+  return  (
+      <Card className={className ? className : "w-full min-w-sm p-0"} onClick={() => {onClick ? onClick(post) : {}}}>
+        {children}
+      </Card>
+    )
 }
