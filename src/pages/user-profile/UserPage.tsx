@@ -1,6 +1,5 @@
 import { useState, type MouseEvent } from "react";
 import { useParams } from "react-router-dom";
-import type { PostResponse } from "@/types/ApiResponses";
 import { useScrollToEnd } from "@/pages/feeds/hooks/useScrollToEnd";
 import { useUserPosts } from "./hooks/useUserPosts";
 import { useProfileUser } from "./hooks/useProfileUser";
@@ -11,6 +10,7 @@ import { ReadPost } from "@/features/posts";
 import { PostHeader } from "@/features/posts/components/PostHeader";
 import { PostContentReader } from "@/features/posts/components/read/PostContentReader";
 import { PostFooterReader } from "@/features/posts/components/read/PostFooterReader";
+import type { PostResponse } from "@/shared/types/PostApi";
 
 export function UserPage() {
 	const { userId } = useParams();
@@ -21,7 +21,7 @@ export function UserPage() {
 
 	const isSelf = authUserId != null && authUserId === profileId;
 	const [update, setUpdate] = useState<boolean>(true);
-	const { posts, setPosts, state, resetPosts } = useUserPosts(profileId, update);
+	const { posts, setPosts, state, resetPosts } = useUserPosts(profileId);
 	const { profileUser, setProfileUser, profileLoading, profileError: error } = useProfileUser(profileId);
 
 	useScrollToEnd(() => {
@@ -111,29 +111,20 @@ export function UserPage() {
 			{profileState}
 			<div className="flex flex-col items-center gap-[20px] w-3/5">
 				{posts.map(post => (
-					<ReadPost
-						key={post.id}
-						post={post}
-						onClick={onClickPost}
-						headerChild={
-							<PostHeader
-								post_id={post.id}
-								onDelete={onDelete}
-								user={post.user}
-							/>
-						}
-						contentChild={
-							<PostContentReader
-								post={post}
-							/>
-						}
-						footerChild={
-							<PostFooterReader
-								post_id={post.id}
-								liked={post.liked}
-							/>
-						}
-					/>
+					<ReadPost key={post.id} post={post} onClick={onClickPost}>
+						<PostHeader
+							post_id={post.id}
+							onDelete={onDelete}
+							user={post.user}
+						/>
+						<PostContentReader
+							post={post}
+						/>
+						<PostFooterReader
+							post_id={post.id}
+							liked={post.liked}
+						/>
+					</ReadPost>
 				))}
 			</div>
 		</>
