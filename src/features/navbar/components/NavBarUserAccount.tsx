@@ -1,4 +1,4 @@
-import type { UserResponse } from "@/types/ApiResponses";
+import type { UserResponse } from "@/shared/types/UserApi";
 
 import { useState } from "react";
 import { UserAccountModal } from "./UserAccountModal";
