@@ -8,7 +8,7 @@ interface UserAccountModalProps {
 export function UserAccountModal({ user }: UserAccountModalProps) {
     
     return (
-        <div className="absolute w-[100px] h-[50px] -bottom-[25px] right-[46px]">
+        <div className="absolute bg-white w-[100px] h-[50px] -bottom-[43px] right-[46px] z-1">
             <User
                 user={user}
 				onClick={() => window.location.href = "/user/" + user.id}
