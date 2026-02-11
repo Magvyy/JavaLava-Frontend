@@ -5,66 +5,68 @@ interface HandleApiResponseProps {
     endpoint: string
     credentials?: boolean
     method: string
-    data?: string
+    body?: string
+    authenticate?: boolean
 }
-export const useApiCall = <T> ({ endpoint, credentials, method, data }: HandleApiResponseProps) => {
+export const useApiCall = <T> ({ endpoint, credentials, method, body }: HandleApiResponseProps) => {
     const [state, setState] = useState<ApiState<T>>({
-        loading: true,
+        called: false,
+        loading: false,
         result: null
     });
 
-    useEffect(() => {
-        const handleApiCall = async () => {
-            try {
-                const response = (credentials)
-                    ? await fetch(endpoint, {
-                        credentials: "include",
-                        method: method,
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Accept": "application/json",
-                            "Access-Control-Allow-Credentials": "true"
-                        },
-                        body: (method === "POST") ? data : null
-                    })
-                    : await fetch(endpoint, {
-                        method: method,
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Accept": "application/json"
-                        }
-                    });
+    const handleApiCall = async () => {
+        try {
+            const response = (credentials)
+                ? await fetch(endpoint, {
+                    credentials: "include",
+                    method: method,
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                        "Access-Control-Allow-Credentials": "true"
+                    },
+                    body: (method === "POST") ? body : null
+                })
+                : await fetch(endpoint, {
+                    method: method,
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    }
+                });
 
-                if (response.ok) {
-                    const responseJSON = await response.json();
-                    setState({
-                        loading: false,
-                        result: {
-                            data: responseJSON,
-                            error: null
-                        }
-                    });
-                } else {
-                    setState({
-                        loading: false,
-                        result: {
-                            data: null,
-                            error: response.status.toString()
-                        }
-                    });
-                        }
-            } catch (err: any) {
+            if (response.ok) {
+                const responseJSON = await response.json();
                 setState({
+                    called: true,
+                    loading: false,
+                    result: {
+                        data: responseJSON,
+                        error: null
+                    }
+                });
+            } else {
+                setState({
+                    called: true,
                     loading: false,
                     result: {
                         data: null,
-                        error: err.message
+                        error: response.status.toString()
                     }
                 });
-            }
+                    }
+        } catch (err: any) {
+            setState({
+                called: true,
+                loading: false,
+                result: {
+                    data: null,
+                    error: err.message
+                }
+            });
         }
-        handleApiCall();
-    }, []);
+    }
     
-    return state;
+    return { state, handleApiCall };
 }
