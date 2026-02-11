@@ -33,6 +33,7 @@ export function ReadPostPage() {
     return (
         <ReadPost
             post={post}
+            className="mx-auto w-full max-w-1/2 p-0"
             headerChild={
                 <PostHeader
                     post_id={post.id}
