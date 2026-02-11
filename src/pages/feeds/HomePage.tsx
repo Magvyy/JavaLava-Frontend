@@ -7,12 +7,12 @@ import { PostFooterReader } from "@/features/posts/components/read/PostFooterRea
 import { deletePostAPI } from "@/features/posts/services/deletePostAPI";
 import { createPostAPI } from "@/features/posts/services/createPostAPI";
 import { editPostAPI } from "@/features/posts/services/editPostAPI";
-import { TailSpin } from "react-loader-spinner";
 import type { PostRequest, PostResponse } from "@/shared/types/PostApi";
+import { Loader } from "@/shared/components/Loader";
 
 
 export function HomePage() {
-    let { posts, setPosts, page, setPage, state } = useHomePagePosts("all");
+    const { posts, setPosts, page, setPage, state } = useHomePagePosts("all");
   
     useScrollToEnd(() => {
         if (!state.loading) setPage(page + 1);
@@ -59,41 +59,27 @@ export function HomePage() {
     }
 
     return (
-        <div className="flex flex-col items-center gap-[20px] w-2/5">
-            {posts.map(post => (
-                <ReadPost
-                    key={post.id}
-                    post={post}
-                    onClick={onClickPost}
-                    headerChild={
-                        <PostHeader
-                            post_id={post.id}
-                            onDelete={onDelete}
-                            user={post.user}
-                        />
-                    }
-                    contentChild={
-                        <PostContentReader
-                            post={post}
-                        />
-                    }
-                    footerChild={
-                        <PostFooterReader
-                            post_id={post.id}
-                            liked={post.liked}
-                        />
-                    }
-                />
-            ))}
-            {state.loading && (
-                <TailSpin
-                    height="40"
-                    width="40"
-                    color="#4fa94d"
-                    ariaLabel="loading"
-                />
-
-            )}
-        </div>
+        <Loader state={state} className="w-full h-full p-4">
+            {(posts) => 
+                <div className="flex flex-col items-center gap-[20px] w-2/5">
+                    {posts.map(post => (
+                        <ReadPost key={post.id} post={post} onClick={onClickPost}>
+                            <PostHeader
+                                post_id={post.id}
+                                onDelete={onDelete}
+                                user={post.user}
+                            />
+                            <PostContentReader
+                                post={post}
+                            />
+                            <PostFooterReader
+                                post_id={post.id}
+                                liked={post.liked}
+                            />
+                        </ReadPost>
+                    ))}
+                </div>
+            }
+        </Loader>
     )
 }
