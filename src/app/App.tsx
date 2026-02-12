@@ -9,6 +9,7 @@ import { EditPostPage } from '@/pages/posts/EditPostPage';
 import { CreatePostPage } from '@/pages/posts/CreatePostPage';
 import Layout from './Layout';
 import Secret from '@/features/secret/Secret';
+// import { Conversation } from '@/pages/conversation/Conversation';
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
             <Route path="/post/edit/:id" element={<EditPostPage />} />
             <Route path="/post/create" element={<CreatePostPage />} />
             <Route path="/empty" element={<Secret />} />
+            {/* <Route path="/conversation/:id" element={<Conversation />} /> */}
           </Routes>
         </div>
       </Layout>
