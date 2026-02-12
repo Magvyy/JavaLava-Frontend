@@ -3,7 +3,7 @@
   width: 100%;
 }
 
-#page-content > * {
+.center-sidebar {
   margin-left: calc((100% - 192px) / 2);
   transform: translateX(-50%);
 }
@@ -16,7 +16,7 @@
     justify-content: center;
   }
 
-  #page-content > * {
+  .center-sidebar {
     margin-left: 0;
     transform: translate(0);
   }
