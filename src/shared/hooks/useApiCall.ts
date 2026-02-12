@@ -46,12 +46,13 @@ export const useApiCall = <T> () => {
                     }
                 });
             } else {
+                const responseJSON = await response.json();
                 setState({
                     called: true,
                     loading: false,
                     result: {
                         data: undefined,
-                        error: response.status.toString()
+                        error: responseJSON.message
                     }
                 });
                     }
