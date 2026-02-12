@@ -5,27 +5,22 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 
-import { useAuthenticateMe } from "@/shared/hooks/useAuthenticateMe";
 import { NavBarUserAccount } from "./NavBarUserAccount";
 import { Logout } from "@/features/auth/components/Logout";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { useAuth } from "@/contexts/AuthContext";
 
 
 export function NavBar() {
-    const { user, state } = useAuthenticateMe();
-
-    if (state.loading) {
-        return (
-            <NavigationMenu>
-                Loading...
-            </NavigationMenu>
-        )
-    }
+    const { authUser, authState } = useAuth();
 
     return (
-        <NavigationMenu className="w-full max-w-full border-b" id="navbar">
+        <NavigationMenu className="w-full max-w-full h-fit border-b flex-0" id="navbar">
             <NavigationMenuList className="flex justify-between w-full max-w-full p-4">
                 <div className="flex items-center justify-center mr-auto">
-                    {/* <SidebarTrigger /> */}
+                    <NavigationMenuItem>
+                        <SidebarTrigger />
+                    </NavigationMenuItem>
                     <NavigationMenuItem>
                         <NavigationMenuLink href="/">Home</NavigationMenuLink>
                     </NavigationMenuItem>
@@ -34,14 +29,14 @@ export function NavBar() {
                     </NavigationMenuItem>
                 </div>
                 <div className="flex flex-1 justify-end">
-                {(user) ? (
+                {(authUser) ? (
                     <>
                         <NavigationMenuItem className="right-[46px]">
                             <Logout/>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
                             <NavBarUserAccount
-                                user={user}
+                                user={authUser}
                             />
                         </NavigationMenuItem>
                     </>

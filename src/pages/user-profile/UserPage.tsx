@@ -5,19 +5,19 @@ import { useUserPosts } from "./hooks/useUserPosts";
 import { useProfileUser } from "./hooks/useProfileUser";
 import { ProfilePic, User } from "@/features/users";
 import { FriendActions } from "@/features/users/components/FriendActions";
-import { useAuthenticateMe } from "@/shared/hooks/useAuthenticateMe";
 import { ReadPost } from "@/features/posts";
 import { PostHeader } from "@/features/posts/components/PostHeader";
 import { PostContentReader } from "@/features/posts/components/read/PostContentReader";
 import { PostFooterReader } from "@/features/posts/components/read/PostFooterReader";
 import type { PostResponse } from "@/shared/types/PostApi";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function UserPage() {
 	const { userId } = useParams();
 	const profileId = Number(userId);
 	
-	const { user } = useAuthenticateMe();
-	const authUserId = (user) ? user.id : null
+    const { authUser, authState } = useAuth();
+	const authUserId = (authUser) ? authUser.id : null
 
 	const isSelf = authUserId != null && authUserId === profileId;
 	const [update, setUpdate] = useState<boolean>(true);

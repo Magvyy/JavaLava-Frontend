@@ -4,8 +4,8 @@ import { createFriendRequest } from "@/features/users/services/createFriendReque
 import { declineFriendRequest } from "@/features/users/services/declineFriendRequest";
 import { removeFriend } from "@/features/users/services/removeFriend";
 import { useState } from "react";
-import { useAuthenticateMe } from "@/shared/hooks/useAuthenticateMe";
 import type { ProfileUserResponse } from "@/shared/types/UserApi";
+import { useAuth } from "@/contexts/AuthContext";
 
 type Props = {
     profileUser: ProfileUserResponse;
@@ -21,8 +21,8 @@ export function FriendActions({
     onVisibilityChange,
 }: Props) {
     const [loading, setLoading] = useState(false);
-    const { user } = useAuthenticateMe();
-    if (!user) {
+    const { authUser, authState } = useAuth();
+    if (!authUser) {
         return (
             <Button className="self-end" onClick={() => window.location.href = "/login"} disabled={loading}>
                 Login

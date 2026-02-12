@@ -1,7 +1,7 @@
 import { ProfilePic, User } from "@/features/users";
-import { useAuthenticateMe } from "@/shared/hooks/useAuthenticateMe";
 import { timeSinceMessage } from "../services/timeSinceMessage";
 import type { MessageResponse } from "@/shared/types/MessageApi";
+import { useAuth } from "@/contexts/AuthContext";
 
 
 
@@ -10,10 +10,10 @@ interface SideBarConversationProps {
 }
 
 export function SideBarConversation({ message }: SideBarConversationProps) {
-    const { user, state } = useAuthenticateMe();
-    if (!user) return null;
+    const { authUser, authState } = useAuth();
+    if (!authUser) return null;
 
-    const friendData = (user.id === message.from.id) ? message.to : message.from;
+    const friendData = (authUser.id === message.from.id) ? message.to : message.from;
     const timeSince = timeSinceMessage(message.sent);
     
     return (

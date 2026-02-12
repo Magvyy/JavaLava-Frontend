@@ -1,15 +1,15 @@
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu } from "@/components/ui/sidebar";
 import { SideBarConversations } from "./SideBarConversations";
-import { useAuthenticateMe } from "@/shared/hooks/useAuthenticateMe";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface AppSideBarProps {
 
 }
 
 export function AppSideBar({  }: AppSideBarProps) {
-    const { user, state } = useAuthenticateMe();
-    
-    const conversations = (!user)
+    const { authUser, authState } = useAuth();
+
+    const conversations = (!authUser)
     ? (
     <SidebarGroup>
         <SidebarGroupLabel>Messages</SidebarGroupLabel>
