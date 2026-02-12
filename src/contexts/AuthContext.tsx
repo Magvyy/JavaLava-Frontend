@@ -1,7 +1,7 @@
 import { useApiCall } from '@/shared/hooks/useApiCall';
 import type { AuthContextType } from '@/shared/types/AuthContext';
 import type { UserResponse } from '@/shared/types/UserApi';
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, type ReactNode } from 'react';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
