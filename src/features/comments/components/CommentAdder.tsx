@@ -1,8 +1,4 @@
-import type { CommentRequest, CommentResponse } from "@/shared/types/CommentApi";
-
-import { useEffect, useState } from "react";
-import { getCurrentTime } from "../services/getCurrentTime";
-import { createComment } from "../services/createComment";
+import type { CommentResponse } from "@/shared/types/CommentApi";
 import { Input } from "@/components/ui/input";
 import { useAddComment } from "../hooks/useAddComment";
 
