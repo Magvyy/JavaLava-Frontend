@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 import {
   Card,
   CardContent,
@@ -31,7 +29,7 @@ export default function AuthForm({endpoint, name}: AuthFormProps) {
   }
 
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full max-w-sm center-sidebar">
       <CardHeader>
         <CardTitle>{name}</CardTitle>
       </CardHeader>
