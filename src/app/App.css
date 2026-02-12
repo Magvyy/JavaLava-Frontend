@@ -10,6 +10,18 @@
 
 /* Sidebar + w-1/2 ||| ((w - sidebar) * 2 + sidebar) / 2 */
 
+@media screen and (max-width: 768px) {
+  #page-content {
+    display: flex;
+    justify-content: center;
+  }
+
+  #page-content > * {
+    margin-left: 0;
+    transform: translate(0);
+  }
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
