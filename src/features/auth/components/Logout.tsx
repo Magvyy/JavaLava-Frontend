@@ -1,14 +1,10 @@
 import { NavigationMenuLink } from '@/components/ui/navigation-menu';
-// import Cookies from 'js-cookie';
+import { logout } from '../services/logout';
 
 
 export function Logout() {
-
-    const handleLogout = () => {
-        // Cookies.remove("access_token");
-    };
-
+    
     return (
-        <NavigationMenuLink onClick={handleLogout} href="/">Logout</NavigationMenuLink>
+        <NavigationMenuLink onClick={logout}>Logout</NavigationMenuLink>
     )
 }
