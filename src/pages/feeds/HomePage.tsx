@@ -59,7 +59,7 @@ export function HomePage() {
     }
 
     return (
-        <Loader state={state} className="w-full h-full p-4">
+        <Loader state={state} className="w-full h-[200px] p-4">
             {(posts) => 
                 <div className="flex flex-col items-center gap-[20px] w-2/5">
                     {posts.map(post => (
