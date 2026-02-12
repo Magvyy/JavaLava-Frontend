@@ -13,7 +13,7 @@ interface ReadPostProps {
 }
 export function ReadPost({ post, onError, onClick, children, className }: ReadPostProps) {
   return  (
-      <Card className={className ? className : "w-full min-w-sm p-0"} onClick={() => {onClick ? onClick(post) : {}}}>
+      <Card className={className ? className : "w-full min-w-fit p-0"} onClick={() => {onClick ? onClick(post) : {}}}>
         {children}
       </Card>
     )
