@@ -61,7 +61,7 @@ export function HomePage() {
     return (
         <Loader state={state} className="w-full h-[200px] p-4">
             {(posts) => 
-                <div className="w-2/5 flex flex-col justify-center items-center gap-[20px] min-w-[200px]">
+                <div className="w-full p-5 flex flex-col justify-center items-center gap-[20px] min-w-[200px] center-sidebar">
                     {posts.map(post => (
                         <ReadPost key={post.id} post={post} onClick={onClickPost}>
                             <PostHeader
