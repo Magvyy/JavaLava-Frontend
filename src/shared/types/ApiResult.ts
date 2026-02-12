@@ -1,11 +1,8 @@
-export type Error = {
-  error: string,
-  message: string
-}
+
 
 export type ApiResult<T> =
   | { data: T; error: undefined }
-  | { data: undefined; error: Error }
+  | { data: undefined; error: string }
 
 export type ApiState<T> =
   | {called: false; loading: false; result: undefined}
