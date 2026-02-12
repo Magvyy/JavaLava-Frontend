@@ -1,4 +1,4 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { NavBar } from "@/features/navbar";
 import { AppSideBar } from "@/features/sidebar";
 
