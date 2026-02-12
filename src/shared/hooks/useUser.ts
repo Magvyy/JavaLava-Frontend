@@ -13,5 +13,5 @@ export const useUser = (id: Number) => {
         });
         setSubmit(true);
     }
-    return { user: state.result?.data, state };
+    return { state };
 }
