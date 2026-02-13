@@ -3,6 +3,10 @@
   width: 100%;
 }
 
+#page-content {
+  max-height: calc(100vh - 68px);
+}
+
 .center-sidebar {
   margin-left: calc((100% - 192px) / 2);
   transform: translateX(-50%);
