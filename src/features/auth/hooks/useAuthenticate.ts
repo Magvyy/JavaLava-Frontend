@@ -19,7 +19,7 @@ export const useAuthenticate = (endpoint: string) => {
         });
     }
 
-    if (state.called) {
+    if (state.called && !state.loading) {
         let error = state.result?.error;
         if (error) {
             let errorBox = document.getElementById("error-box");
@@ -29,7 +29,7 @@ export const useAuthenticate = (endpoint: string) => {
                 errorBox.classList.add("error-box");
             }
 
-            }else {
+        } else {
             window.location.href = "/";
         }
     }
