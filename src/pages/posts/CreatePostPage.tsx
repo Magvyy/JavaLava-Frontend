@@ -1,10 +1,10 @@
 import { CreatePost } from "@/features/posts";
 import { useState } from "react";
 import type { PostResponse } from "@/shared/types/PostApi";
-import { editPostAPI } from "@/features/posts/services/editPostAPI";
 import { getCurrentTime } from "@/features/comments/services/getCurrentTime";
 import { PostContentCreator } from "@/features/posts/components/create/PostContentCreator";
 import { PostFooterCreator } from "@/features/posts/components/create/PostFooterCreator";
+import { createPostAPI } from "@/features/posts/services/createPostAPI";
 
 
 
@@ -23,7 +23,7 @@ export function CreatePostPage() {
         
     const createPost = async () => {
         let postRequest = createPostRequest();
-        await editPostAPI(postRequest, onCreate, null);
+        await createPostAPI(postRequest, onCreate, null);
     }
 
     const onCreate = (post: PostResponse) => {
@@ -31,21 +31,23 @@ export function CreatePostPage() {
     }
 
     return (
-        <CreatePost
-            contentChild={
-                <PostContentCreator
-                    content={content}
-                    setContent={setContent}
-                    submitCallback={createPost}
-                />
-            }
-            footerChild={
-                <PostFooterCreator
-                    visible={visible}
-                    setVisible={setVisible}
-                    submitCallback={createPost}
-                />
-            }
-        />
+        <div className="center-sidebar w-1/2 p-5">
+            <CreatePost
+                contentChild={
+                    <PostContentCreator
+                        content={content}
+                        setContent={setContent}
+                        submitCallback={createPost}
+                    />
+                }
+                footerChild={
+                    <PostFooterCreator
+                        visible={visible}
+                        setVisible={setVisible}
+                        submitCallback={createPost}
+                    />
+                }
+            />
+        </div>
     )
 }
