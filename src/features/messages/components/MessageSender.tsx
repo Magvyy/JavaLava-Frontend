@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 import send from "./assets/send.svg";
-import { useQueryClient } from "@tanstack/react-query";
 
 interface MessageBarProps {
     user_id: number
@@ -14,16 +13,6 @@ interface MessageBarProps {
 
 export function MessageSender({ user_id, addMessage, className }: MessageBarProps) {
     const { content, setContent, sendMessage } = useSendMessage();
-
-    
-    // const queryClient = useQueryClient();
-    // const mutation = useMutation({
-    //     mutationFn: sendMessage,
-    //     onSuccess: () => {
-    //         // Refetch sidebar conversations
-    //         queryClient.invalidateQueries({ queryKey: ["conversations"] });
-    //     },
-    // });
     
     return (
         <div className={className ? className : "w-full"}>
