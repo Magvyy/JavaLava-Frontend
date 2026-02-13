@@ -1,6 +1,6 @@
 import { useHomePagePosts } from "./hooks/useHomePagePosts";
 import { useScrollToEnd } from "./hooks/useScrollToEnd";
-import { ReadPost } from "@/features/posts";
+import { CreatePost, ReadPost } from "@/features/posts";
 import { PostHeader } from "@/features/posts/components/PostHeader";
 import { PostContentReader } from "@/features/posts/components/read/PostContentReader";
 import { PostFooterReader } from "@/features/posts/components/read/PostFooterReader";
@@ -9,6 +9,10 @@ import { createPostAPI } from "@/features/posts/services/createPostAPI";
 import { editPostAPI } from "@/features/posts/services/editPostAPI";
 import type { PostRequest, PostResponse } from "@/shared/types/PostApi";
 import { Loader } from "@/shared/components/Loader";
+import { useEffect, useState } from "react";
+import { PostContentCreator } from "@/features/posts/components/create/PostContentCreator";
+import { getCurrentTime } from "@/features/comments/services/getCurrentTime";
+import { PostFooterCreator } from "@/features/posts/components/create/PostFooterCreator";
 
 
 export function HomePage() {
@@ -18,8 +22,9 @@ export function HomePage() {
         if (!state.loading) setPage(page + 1);
     });
 
-    const createPost = async (post: PostRequest) => {
-        await createPostAPI(post, onCreate, null);
+    const createPost = async () => {
+        let postRequest = createPostRequest();
+        await createPostAPI(postRequest, onCreate, null);
     }
 
     const onCreate = (post: PostResponse) => {
@@ -58,10 +63,38 @@ export function HomePage() {
         window.location.href = "/post/" + post.id;
     }
 
+    const [content, setContent] = useState<string>("")
+    const [visible, setVisible] = useState<boolean>(false);
+        
+    function createPostRequest() {
+        return {
+            id: null,
+            content: content,
+            published: getCurrentTime(),
+            visible: visible
+        };
+    }
+
     return (
-        <Loader state={state} className="w-full h-[200px] p-4">
+        <Loader state={state} data={posts} className="w-full h-[200px] p-4">
             {(posts) => 
                 <div className="w-full p-5 flex flex-col justify-center items-center gap-[20px] min-w-[200px] center-sidebar">
+                    <CreatePost
+                        contentChild={
+                            <PostContentCreator
+                                content={content}
+                                setContent={setContent}
+                                submitCallback={createPost}
+                            />
+                        }
+                        footerChild={
+                            <PostFooterCreator
+                                visible={visible}
+                                setVisible={setVisible}
+                                submitCallback={createPost}
+                            />
+                        }
+                    />
                     {posts.map(post => (
                         <ReadPost key={post.id} post={post} onClick={onClickPost}>
                             <PostHeader
