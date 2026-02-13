@@ -11,7 +11,7 @@ interface CreatePostProps {
 export function CreatePost({ onError, contentChild, footerChild, className }: CreatePostProps) {
 
   return (
-    <Card className={className ? className : "mx-auto w-full max-w-sm p-0"}>
+    <Card className={className ? className : "w-2/5 p-0 min-w-[200px]"}>
       {contentChild}
       {footerChild}
     </Card>

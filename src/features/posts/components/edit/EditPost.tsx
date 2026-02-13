@@ -10,7 +10,7 @@ interface EditPostProps {
 export function EditPost({ onError, className, children}: EditPostProps) {
 
   return (
-    <Card className={className ? className : "w-full max-w-sm p-0"}>
+    <Card className={className ? className : "w-2/5 p-0 min-w-[200px]"}>
       {children}
     </Card>
   )

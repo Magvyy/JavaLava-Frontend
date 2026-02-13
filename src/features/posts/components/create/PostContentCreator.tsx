@@ -9,7 +9,7 @@ interface PostContentCreatorProps {
     className?: string
 }
 export function PostContentCreator({ submitCallback, content, setContent, className }: PostContentCreatorProps) {
-    
+
     return (
         <CardContent className={className ? className : "w-full p-[10px]"}>
             <form
@@ -26,9 +26,9 @@ export function PostContentCreator({ submitCallback, content, setContent, classN
                     value={content}
                     onKeyDown={(e) => {
                         if (e.key === "Enter" && !e.shiftKey) {
-                        e.preventDefault();
-                        submitCallback();
-                        setContent("");
+                            e.preventDefault();
+                            submitCallback();
+                            setContent("");
                         }
                     }}
                 />
