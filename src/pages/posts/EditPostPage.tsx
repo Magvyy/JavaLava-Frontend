@@ -1,6 +1,6 @@
 import { EditPost } from "@/features/posts";
 import { useReadPost } from "./hooks/useReadPost";
-import { useParams } from "react-router-dom";
+import { redirect, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { PostResponse } from "@/shared/types/PostApi";
 import { PostHeader } from "@/features/posts/components/PostHeader";
@@ -55,6 +55,7 @@ export function EditPostPage() {
     const editPost = async () => {
         let postRequest = createPostRequest(post);
         await editPostAPI(postRequest, onEdit, null);
+        window.location.href = "/post/" + post.id;
     }
 
     const onEdit = (post: PostResponse) => {
@@ -68,23 +69,25 @@ export function EditPostPage() {
     return (
         <Loader state={state}>
             {(post) => 
-                <EditPost>
-                    <PostHeader
-                        post_id={post.id}
-                        onDelete={onDelete}
-                        user={post.user}
-                    />
-                    <PostContentEditor
-                        content={post.content}
-                        setContent={setContent}
-                        submitCallback={editPost}
-                    />
-                    <PostFooterEditor
-                        visible={post.visible}
-                        setVisible={setVisible}
-                        submitCallback={editPost}
-                    />
-                </EditPost>
+                <div className="center-sidebar w-1/2 p-5">
+                    <EditPost>
+                        <PostHeader
+                            post_id={post.id}
+                            onDelete={onDelete}
+                            user={post.user}
+                        />
+                        <PostContentEditor
+                            content={content}
+                            setContent={setContent}
+                            submitCallback={editPost}
+                        />
+                        <PostFooterEditor
+                            visible={visible}
+                            setVisible={setVisible}
+                            submitCallback={editPost}
+                        />
+                    </EditPost>
+                </div>
             }
         </Loader>
     )
