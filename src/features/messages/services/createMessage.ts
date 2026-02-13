@@ -1,7 +1,7 @@
 import type { MessageRequest, MessageResponse } from "@/shared/types/MessageApi";
 
 
-export async function createMessage(messageRequest: MessageRequest, addMessage: (message: MessageResponse) => void) {
+export async function createMessage(messageRequest: MessageRequest): Promise<MessageResponse>  {
     let response = await fetch("http://localhost:8080/messages", {
         credentials: "include",
         method: "POST",
@@ -12,9 +12,8 @@ export async function createMessage(messageRequest: MessageRequest, addMessage: 
         },
         body: JSON.stringify(messageRequest)
     })
-    if (response.ok) {
-        let message = await response.json();
-        console.log("?")
-        addMessage(message);
+    if (!response.ok) {
+        
     }
+    return response.json();
 }
