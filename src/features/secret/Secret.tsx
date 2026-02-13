@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import './secret.css'
 
 export default function Secret() {
   const [secret, setSecret] = useState("Hi, it is not me, the not secret.")
@@ -25,8 +24,8 @@ export default function Secret() {
   }, []);
     
   return (
-    <>
+    <div className="text-center">
       {secret}
-    </>
+    </div>
   )
 }

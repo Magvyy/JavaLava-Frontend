@@ -1,37 +1,30 @@
-import { useEffect, useState } from "react";
 import { useHomePagePosts } from "./hooks/useHomePagePosts";
 import { useScrollToEnd } from "./hooks/useScrollToEnd";
-import type { PostRequest, PostResponse } from "@/types/ApiResponses";
-import { ReadPost } from "@/features/posts";
+import { CreatePost, ReadPost } from "@/features/posts";
 import { PostHeader } from "@/features/posts/components/PostHeader";
 import { PostContentReader } from "@/features/posts/components/read/PostContentReader";
 import { PostFooterReader } from "@/features/posts/components/read/PostFooterReader";
 import { deletePostAPI } from "@/features/posts/services/deletePostAPI";
 import { createPostAPI } from "@/features/posts/services/createPostAPI";
 import { editPostAPI } from "@/features/posts/services/editPostAPI";
+import type { PostRequest, PostResponse } from "@/shared/types/PostApi";
+import { Loader } from "@/shared/components/Loader";
+import { useEffect, useState } from "react";
+import { PostContentCreator } from "@/features/posts/components/create/PostContentCreator";
+import { getCurrentTime } from "@/features/comments/services/getCurrentTime";
+import { PostFooterCreator } from "@/features/posts/components/create/PostFooterCreator";
 
 
 export function HomePage() {
-    const [update, setUpdate] = useState<boolean>(true);
-    const { posts, setPosts, state } = useHomePagePosts(update, "all");
+    const { posts, setPosts, page, setPage, state } = useHomePagePosts("all");
   
     useScrollToEnd(() => {
-        if (update) setUpdate(false)
-        else setUpdate(true);
+        if (!state.loading) setPage(page + 1);
     });
 
-    useEffect(() => {
-
-    }, [posts, state]);
-
-    if ( state.loading ) {
-        return (
-            <p>Loading...</p>
-        )
-    }
- 
-    const createPost = async (post: PostRequest) => {
-        await createPostAPI(post, onCreate, null);
+    const createPost = async () => {
+        let postRequest = createPostRequest();
+        await createPostAPI(postRequest, onCreate, null);
     }
 
     const onCreate = (post: PostResponse) => {
@@ -70,33 +63,56 @@ export function HomePage() {
         window.location.href = "/post/" + post.id;
     }
 
+    const [content, setContent] = useState<string>("")
+    const [visible, setVisible] = useState<boolean>(false);
+        
+    function createPostRequest() {
+        return {
+            id: null,
+            content: content,
+            published: getCurrentTime(),
+            visible: visible
+        };
+    }
+
     return (
-        <div className="flex flex-col items-center gap-[20px] w-8/10">
-            {posts.map(post => (
-                <ReadPost
-                    key={post.id}
-                    post={post}
-                    onClick={onClickPost}
-                    headerChild={
-                        <PostHeader
-                            post_id={post.id}
-                            onDelete={onDelete}
-                            user={post.user}
-                        />
-                    }
-                    contentChild={
-                        <PostContentReader
-                            post={post}
-                        />
-                    }
-                    footerChild={
-                        <PostFooterReader
-                            post_id={post.id}
-                            liked={post.liked}
-                        />
-                    }
-                />
-            ))}
-        </div>
+        <Loader state={state} data={posts} className="w-full h-[200px] p-4">
+            {(posts) => 
+                <div className="w-full p-5 flex flex-col justify-center items-center gap-[20px] min-w-[200px] center-sidebar">
+                    <CreatePost
+                        contentChild={
+                            <PostContentCreator
+                                content={content}
+                                setContent={setContent}
+                                submitCallback={createPost}
+                            />
+                        }
+                        footerChild={
+                            <PostFooterCreator
+                                visible={visible}
+                                setVisible={setVisible}
+                                submitCallback={createPost}
+                            />
+                        }
+                    />
+                    {posts.map(post => (
+                        <ReadPost key={post.id} post={post} onClick={onClickPost}>
+                            <PostHeader
+                                post_id={post.id}
+                                onDelete={onDelete}
+                                user={post.user}
+                            />
+                            <PostContentReader
+                                post={post}
+                            />
+                            <PostFooterReader
+                                post_id={post.id}
+                                liked={post.liked}
+                            />
+                        </ReadPost>
+                    ))}
+                </div>
+            }
+        </Loader>
     )
 }

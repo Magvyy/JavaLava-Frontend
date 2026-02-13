@@ -1,47 +1,62 @@
 
 export interface State {
-  loading: boolean,
+  loading: boolean
   error: string | null
 }
 
 export interface UserResponse {
-  id: number,
+  id: number
   user_name: string
 }
 
 export interface ProfileUserResponse extends UserResponse {
   friend_status : "NOT_FRIENDS" | "FRIENDS" | "PENDING" | "REQUESTED"
 }
+
 export interface PostResponse {
-  id: number,
-  user: UserResponse,
-  liked: boolean,
-  content: string,
-  published: string,
-  visible: boolean,
-  like_count: number,
+  id: number
+  user: UserResponse
+  liked: boolean
+  content: string
+  published: string
+  visible: boolean
+  like_count: number
   comment_count: number
 }
 
 export interface PostRequest {
-  id: number | null,
-  content: string,
-  published: string,
+  id: number | null
+  content: string
+  published: string
   visible: boolean
 }
 
 export interface CommentResponse {
-  id: number,
-  user: UserResponse,
-  content: string,
-  published: string,
-  post_id: number,
-}
-
-export interface CommentRequest {
-  id: number | null,
-  content: string,
-  published: string,
+  id: number
+  user: UserResponse
+  content: string
+  published: string
   post_id: number
 }
 
+export interface CommentRequest {
+  id: number | null
+  content: string
+  published: string
+  post_id: number
+}
+
+export interface MessageResponse {
+  id: number
+  from: UserResponse
+  to: UserResponse
+  content: string
+  sent: string
+}
+
+export interface MessageRequest {
+  id: number | null
+  to_user_id: number
+  content: string
+  sent: string
+}

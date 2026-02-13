@@ -2,8 +2,8 @@ import { CardHeader, CardTitle } from "@/components/ui/card";
 import HeaderActions from "@/features/header-actions/components/HeaderActions";
 
 
-import { User } from "@/features/users";
-import type { UserResponse } from "@/types/ApiResponses";
+import { ProfilePic, User } from "@/features/users";
+import type { UserResponse } from "@/shared/types/UserApi";
 import { deletePostAPI } from "../services/deletePostAPI";
 
 
@@ -28,7 +28,11 @@ export function PostHeader({ post_id, onDelete, user, onError, className }: Post
     <CardHeader className={className ? className : "w-full flex justify-between p-[10px] pl-[30px]"}>
       <CardTitle>
         <User
-            user={user}
+          onClick={() => window.location.href = "/user/" + user.id}
+          profilePicChild={
+              <ProfilePic/>
+          }
+          user={user}
         />
       </CardTitle>
       <HeaderActions

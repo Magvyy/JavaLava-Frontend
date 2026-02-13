@@ -5,41 +5,52 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 
-import { useAuthenticateMe } from "@/shared/hooks/useAuthenticateMe";
 import { NavBarUserAccount } from "./NavBarUserAccount";
+import { Logout } from "@/features/auth/components/Logout";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { useAuth } from "@/contexts/AuthContext";
 
 
 export function NavBar() {
-    const { user, state } = useAuthenticateMe();
-
-    if (state.loading) {
-        return (
-            <NavigationMenu>
-                Loading...
-            </NavigationMenu>
-        )
-    }
+    const { authUser, authState } = useAuth();
 
     return (
-        <NavigationMenu>
-            <NavigationMenuList className="justify-between w-screen px-9">
-                <NavigationMenuItem>
-                    <NavigationMenuLink href="/">Home</NavigationMenuLink>
-                </NavigationMenuItem>
-                {(user) ? (
-                    <NavBarUserAccount
-                        user={user}
-                    />
+        <NavigationMenu className="w-full max-w-full h-fit border-b flex-0" id="navbar">
+            <NavigationMenuList className="flex justify-between w-full max-w-full p-4">
+                <div className="flex items-center justify-center mr-auto">
+                    <NavigationMenuItem>
+                        <SidebarTrigger />
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        <NavigationMenuLink href="/">Home</NavigationMenuLink>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        <NavigationMenuLink href="/empty">Empty</NavigationMenuLink>
+                    </NavigationMenuItem>
+                </div>
+                <div className="flex flex-1 justify-end">
+                {(authUser) ? (
+                    <>
+                        <NavigationMenuItem className="right-[46px]">
+                            <Logout/>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavBarUserAccount
+                                user={authUser}
+                            />
+                        </NavigationMenuItem>
+                    </>
                 ) : (
-                    <div className="flex flex-1 justify-end">
+                    <>
                         <NavigationMenuItem>
                             <NavigationMenuLink href="/login">Login</NavigationMenuLink>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
                             <NavigationMenuLink href="/register">Register</NavigationMenuLink>
                         </NavigationMenuItem>
-                    </div>
+                    </>
                 )}
+                </div>
             </NavigationMenuList>
         </NavigationMenu>
     )

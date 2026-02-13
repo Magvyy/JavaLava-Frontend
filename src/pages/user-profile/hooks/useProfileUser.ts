@@ -1,4 +1,4 @@
-import type { ProfileUserResponse} from "@/types/ApiResponses";
+import type { ProfileUserResponse } from "@/shared/types/UserApi";
 import { useEffect, useState } from "react";
 
 export const useProfileUser = (userId: number | null) => {

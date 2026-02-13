@@ -1,44 +1,32 @@
-import type { PostResponse, State } from "@/types/ApiResponses";
+import { useApiCall } from "@/shared/hooks/useApiCall";
+import type { PostResponse } from "@/shared/types/PostApi";
 import { useEffect, useState } from "react";
 
 
-export const useHomePagePosts = (update: boolean, endpoint: string) => {
-    const [posts, setPosts] = useState<PostResponse[]>([]);
-    const [state, setState] = useState<State>({
-        loading: true,
-        error: null
-    });
+export const useHomePagePosts = (endpoint: string) => {
     const [page, setPage] = useState<number>(0);
+    const [posts, setPosts] = useState<PostResponse[]>([]);
+    const { state, handleApiCall } = useApiCall<PostResponse[]>();
 
     useEffect(() => {
-        const fetchPosts = async () => {
-            try {
-                const response = await
-                    fetch("http://localhost:8080/post/" + endpoint + "?page=" + page, {
-                        credentials: "include",
-                        method: "GET",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Accept": "application/json",
-                            "Access-Control-Allow-Credentials": "true"
-                        }
-                    });
-                if (response.ok) {
-                    const postsJSON = await response.json();
-                    setPosts([...posts, ...postsJSON]);
-                    setState({
-                        loading: false,
-                        error: null
-                    });
-                    setPage(page + 1);
-                } else {
-                    setState({ loading: false, error: response.status.toString() });
-                }
-            } catch (err: any) {
-                setState({ loading: false, error: err.message });
-            }
+        let data = state.result?.data;
+        if (data) {
+            let postsToAdd: PostResponse[] = [];
+            data.forEach(add => {
+                if (!posts.some(post => post.id == add.id)) postsToAdd.push(add);
+            })
+            setPosts([...postsToAdd, ...posts])
+            setPage(page + 1);
         }
-        fetchPosts();
-    }, [update]);
-    return { posts, setPosts, state };
+    }, [state])
+    
+    useEffect(() => {
+        handleApiCall({
+            endpoint: "http://localhost:8080/post/" + endpoint + "?page=" + page,
+            credentials: true,
+            method: "GET",
+        });
+    }, [])
+
+    return { posts, setPosts, page, setPage, state };
 }

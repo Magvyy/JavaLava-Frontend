@@ -1,4 +1,4 @@
-import type { UserResponse } from "@/types/ApiResponses";
+import type { UserResponse } from "@/shared/types/UserApi";
 
 import { useState } from "react";
 import { UserAccountModal } from "./UserAccountModal";
@@ -12,29 +12,27 @@ export function NavBarUserAccount({ user }: NavBarUserAccountProps) {
     
     
     return (
-        <NavigationMenuItem>
-            <div
-                className="relative flex"
-                onMouseEnter={() => setIsHovering(true)}
-                onMouseLeave={() => setIsHovering(false)}
+        <div
+            className="relative flex"
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
+        >
+            <NavigationMenuLink
+                className="absolute w-fit h-fit z-1 right-0 -bottom-[36px]"
+                href={"/user/" + user.id}
             >
-                <NavigationMenuLink
-                    className="absolute w-fit h-fit z-1 right-0 -bottom-[18px]"
-                    href={"/user/" + user.id}
-                >
-                    <UserAccount
-                        user={user}
-                    />
-                </NavigationMenuLink>
-                {(isHovering) &&
-                    <UserAccountModal
-                        user={user}
-                    />
-                }
-                <div
-                    className="absolute -bottom-[25px] right-[36px] bg-transparent h-[50px] w-[10px]"
+                <UserAccount
+                    user={user}
                 />
-            </div>
-        </NavigationMenuItem>
+            </NavigationMenuLink>
+            {(isHovering) &&
+                <UserAccountModal
+                    user={user}
+                />
+            }
+            <div
+                className="absolute -bottom-[43px] right-[36px] bg-transparent h-[50px] w-[10px]"
+            />
+        </div>
     )
 }

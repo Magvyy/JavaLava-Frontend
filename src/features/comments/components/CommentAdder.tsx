@@ -1,9 +1,6 @@
-import type { CommentRequest, CommentResponse } from "@/types/ApiResponses";
-
-import { useEffect, useState } from "react";
-import { getCurrentTime } from "../services/getCurrentTime";
-import { createComment } from "../services/createComment";
+import type { CommentResponse } from "@/shared/types/CommentApi";
 import { Input } from "@/components/ui/input";
+import { useAddComment } from "../hooks/useAddComment";
 
 
 
@@ -12,31 +9,18 @@ interface AddCommentProps {
   addComment: (comment: CommentResponse) => void
 }
 export function AddComment({ post_id, addComment }: AddCommentProps) {
-  const [content, setContent] = useState<string>("");
-  const [published, setPublished] = useState<string>(getCurrentTime());
-
-  useEffect(() => {
-    
-  }, [content]);
-
-  const submit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    let commentRequest: CommentRequest = {
-        id: null,
-        content: content,
-        published: getCurrentTime(),
-        post_id: post_id
-    };
-    createComment(commentRequest, addComment);
-    setContent("");
-  }
+  const { content, setContent, submitComment } = useAddComment();
   
   return (
     <div className="w-full p-[5px]">
-      <form onSubmit={submit}>
+      <form onSubmit={(e) => {
+        e.preventDefault();
+        submitComment(post_id, addComment);
+      }}>
         <Input
           placeholder="Write something..."
-          onChange={e => {setContent(e.target.value);}}
+          value={content}
+          onChange={e => setContent(e.target.value)}
         />
         <button type="submit" style={{display: "none"}}/>
       </form>

@@ -8,10 +8,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { isOwner } from "../hooks/isOwner";
 
 
 import dots from "./assets/dots.svg";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface HeaderActionProps {
     userId: number
@@ -19,11 +19,12 @@ interface HeaderActionProps {
     deletePost: () => void
 }
 export default function HeaderActions({ userId, editPostRedirect, deletePost }: HeaderActionProps) {
-    const owner = isOwner(userId);
+    const { authUser, authState } = useAuth();
 
-    if (!owner) {
-        return (<></>)
-    }
+    const user = authState.result?.data;
+
+    if (!user) return <></> 
+    if (user.id != userId) return <></> 
 
     return (
         <DropdownMenu>

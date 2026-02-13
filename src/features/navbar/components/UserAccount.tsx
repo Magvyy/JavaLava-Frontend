@@ -1,4 +1,4 @@
-import type { UserResponse } from "@/types/ApiResponses";
+import type { UserResponse } from "@/shared/types/UserApi";
 
 import user_img from "./assets/user.svg";
 interface UserAccountProps {

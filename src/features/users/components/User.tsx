@@ -1,24 +1,22 @@
-import type { UserResponse } from "@/types/ApiResponses";
+import type { UserResponse } from "@/shared/types/UserApi";
 
-import user_img from "./assets/user.svg";
+import type { ReactNode } from "react";
 
 interface UserProps {
-  user: UserResponse
-  className?: string
+    user: UserResponse
+    onClick?: () => void
+    profilePicChild?: ReactNode
+    className?: string
 }
-export function User({ user, className }: UserProps) {
-
-    const onClick = () => {
-        window.location.href = "/user/" + user.id;
-    }
+export function User({ user, onClick, profilePicChild, className }: UserProps) {
 
     return (
         <div onClick={(event) => {
             event.stopPropagation();
-            onClick();
+            onClick?.();
         }}>
             <div className={className ? className : "p-0 pt-[10px] m-0 h-full flex flex-row items-center gap-[5px]"}>
-                <img className="h-[30px] rounded-[50%]" src={user_img}/>
+                {profilePicChild}
                 <p>{user.user_name}</p>
             </div>
         </div>

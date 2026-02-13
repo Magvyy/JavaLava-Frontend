@@ -1,4 +1,4 @@
-import type { CommentRequest, CommentResponse } from "@/types/ApiResponses";
+import type { CommentRequest, CommentResponse } from "@/shared/types/CommentApi";
 
 
 export async function createComment(commentRequest: CommentRequest, addComment: (comment: CommentResponse) => void) {

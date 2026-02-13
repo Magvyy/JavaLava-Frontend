@@ -4,7 +4,8 @@ import { createFriendRequest } from "@/features/users/services/createFriendReque
 import { declineFriendRequest } from "@/features/users/services/declineFriendRequest";
 import { removeFriend } from "@/features/users/services/removeFriend";
 import { useState } from "react";
-import type { ProfileUserResponse } from "@/types/ApiResponses";
+import type { ProfileUserResponse } from "@/shared/types/UserApi";
+import { useAuth } from "@/contexts/AuthContext";
 
 type Props = {
     profileUser: ProfileUserResponse;
@@ -20,6 +21,14 @@ export function FriendActions({
     onVisibilityChange,
 }: Props) {
     const [loading, setLoading] = useState(false);
+    const { authUser, authState } = useAuth();
+    if (!authUser) {
+        return (
+            <Button className="self-end" onClick={() => window.location.href = "/login"} disabled={loading}>
+                Login
+            </Button>
+        )
+    }
 
     if (isSelf) return null;
 
@@ -62,7 +71,7 @@ export function FriendActions({
     switch (profileUser.friend_status) {
         case "REQUESTED":
             return (
-                <div className="friend-actions">
+                <div className="self-end">
                     <Button onClick={accept} disabled={loading}>Accept</Button>
                     <Button variant="outline" onClick={decline} disabled={loading}>
                         Decline
@@ -72,17 +81,17 @@ export function FriendActions({
 
         case "FRIENDS":
             return (
-                <Button variant="outline" onClick={remove} disabled={loading}>
+                <Button variant="outline" className="self-end" onClick={remove} disabled={loading}>
                     Remove friend
                 </Button>
             );
 
         case "PENDING":
-            return <Button disabled>Request sent</Button>;
+            return <Button className="self-end" disabled>Request sent</Button>;
 
         default:
             return (
-                <Button onClick={add} disabled={loading}>
+                <Button className="self-end" onClick={add} disabled={loading}>
                     Add Friend
                 </Button>
             );

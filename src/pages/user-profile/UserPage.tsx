@@ -1,28 +1,27 @@
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 import { useParams } from "react-router-dom";
-import type { PostResponse } from "@/types/ApiResponses";
 import { useScrollToEnd } from "@/pages/feeds/hooks/useScrollToEnd";
 import { useUserPosts } from "./hooks/useUserPosts";
 import { useProfileUser } from "./hooks/useProfileUser";
-import { User } from "@/features/users";
+import { ProfilePic, User } from "@/features/users";
 import { FriendActions } from "@/features/users/components/FriendActions";
-import "./UserPage.css";
-import { useAuthenticateMe } from "@/shared/hooks/useAuthenticateMe";
 import { ReadPost } from "@/features/posts";
 import { PostHeader } from "@/features/posts/components/PostHeader";
 import { PostContentReader } from "@/features/posts/components/read/PostContentReader";
 import { PostFooterReader } from "@/features/posts/components/read/PostFooterReader";
+import type { PostResponse } from "@/shared/types/PostApi";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function UserPage() {
 	const { userId } = useParams();
 	const profileId = Number(userId);
 	
-	const { user } = useAuthenticateMe();
-	const authUserId = (user) ? user.id : null
+    const { authUser, authState } = useAuth();
+	const authUserId = (authUser) ? authUser.id : null
 
 	const isSelf = authUserId != null && authUserId === profileId;
 	const [update, setUpdate] = useState<boolean>(true);
-	const { posts, setPosts, state, resetPosts } = useUserPosts(profileId, update);
+	const { posts, setPosts, state, resetPosts } = useUserPosts(profileId);
 	const { profileUser, setProfileUser, profileLoading, profileError: error } = useProfileUser(profileId);
 
 	useScrollToEnd(() => {
@@ -63,10 +62,23 @@ export function UserPage() {
 
 	const showEmptyState = !state.loading && posts.length === 0 && profileUser != null;
 	const showLoadingState = state.loading && posts.length === 0;
-
+	
 	const profileHeader = (
-	<div className="profile-header">
-		{profileUser && <User user={profileUser} />}
+	<div className="w-4/5 flex flex-col items-center justify-between gap-[16px] flex-wrap">
+		{profileUser &&
+			<User
+				user={profileUser}
+				profilePicChild={
+					<ProfilePic
+						className="w-[200px] h-[200px] rounded-[50%]"
+						onClick={(e: MouseEvent<HTMLImageElement>) => {
+							e.stopPropagation();
+						}}
+					/>
+				}
+				className="flex flex-col gap-[10px] text-center"
+			/>
+		}
 
 		{profileUser && (
 			<FriendActions
@@ -85,7 +97,7 @@ export function UserPage() {
 	);
 
 	const profileState = (
-        <div className="profile-state">
+        <div className="w-4/5 text-left">
             {profileLoading && <p>Loading profile...</p>}
             {!profileLoading && error === "not-found" && <p>User does not exist.</p>}
             {!profileLoading && !error && showLoadingState && <p>Loading posts...</p>}
@@ -97,31 +109,22 @@ export function UserPage() {
 		<>
 			{profileHeader}
 			{profileState}
-			<div className="flex flex-col items-center gap-[20px] w-8/10">
+			<div className="flex flex-col items-center gap-[20px] w-3/5">
 				{posts.map(post => (
-					<ReadPost
-						key={post.id}
-						post={post}
-						onClick={onClickPost}
-						headerChild={
-							<PostHeader
-								post_id={post.id}
-								onDelete={onDelete}
-								user={post.user}
-							/>
-						}
-						contentChild={
-							<PostContentReader
-								post={post}
-							/>
-						}
-						footerChild={
-							<PostFooterReader
-								post_id={post.id}
-								liked={post.liked}
-							/>
-						}
-					/>
+					<ReadPost key={post.id} post={post} onClick={onClickPost}>
+						<PostHeader
+							post_id={post.id}
+							onDelete={onDelete}
+							user={post.user}
+						/>
+						<PostContentReader
+							post={post}
+						/>
+						<PostFooterReader
+							post_id={post.id}
+							liked={post.liked}
+						/>
+					</ReadPost>
 				))}
 			</div>
 		</>
@@ -129,7 +132,7 @@ export function UserPage() {
 
 	return (
     <>
-        <div className="profile-page">
+        <div className="flex flex-col items-center gap-[16px] w-full">
 			{profileFeed}
         </div>
     </>

@@ -1,4 +1,4 @@
-import type { PostResponse } from "@/types/ApiResponses";
+import type { PostResponse } from "@/shared/types/PostApi";
 import { CardContent } from "@/components/ui/card";
 
 interface PostContentReaderProps {
