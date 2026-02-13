@@ -29,37 +29,39 @@ export function ReadPostPage() {
     return (
         <Loader state={postState} className="w-full max-w-1/2 p-4">
             {(post) =>
-                <ReadPost post={post} className="w-full max-w-1/2 p-0 min-w-[200px]">
-                    <PostHeader
-                        post_id={post.id}
-                        onDelete={onDelete}
-                        user={post.user}
-                    />
-                    <PostContentReader
-                        post={post}
-                    />
-                    <PostFooterReader
-                        post_id={post.id}
-                        liked={post.liked}
-                        comments={comments}
-                        setComments={setComments}
-                        commentSectionChild={
-                            <CommentSection
-                                adderChild={
-                                    <AddComment
-                                        post_id={post.id}
-                                        addComment={(comment: CommentResponse) => setComments([comment, ...comments])}
-                                    />
-                                }
-                                commentsChild={
-                                    <Comments
-                                        comments={comments}
-                                    />
-                                }
-                            />
-                        }
-                    />
-                </ReadPost>
+                <div className="center-sidebar w-1/2 p-5">
+                    <ReadPost post={post} className="w-full p-0 min-w-[200px]">
+                        <PostHeader
+                            post_id={post.id}
+                            onDelete={onDelete}
+                            user={post.user}
+                        />
+                        <PostContentReader
+                            post={post}
+                        />
+                        <PostFooterReader
+                            post_id={post.id}
+                            liked={post.liked}
+                            comments={comments}
+                            setComments={setComments}
+                            commentSectionChild={
+                                <CommentSection
+                                    adderChild={
+                                        <AddComment
+                                            post_id={post.id}
+                                            addComment={(comment: CommentResponse) => setComments([comment, ...comments])}
+                                        />
+                                    }
+                                    commentsChild={
+                                        <Comments
+                                            comments={comments}
+                                        />
+                                    }
+                                />
+                            }
+                        />
+                    </ReadPost>
+                </div>
             }
         </Loader>
     )
