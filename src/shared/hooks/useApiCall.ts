@@ -16,6 +16,11 @@ export const useApiCall = <T> () => {
 
     const handleApiCall = async ({ endpoint, credentials, method, body }: HandleApiResponseProps) => {
         try {
+            setState({
+                called: true,
+                loading: true,
+                result: undefined
+            })
             const response = (credentials)
                 ? await fetch(endpoint, {
                     credentials: "include",
