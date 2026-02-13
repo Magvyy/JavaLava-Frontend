@@ -7,14 +7,15 @@ import { createMessage } from "../services/createMessage";
 export function useSendMessage() {
     const [content, setContent] = useState<string>("");
 
-    const sendMessage = (user_id: number, addMessage: (messageRequest: MessageResponse) => void) => {
+    const sendMessage = async (user_id: number, addMessage: (messageRequest: MessageResponse) => void) => {
         let messageRequest: MessageRequest = {
             id: null,
             to_user_id: user_id,
             content: content,
             sent: getCurrentTime()
         };
-        createMessage(messageRequest, addMessage);
+        let message = await createMessage(messageRequest);
+        addMessage(message);
         setContent("");
     }
 
