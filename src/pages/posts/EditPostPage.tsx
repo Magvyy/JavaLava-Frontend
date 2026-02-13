@@ -1,6 +1,6 @@
 import { EditPost } from "@/features/posts";
 import { useReadPost } from "./hooks/useReadPost";
-import { redirect, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { PostResponse } from "@/shared/types/PostApi";
 import { PostHeader } from "@/features/posts/components/PostHeader";
