@@ -1,4 +1,3 @@
-import { useHomePagePosts } from "./hooks/useHomePagePosts";
 import { useScrollToEnd } from "./hooks/useScrollToEnd";
 import { CreatePost, ReadPost } from "@/features/posts";
 import { PostHeader } from "@/features/posts/components/PostHeader";
@@ -13,10 +12,11 @@ import { useState } from "react";
 import { PostContentCreator } from "@/features/posts/components/create/PostContentCreator";
 import { getCurrentTime } from "@/features/comments/services/getCurrentTime";
 import { PostFooterCreator } from "@/features/posts/components/create/PostFooterCreator";
+import { usePaginatedData } from "@/shared/hooks/usePaginatedData";
 
 
 export function HomePage() {
-    const { posts, setPosts, page, setPage, state } = useHomePagePosts("all");
+    const { data: posts, setData: setPosts, page, setPage, state } = usePaginatedData<PostResponse>("http://localhost:8080/post/all");
   
 	useScrollToEnd(() => setPage(prev => prev + 1));
 
