@@ -2,13 +2,14 @@ import { ConversationUser } from "@/features/messages/components/ConversationUse
 import { Loader } from "@/shared/components/Loader";
 import { useUser } from "@/shared/hooks/useUser";
 import { useParams } from "react-router-dom";
-import { useConversationMessages } from "./hooks/useConversationMessages";
 import { Message } from "@/features/messages";
 import { MessageSender } from "@/features/messages/components/MessageSender";
 import type { MessageResponse } from "@/shared/types/MessageApi";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { usePaginatedData } from "@/shared/hooks/usePaginatedData";
+import { useScrollToEnd } from "@/shared/hooks/useScrollToEnd";
 
 
 export function Conversation() {
@@ -20,7 +21,8 @@ export function Conversation() {
 
     const { state: friendState } = useUser(Number(id));
 
-    const { messages, setMessages, page, setPage, state: messagesState } = useConversationMessages(Number(id));
+    const { data: messages, setData: setMessages, page, setPage, state: messagesState } = usePaginatedData<MessageResponse>("http://localhost:8080/messages/" + Number(id));
+    useScrollToEnd(() => setPage(prev => prev + 1));
 
     useEffect(() => {
         let temp = document.getElementById("conversation");

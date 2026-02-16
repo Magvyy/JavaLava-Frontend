@@ -1,7 +1,6 @@
-import { useState, type MouseEvent } from "react";
+import { type MouseEvent } from "react";
 import { useParams } from "react-router-dom";
-import { useScrollToEnd } from "@/pages/feeds/hooks/useScrollToEnd";
-import { useUserPosts } from "./hooks/useUserPosts";
+import { useScrollToEnd } from "@/shared/hooks/useScrollToEnd";
 import { useProfileUser } from "./hooks/useProfileUser";
 import { ProfilePic, User } from "@/features/users";
 import { FriendActions } from "@/features/users/components/FriendActions";
@@ -11,6 +10,7 @@ import { PostContentReader } from "@/features/posts/components/read/PostContentR
 import { PostFooterReader } from "@/features/posts/components/read/PostFooterReader";
 import type { PostResponse } from "@/shared/types/PostApi";
 import { useAuth } from "@/contexts/AuthContext";
+import { usePaginatedData } from "@/shared/hooks/usePaginatedData";
 
 export function UserPage() {
 	const { userId } = useParams();
@@ -20,14 +20,16 @@ export function UserPage() {
 	const authUserId = (authUser) ? authUser.id : null
 
 	const isSelf = authUserId != null && authUserId === profileId;
-	const [update, setUpdate] = useState<boolean>(true);
-	const { posts, setPosts, state, resetPosts } = useUserPosts(profileId);
-	const { profileUser, setProfileUser, profileLoading, profileError: error } = useProfileUser(profileId);
+	const { data: posts, setData: setPosts, page, setPage, state } = usePaginatedData<PostResponse>("http://localhost:8080/post/user/" + Number(userId));
 
-	useScrollToEnd(() => {
-		if (update) setUpdate(false)
-		else setUpdate(true);
-	});
+    const resetPosts = () => {
+        setPosts([]);
+        setPage(0);
+    };
+
+	useScrollToEnd(() => setPage(prev => prev + 1));
+
+	const { profileUser, setProfileUser, profileLoading, profileError: error } = useProfileUser(profileId);
 
 	const onCreate = (post: PostResponse) => {
         setPosts([post, ...posts]);
@@ -89,7 +91,6 @@ export function UserPage() {
 				}
 				onVisibilityChange={() => {
 					resetPosts();
-					setUpdate(prev => !prev);
 				}}
 			/>
 		)}

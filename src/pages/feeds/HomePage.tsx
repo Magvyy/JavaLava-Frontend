@@ -1,4 +1,4 @@
-import { useScrollToEnd } from "./hooks/useScrollToEnd";
+import { useScrollToEnd } from "../../shared/hooks/useScrollToEnd";
 import { CreatePost, ReadPost } from "@/features/posts";
 import { PostHeader } from "@/features/posts/components/PostHeader";
 import { PostContentReader } from "@/features/posts/components/read/PostContentReader";
