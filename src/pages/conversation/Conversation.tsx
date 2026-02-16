@@ -29,7 +29,7 @@ export function Conversation() {
 
     return (
         <div className="w-full h-full flex flex-col">
-            <Loader state={friendState}>
+            <Loader state={friendState} className="p-5 border-b-1">
                 {(user) => 
                     <ConversationUser
                         user={user}
@@ -37,16 +37,18 @@ export function Conversation() {
                     />
                 }
             </Loader>
-            <Loader state={messagesState} data={messages}>
+            <Loader state={messagesState} data={messages} upwards={true} className="p-5 flex-1">
                 {(messages) =>
-                    <div id="conversation" className="p-5 flex-1 flex flex-col gap-[10px] overflow-y-scroll">
-                        {messages.map(message => (
-                            <Message
-                                key={message.id}
-                                message={message}
-                            />
-                        ))}
-                    </div>
+                    messages.length !== 0 ? (
+                        <div id="conversation" className="p-5 flex-1 flex flex-col gap-[10px] overflow-y-scroll">
+                            {messages.map(message => (
+                                <Message
+                                    key={message.id}
+                                    message={message}
+                                />
+                            ))}
+                        </div>
+                    ) : <></>
                 }
             </Loader>
             <MessageSender

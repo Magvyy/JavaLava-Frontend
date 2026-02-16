@@ -9,24 +9,23 @@ export const useHomePagePosts = (endpoint: string) => {
     const { state, handleApiCall } = useApiCall<PostResponse[]>();
 
     useEffect(() => {
-        let data = state.result?.data;
-        if (data) {
-            let postsToAdd: PostResponse[] = [];
-            data.forEach(add => {
-                if (!posts.some(post => post.id == add.id)) postsToAdd.push(add);
-            })
-            setPosts([...postsToAdd, ...posts])
-            setPage(page + 1);
-        }
-    }, [state])
-    
-    useEffect(() => {
         handleApiCall({
             endpoint: "http://localhost:8080/post/" + endpoint + "?page=" + page,
             credentials: true,
             method: "GET",
         });
-    }, [])
+    }, [page])
+    
+    useEffect(() => {
+        const data = state.result?.data;
+        if (!data) return;
+
+        setPosts(prev => {
+            const existingIds = new Set(prev.map(p => p.id));
+            const newItems = data.filter(item => !existingIds.has(item.id));
+            return [...prev, ...newItems];
+        })
+    }, [state.result?.data])
 
     return { posts, setPosts, page, setPage, state };
 }

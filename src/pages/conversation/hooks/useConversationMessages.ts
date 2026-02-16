@@ -21,7 +21,7 @@ export const useConversationMessages = (userId: number) => {
     
     useEffect(() => {
         handleApiCall({
-            endpoint: "http://localhost:8080/messages/" + userId,
+            endpoint: "http://localhost:8080/messages/" + userId + "?page=" + page,
             credentials: true,
             method: "GET",
         });

@@ -9,7 +9,7 @@ import { createPostAPI } from "@/features/posts/services/createPostAPI";
 import { editPostAPI } from "@/features/posts/services/editPostAPI";
 import type { PostRequest, PostResponse } from "@/shared/types/PostApi";
 import { Loader } from "@/shared/components/Loader";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { PostContentCreator } from "@/features/posts/components/create/PostContentCreator";
 import { getCurrentTime } from "@/features/comments/services/getCurrentTime";
 import { PostFooterCreator } from "@/features/posts/components/create/PostFooterCreator";
@@ -18,9 +18,7 @@ import { PostFooterCreator } from "@/features/posts/components/create/PostFooter
 export function HomePage() {
     const { posts, setPosts, page, setPage, state } = useHomePagePosts("all");
   
-    useScrollToEnd(() => {
-        if (!state.loading) setPage(page + 1);
-    });
+	useScrollToEnd(() => setPage(prev => prev + 1));
 
     const createPost = async () => {
         let postRequest = createPostRequest();
@@ -76,7 +74,7 @@ export function HomePage() {
     }
 
     return (
-        <Loader state={state} data={posts} className="w-full h-[200px] p-4">
+        <Loader state={state} data={posts} className="w-full h-[200px] p-4 center-sidebar">
             {(posts) => 
                 <div className="w-full p-5 flex flex-col justify-center items-center gap-[20px] min-w-[200px] center-sidebar">
                     <CreatePost
