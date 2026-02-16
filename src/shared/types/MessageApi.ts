@@ -1,6 +1,7 @@
+import type { Id } from "./Id"
 import type { UserResponse } from "./UserApi"
 
-export interface MessageResponse {
+export interface MessageResponse extends Id {
   id: number
   from: UserResponse
   to: UserResponse

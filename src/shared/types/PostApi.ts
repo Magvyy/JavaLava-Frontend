@@ -1,6 +1,7 @@
+import type { Id } from "./Id"
 import type { UserResponse } from "./UserApi"
 
-export interface PostResponse {
+export interface PostResponse extends Id {
   id: number
   user: UserResponse
   liked: boolean
