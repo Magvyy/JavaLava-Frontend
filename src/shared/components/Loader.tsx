@@ -6,48 +6,29 @@ import { TailSpin } from "react-loader-spinner";
 interface LoaderProps <T> {
     state: ApiState<T>
     data?: T
-    children: (data: T) => ReactNode
-    upwards?: boolean
+    children: (data: T, spinner?: ReactNode) => ReactNode
     className?: string
 }
-export function Loader <T> ({ state, data, children, upwards, className }: LoaderProps <T>) {
+export function Loader <T> ({ state, data, children, className }: LoaderProps <T>) {
+
+    const spinner = 
+        <div className={className ? "flex justify-center items-center " + className : "flex justify-center items-center"}>
+            <TailSpin
+                height="40"
+                width="40"
+                color="#4fa94d"
+                ariaLabel="loading"
+            />
+        </div>
+
     if (!state.called || state.loading) return (
         <>
             {data ? (
-                upwards ? (
-                    <>
-                        <div className={className ? "flex justify-center items-center " + className : "flex justify-center items-center"}>
-                            <TailSpin
-                                height="40"
-                                width="40"
-                                color="#4fa94d"
-                                ariaLabel="loading"
-                            />
-                        </div>
-                        {children(data)}
-                    </>
-                ) : (
-                    <>
-                        {children(data)}
-                        <div className={className ? "flex justify-center items-center " + className : "flex justify-center items-center"}>
-                            <TailSpin
-                                height="40"
-                                width="40"
-                                color="#4fa94d"
-                                ariaLabel="loading"
-                            />
-                        </div>
-                    </>
-                )
+                <>
+                    {children(data, spinner)}
+                </>
             ) : (
-                <div className={className ? "flex justify-center items-center " + className : "flex justify-center items-center"}>
-                    <TailSpin
-                        height="40"
-                        width="40"
-                        color="#4fa94d"
-                        ariaLabel="loading"
-                    />
-                </div>
+                spinner
             )}
         </>
     )
