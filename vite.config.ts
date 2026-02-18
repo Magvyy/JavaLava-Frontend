@@ -12,6 +12,13 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  optimizeDeps: {
+    include: [
+      'react-loader-spinner',
+      '@stomp/stompjs',
+      "@tanstack/react-query"
+    ],
+  },
   // server: {
   //   proxy: {
   //     "/api": {
