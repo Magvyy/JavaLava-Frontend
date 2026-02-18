@@ -14,7 +14,7 @@ export function AppSideBar({  }: AppSideBarProps) {
     <SidebarGroup>
         <SidebarGroupLabel>Messages</SidebarGroupLabel>
         <SidebarGroupContent className="p-2 text-center">
-            Get some friends dawg
+            Login to view
         </SidebarGroupContent>
     </SidebarGroup>
     ) : (
