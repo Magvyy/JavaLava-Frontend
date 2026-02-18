@@ -6,11 +6,8 @@ import { Message } from "@/features/messages";
 import { MessageSender } from "@/features/messages/components/MessageSender";
 import type { MessageResponse } from "@/shared/types/MessageApi";
 import { useAuth } from "@/contexts/AuthContext";
-import { useEffect } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { usePaginatedData } from "@/shared/hooks/usePaginatedData";
+import { useRef } from "react";
 import { useScrollToEnd } from "@/shared/hooks/useScrollToEnd";
-
 
 export function Conversation() {
     const { id } = useParams<{ id: string }>();
@@ -21,13 +18,14 @@ export function Conversation() {
 
     const { state: friendState } = useUser(Number(id));
 
-    const { data: messages, setData: setMessages, page, setPage, state: messagesState } = usePaginatedData<MessageResponse>("http://localhost:8080/messages/" + Number(id));
-    useScrollToEnd(() => setPage(prev => prev + 1));
-
-    useEffect(() => {
-        let temp = document.getElementById("conversation");
-        if (temp) temp.scrollTop = temp.scrollHeight;
-    }, [messages])
+    const containerRef = useRef<HTMLDivElement>(null);
+    const { data: messages, setData: setMessages, state: messagesState } = useScrollToEnd<MessageResponse>(
+        "/messages/" + Number(id),
+        containerRef,
+        false,
+        0,
+        true
+    );
 
     return (
         <div className="w-full h-full flex flex-col">
@@ -39,20 +37,22 @@ export function Conversation() {
                     />
                 }
             </Loader>
-            <Loader state={messagesState} data={messages} upwards={true} className="p-5 flex-1">
-                {(messages) =>
-                    messages.length !== 0 ? (
-                        <div id="conversation" className="p-5 flex-1 flex flex-col gap-[10px] overflow-y-scroll">
-                            {messages.map(message => (
-                                <Message
-                                    key={message.id}
-                                    message={message}
-                                />
-                            ))}
-                        </div>
-                    ) : <></>
-                }
-            </Loader>
+            <div ref={containerRef} className="p-5 flex-1 flex flex-col gap-[10px] overflow-auto scrollbar-hide">
+                <Loader state={messagesState} data={messages} className="p-5 flex-1">
+                    {(messages, spinner) =>
+                        messages.length !== 0 ? (
+                            <>
+                                {messages.map(message => (
+                                    <Message
+                                        key={message.id}
+                                        message={message}
+                                    />
+                                ))}
+                            </>
+                        ) : spinner
+                    }
+                </Loader>
+            </div>
             <MessageSender
                 user_id={Number(id)}
                 addMessage={(message: MessageResponse) => setMessages([...messages, message])}
