@@ -1,4 +1,4 @@
-import { ReadPost, usePostComments} from "@/features/posts";
+import { ReadPost} from "@/features/posts";
 import { useReadPost } from "./hooks/useReadPost";
 import { useParams } from "react-router-dom";
 import { PostHeader } from "@/features/posts/components/PostHeader";
@@ -9,8 +9,8 @@ import { AddComment } from "@/features/comments";
 import type { CommentResponse } from "@/shared/types/CommentApi";
 import Comments from "@/features/comments/components/Comments";
 import { Loader } from "@/shared/components/Loader";
-
-
+import { useScrollToEnd } from "@/shared/hooks/useScrollToEnd";
+import { useRef } from "react";
 
 export function ReadPostPage() {
     const { id } = useParams<{ id: string }>();
@@ -20,8 +20,12 @@ export function ReadPostPage() {
     }
 
     const { state: postState } = useReadPost(Number(id));
-    const { comments, setComments, page, setPage, state: commentsState } = usePostComments(Number(id));
-
+    const containerRef = useRef<HTMLDivElement>(null);
+    const { data: comments, setData: setComments, state: commentsState } = useScrollToEnd<CommentResponse>(
+        "/post/" + Number(id) + "/comments",
+        containerRef
+    );
+ 
     const onDelete = (id: number) => {
         window.location.href = "/";
     }
@@ -55,6 +59,7 @@ export function ReadPostPage() {
                                     commentsChild={
                                         <Comments
                                             comments={comments}
+                                            ref={containerRef}
                                         />
                                     }
                                 />

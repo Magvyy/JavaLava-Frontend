@@ -1,6 +1,8 @@
 import { useState } from "react"
 import type { ApiState } from "../types/ApiResult"
 
+import env from "@/env/environment.json";
+
 interface HandleApiResponseProps {
     endpoint: string
     credentials?: boolean
@@ -21,8 +23,10 @@ export const useApiCall = <T> () => {
                 loading: true,
                 result: undefined
             })
+            const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+            await sleep(100)
             const response = (credentials)
-                ? await fetch(endpoint, {
+                ? await fetch(env.backend + endpoint, {
                     credentials: "include",
                     method: method,
                     headers: {

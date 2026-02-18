@@ -1,4 +1,4 @@
-import { ProfilePic, User } from "@/features/users";
+import { ProfilePic } from "@/features/users";
 import { timeSinceMessage } from "../services/timeSinceMessage";
 import type { MessageResponse } from "@/shared/types/MessageApi";
 import { useAuth } from "@/contexts/AuthContext";

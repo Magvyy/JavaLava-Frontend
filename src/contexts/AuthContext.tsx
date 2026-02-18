@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     useEffect(() => {
         handleApiCall({
-            endpoint: "http://localhost:8080/auth/me",
+            endpoint: "/auth/me",
             credentials: true,
             method: "GET",
         });

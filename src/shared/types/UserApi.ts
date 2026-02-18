@@ -1,7 +1,8 @@
+import type { Id } from "./Id"
 
 
 
-export interface UserResponse {
+export interface UserResponse extends Id {
   id: number
   user_name: string
 }

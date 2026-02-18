@@ -1,7 +1,9 @@
+import env from "@/env/environment.json";
+
 export const removeFriend = async (userId: number): Promise<boolean> => {
     try {
         const res = await fetch(
-            `http://localhost:8080/friends/${userId}`,
+            env.backend + `/friends/${userId}`,
             {
                 method: "DELETE",
                 credentials: "include",

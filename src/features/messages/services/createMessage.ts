@@ -1,8 +1,9 @@
 import type { MessageRequest, MessageResponse } from "@/shared/types/MessageApi";
 
+import env from "@/env/environment.json";
 
 export async function createMessage(messageRequest: MessageRequest): Promise<MessageResponse>  {
-    let response = await fetch("http://localhost:8080/messages", {
+    let response = await fetch(env.backend + "/messages", {
         credentials: "include",
         method: "POST",
         headers: {

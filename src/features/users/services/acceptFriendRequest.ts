@@ -1,5 +1,7 @@
+import env from "@/env/environment.json";
+
 export async function acceptFriendRequest(userId: number) {
-    const response = await fetch("http://localhost:8080/friends/requests/" + userId + "/accept", {
+    const response = await fetch(env.backend + "/friends/requests/" + userId + "/accept", {
         credentials: "include",
         method: "POST",
         headers: {

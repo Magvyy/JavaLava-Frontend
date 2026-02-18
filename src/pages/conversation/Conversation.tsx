@@ -2,14 +2,13 @@ import { ConversationUser } from "@/features/messages/components/ConversationUse
 import { Loader } from "@/shared/components/Loader";
 import { useUser } from "@/shared/hooks/useUser";
 import { useParams } from "react-router-dom";
-import { useConversationMessages } from "./hooks/useConversationMessages";
 import { Message } from "@/features/messages";
 import { MessageSender } from "@/features/messages/components/MessageSender";
 import type { MessageResponse } from "@/shared/types/MessageApi";
 import { useAuth } from "@/contexts/AuthContext";
-import { useEffect } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-
+import { useEffect, useRef } from "react";
+import { useScrollToEnd } from "@/shared/hooks/useScrollToEnd";
+import { WebSocketService } from "@/shared/services/WebSocketService";
 
 export function Conversation() {
     const { id } = useParams<{ id: string }>();
@@ -20,16 +19,35 @@ export function Conversation() {
 
     const { state: friendState } = useUser(Number(id));
 
-    const { messages, setMessages, page, setPage, state: messagesState } = useConversationMessages(Number(id));
+    const containerRef = useRef<HTMLDivElement>(null);
+    const { data: messages, setData: setMessages, state: messagesState } = useScrollToEnd<MessageResponse>(
+        "/messages/" + Number(id),
+        containerRef,
+        false,
+        0,
+        true
+    );
+    
+    const ws = useRef<WebSocketService<MessageResponse> | null>(null);
 
     useEffect(() => {
-        let temp = document.getElementById("conversation");
-        if (temp) temp.scrollTop = temp.scrollHeight;
-    }, [messages])
+        ws.current = new WebSocketService((message: MessageResponse) => {
+        setMessages(prev => {
+            const existingIds = new Set(prev.map(msg => msg.id));
+            if (existingIds.has(message.id)) return prev;
+            else return [...prev, message];
+        });
+        }, "messages");
+
+        return () => {
+            ws.current?.disconnect();
+            ws.current = null;
+        };
+    }, []);
 
     return (
         <div className="w-full h-full flex flex-col">
-            <Loader state={friendState}>
+            <Loader state={friendState} className="p-5 border-b-1">
                 {(user) => 
                     <ConversationUser
                         user={user}
@@ -37,18 +55,22 @@ export function Conversation() {
                     />
                 }
             </Loader>
-            <Loader state={messagesState} data={messages}>
-                {(messages) =>
-                    <div id="conversation" className="p-5 flex-1 flex flex-col gap-[10px] overflow-y-scroll">
-                        {messages.map(message => (
-                            <Message
-                                key={message.id}
-                                message={message}
-                            />
-                        ))}
-                    </div>
-                }
-            </Loader>
+            <div ref={containerRef} className="p-5 flex-1 flex flex-col gap-[10px] overflow-auto scrollbar-hide">
+                <Loader state={messagesState} data={messages} className="p-5 flex-1">
+                    {(messages, spinner) =>
+                        messages.length !== 0 ? (
+                            <>
+                                {messages.map(message => (
+                                    <Message
+                                        key={message.id}
+                                        message={message}
+                                    />
+                                ))}
+                            </>
+                        ) : spinner
+                    }
+                </Loader>
+            </div>
             <MessageSender
                 user_id={Number(id)}
                 addMessage={(message: MessageResponse) => setMessages([...messages, message])}

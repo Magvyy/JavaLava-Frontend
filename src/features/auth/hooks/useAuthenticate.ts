@@ -10,7 +10,7 @@ export const useAuthenticate = (endpoint: string) => {
     const authenticate = () => {
         handleApiCall({
             credentials: true,
-            endpoint: "http://localhost:8080" + endpoint,
+            endpoint: endpoint,
             method: "POST",
             body: JSON.stringify({
                 "user_name": username,

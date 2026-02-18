@@ -7,7 +7,7 @@ export const useUser = (id: Number) => {
     const { state, handleApiCall } = useApiCall<UserResponse>();
     if (!submit) {
         handleApiCall({
-            endpoint: "http://localhost:8080/users/" + id,
+            endpoint: "/users/" + id,
             credentials: true,
             method: "GET",
         });

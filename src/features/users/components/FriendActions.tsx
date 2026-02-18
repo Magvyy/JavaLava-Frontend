@@ -14,19 +14,16 @@ type Props = {
     onVisibilityChange: () => void; // reset + refetch posts
 };
 
-export function FriendActions({
-    profileUser,
-    isSelf,
-    onFriendStatusChange,
-    onVisibilityChange,
-}: Props) {
+export function FriendActions({ profileUser, isSelf, onFriendStatusChange, onVisibilityChange }: Props) {
     const [loading, setLoading] = useState(false);
     const { authUser, authState } = useAuth();
     if (!authUser) {
         return (
-            <Button className="self-end" onClick={() => window.location.href = "/login"} disabled={loading}>
-                Login
-            </Button>
+            <div className="flex justify-center">
+                <Button className="self-end" onClick={() => window.location.href = "/login"} disabled={loading}>
+                    Login
+                </Button>
+            </div>
         )
     }
 
@@ -71,7 +68,7 @@ export function FriendActions({
     switch (profileUser.friend_status) {
         case "REQUESTED":
             return (
-                <div className="self-end">
+                <div className="flex justify-center gap-[10px]">
                     <Button onClick={accept} disabled={loading}>Accept</Button>
                     <Button variant="outline" onClick={decline} disabled={loading}>
                         Decline
@@ -81,19 +78,30 @@ export function FriendActions({
 
         case "FRIENDS":
             return (
-                <Button variant="outline" className="self-end" onClick={remove} disabled={loading}>
-                    Remove friend
-                </Button>
+                <div className="flex justify-center gap-[10px]">
+                    <Button variant="outline" className="self-end" onClick={remove} disabled={loading}>
+                        Remove friend
+                    </Button>
+                    <Button variant="outline" className="self-end" onClick={() => window.location.href = "/conversation/" + profileUser.id} disabled={loading}>
+                        Message
+                    </Button>
+                </div>
             );
 
         case "PENDING":
-            return <Button className="self-end" disabled>Request sent</Button>;
+            return  (
+                <div className="flex justify-center">
+                    <Button className="self-end" disabled>Request sent</Button>
+                </div>
+            )
 
         default:
             return (
-                <Button className="self-end" onClick={add} disabled={loading}>
-                    Add Friend
-                </Button>
+                <div className="flex justify-center">
+                    <Button className="self-end" onClick={add} disabled={loading}>
+                        Add Friend
+                    </Button>
+                </div>
             );
     }
 }

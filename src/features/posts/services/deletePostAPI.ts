@@ -1,8 +1,8 @@
-
+import env from "@/env/environment.json";
 
 export async function deletePostAPI(id: number, onDelete: ((id: number) => void), onError: ((message: string) => void) | null) {
     const response = await
-        fetch("http://localhost:8080/post/" + id, {
+        fetch(env.backend + "/post/" + id, {
             credentials: "include",
             method: "DELETE",
             headers: {

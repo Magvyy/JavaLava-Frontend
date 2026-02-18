@@ -12,6 +12,10 @@
   transform: translateX(-50%);
 }
 
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* Sidebar + w-1/2 ||| ((w - sidebar) * 2 + sidebar) / 2 */
 
 @media screen and (max-width: 768px) {

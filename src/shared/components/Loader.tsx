@@ -6,11 +6,12 @@ import { TailSpin } from "react-loader-spinner";
 interface LoaderProps <T> {
     state: ApiState<T>
     data?: T
-    children: (data: T) => ReactNode
+    children: (data: T, spinner?: ReactNode) => ReactNode
     className?: string
 }
 export function Loader <T> ({ state, data, children, className }: LoaderProps <T>) {
-    if (!state.called || state.loading) return (
+
+    const spinner = 
         <div className={className ? "flex justify-center items-center " + className : "flex justify-center items-center"}>
             <TailSpin
                 height="40"
@@ -19,6 +20,17 @@ export function Loader <T> ({ state, data, children, className }: LoaderProps <T
                 ariaLabel="loading"
             />
         </div>
+
+    if (!state.called || state.loading) return (
+        <>
+            {data ? (
+                <>
+                    {children(data, spinner)}
+                </>
+            ) : (
+                spinner
+            )}
+        </>
     )
 
     const result = state.result;

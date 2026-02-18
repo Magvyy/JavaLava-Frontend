@@ -1,7 +1,6 @@
-import { useState, type MouseEvent } from "react";
+import { useRef, type MouseEvent } from "react";
 import { useParams } from "react-router-dom";
-import { useScrollToEnd } from "@/pages/feeds/hooks/useScrollToEnd";
-import { useUserPosts } from "./hooks/useUserPosts";
+import { useScrollToEnd } from "@/shared/hooks/useScrollToEnd";
 import { useProfileUser } from "./hooks/useProfileUser";
 import { ProfilePic, User } from "@/features/users";
 import { FriendActions } from "@/features/users/components/FriendActions";
@@ -11,6 +10,7 @@ import { PostContentReader } from "@/features/posts/components/read/PostContentR
 import { PostFooterReader } from "@/features/posts/components/read/PostFooterReader";
 import type { PostResponse } from "@/shared/types/PostApi";
 import { useAuth } from "@/contexts/AuthContext";
+import { Loader } from "@/shared/components/Loader";
 
 export function UserPage() {
 	const { userId } = useParams();
@@ -20,14 +20,14 @@ export function UserPage() {
 	const authUserId = (authUser) ? authUser.id : null
 
 	const isSelf = authUserId != null && authUserId === profileId;
-	const [update, setUpdate] = useState<boolean>(true);
-	const { posts, setPosts, state, resetPosts } = useUserPosts(profileId);
-	const { profileUser, setProfileUser, profileLoading, profileError: error } = useProfileUser(profileId);
 
-	useScrollToEnd(() => {
-		if (update) setUpdate(false)
-		else setUpdate(true);
-	});
+	const containerRef = useRef<HTMLDivElement>(null);
+	const { data: posts, setData: setPosts, state, reset } = useScrollToEnd<PostResponse>(
+		"/post/user/" + Number(userId),
+		containerRef
+	);
+
+	const { profileUser, setProfileUser, profileLoading, profileError: error } = useProfileUser(profileId);
 
 	const onCreate = (post: PostResponse) => {
         setPosts([post, ...posts]);
@@ -64,35 +64,33 @@ export function UserPage() {
 	const showLoadingState = state.loading && posts.length === 0;
 	
 	const profileHeader = (
-	<div className="w-4/5 flex flex-col items-center justify-between gap-[16px] flex-wrap">
+	<div className="w-4/5 flex flex-col items-center justify-between gap-[16px]">
 		{profileUser &&
-			<User
-				user={profileUser}
-				profilePicChild={
-					<ProfilePic
-						className="w-[200px] h-[200px] rounded-[50%]"
-						onClick={(e: MouseEvent<HTMLImageElement>) => {
-							e.stopPropagation();
-						}}
-					/>
-				}
-				className="flex flex-col gap-[10px] text-center"
-			/>
+			<>
+				<User
+					user={profileUser}
+					profilePicChild={
+						<ProfilePic
+							className="w-[200px] h-[200px] rounded-[50%]"
+							onClick={(e: MouseEvent<HTMLImageElement>) => {
+								e.stopPropagation();
+							}}
+						/>
+					}
+					className="flex flex-col gap-[10px] text-center"
+				/>
+				<FriendActions
+					profileUser={profileUser}
+					isSelf={isSelf}
+					onFriendStatusChange={(status) =>
+						setProfileUser({ ...profileUser, friend_status: status })
+					}
+					onVisibilityChange={() => {
+						reset();
+					}}
+				/>
+			</>
 		}
-
-		{profileUser && (
-			<FriendActions
-				profileUser={profileUser}
-				isSelf={isSelf}
-				onFriendStatusChange={(status) =>
-					setProfileUser({ ...profileUser, friend_status: status })
-				}
-				onVisibilityChange={() => {
-					resetPosts();
-					setUpdate(prev => !prev);
-				}}
-			/>
-		)}
 	</div>
 	);
 
@@ -100,33 +98,45 @@ export function UserPage() {
         <div className="w-4/5 text-left">
             {profileLoading && <p>Loading profile...</p>}
             {!profileLoading && error === "not-found" && <p>User does not exist.</p>}
-            {!profileLoading && !error && showLoadingState && <p>Loading posts...</p>}
             {showEmptyState && <p>@{profileUser?.user_name} hasn’t posted yet.</p>}
         </div>
     );
 
 	const profileFeed = (
 		<>
-			{profileHeader}
-			{profileState}
-			<div className="flex flex-col items-center gap-[20px] w-3/5">
-				{posts.map(post => (
-					<ReadPost key={post.id} post={post} onClick={onClickPost}>
-						<PostHeader
-							post_id={post.id}
-							onDelete={onDelete}
-							user={post.user}
-						/>
-						<PostContentReader
-							post={post}
-						/>
-						<PostFooterReader
-							post_id={post.id}
-							liked={post.liked}
-						/>
-					</ReadPost>
-				))}
-			</div>
+			<Loader state={state} data={posts} className="w-2/5 p-0 min-w-[350px]">
+				{(posts, spinner) => 
+					<div
+						className="h-full p-5 flex flex-col items-center gap-[20px] min-w-[200px] overflow-auto scrollbar-hide"
+						ref={containerRef}
+					>
+							{profileHeader}
+							{profileState}
+							{posts.map(post => (
+								<ReadPost
+									key={post.id}
+									post={post}
+									onClick={onClickPost}
+									className="w-full p-0 min-w-[350px]"
+								>
+									<PostHeader
+										post_id={post.id}
+										onDelete={onDelete}
+										user={post.user}
+									/>
+									<PostContentReader
+										post={post}
+									/>
+									<PostFooterReader
+										post_id={post.id}
+										liked={post.liked}
+									/>
+								</ReadPost>
+							))}
+						{spinner}
+					</div>
+				}
+			</Loader>
 		</>
 	);
 

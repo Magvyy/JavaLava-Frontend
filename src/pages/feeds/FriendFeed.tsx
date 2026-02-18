@@ -1,5 +1,5 @@
 import { useScrollToEnd } from "../../shared/hooks/useScrollToEnd";
-import { CreatePost, ReadPost } from "@/features/posts";
+import { ReadPost } from "@/features/posts";
 import { PostHeader } from "@/features/posts/components/PostHeader";
 import { PostContentReader } from "@/features/posts/components/read/PostContentReader";
 import { PostFooterReader } from "@/features/posts/components/read/PostFooterReader";
@@ -9,17 +9,12 @@ import { editPostAPI } from "@/features/posts/services/editPostAPI";
 import type { PostRequest, PostResponse } from "@/shared/types/PostApi";
 import { Loader } from "@/shared/components/Loader";
 import { useRef, useState } from "react";
-import { PostContentCreator } from "@/features/posts/components/create/PostContentCreator";
 import { getCurrentTime } from "@/features/comments/services/getCurrentTime";
-import { PostFooterCreator } from "@/features/posts/components/create/PostFooterCreator";
-import { useAuth } from "@/contexts/AuthContext";
 
-export function HomePage() {
-    const { authUser, authState } = useAuth();
-
+export function FriendFeed() {
     const containerRef = useRef<HTMLDivElement>(null);
     const { data: posts, setData: setPosts, state } = useScrollToEnd<PostResponse>(
-        "/post/all",
+        "/post/friends",
         containerRef
     );
 
@@ -83,23 +78,6 @@ export function HomePage() {
                     className="w-fit h-full p-5 flex flex-col items-center gap-[20px] min-w-[200px] center-sidebar overflow-auto scrollbar-hide"
                     ref={containerRef}
                 >
-                    {authUser && <CreatePost
-                        className="w-full p-0 min-w-[350px]"
-                        contentChild={
-                            <PostContentCreator
-                                content={content}
-                                setContent={setContent}
-                                submitCallback={createPost}
-                            />
-                        }
-                        footerChild={
-                            <PostFooterCreator
-                                visible={visible}
-                                setVisible={setVisible}
-                                submitCallback={createPost}
-                            />
-                        }
-                    />}
                         {posts.map(post => (
                             <ReadPost
                                 key={post.id}
