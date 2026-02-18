@@ -12,7 +12,7 @@ interface MessageBarProps {
 }
 
 export function MessageSender({ user_id, addMessage, className }: MessageBarProps) {
-    const { content, setContent, sendMessage } = useSendMessage();
+    const { content, setContent, sendMessage } = useSendMessage(addMessage);
     
     return (
         <div className={className ? className : "w-full"}>
@@ -20,7 +20,7 @@ export function MessageSender({ user_id, addMessage, className }: MessageBarProp
                 className="flex gap-[5px]"
                 onSubmit={(e) => {
                     e.preventDefault();
-                    sendMessage(user_id, addMessage);
+                    sendMessage(user_id);
                 }}>
                 <Input
                     placeholder="Message..."
