@@ -20,23 +20,6 @@ export function SideBarConversations({  }: SideBarConversationsProps) {
         containerRef
     );
 
-    console.log(conversations)
-
-    const updateMessageOnSideBar = (messageToUpdate: MessageResponse) => {
-        const friendId = (authUser && authUser.id == messageToUpdate.from.id) ? messageToUpdate.to.id : messageToUpdate.from.id
-        setConversations(
-            prev => [
-                messageToUpdate,
-                ...prev.filter(message => {
-                    const messageId = (authUser && authUser.id == message.from.id) ? message.to.id : message.from.id
-                    if (friendId != messageId) {
-                        return message;
-                    }
-                })
-            ]
-        );
-    }
-
     const update = async () => {
         reset();
         return 0;
@@ -55,7 +38,6 @@ export function SideBarConversations({  }: SideBarConversationsProps) {
                         <SideBarConversation
                             key={(authUser && authUser.id == conversation.from.id) ? conversation.to.id : conversation.from.id}
                             message={conversation}
-                            updateMessage={updateMessageOnSideBar}
                         />
                     )
                     }
