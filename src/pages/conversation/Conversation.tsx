@@ -6,8 +6,9 @@ import { Message } from "@/features/messages";
 import { MessageSender } from "@/features/messages/components/MessageSender";
 import type { MessageResponse } from "@/shared/types/MessageApi";
 import { useAuth } from "@/contexts/AuthContext";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useScrollToEnd } from "@/shared/hooks/useScrollToEnd";
+import { WebSocketService } from "@/shared/services/WebSocketService";
 
 export function Conversation() {
     const { id } = useParams<{ id: string }>();
@@ -26,6 +27,23 @@ export function Conversation() {
         0,
         true
     );
+    
+    const ws = useRef<WebSocketService<MessageResponse> | null>(null);
+
+    useEffect(() => {
+        ws.current = new WebSocketService((message: MessageResponse) => {
+        setMessages(prev => {
+            const existingIds = new Set(prev.map(msg => msg.id));
+            if (existingIds.has(message.id)) return prev;
+            else return [...prev, message];
+        });
+        }, "messages");
+
+        return () => {
+            ws.current?.disconnect();
+            ws.current = null;
+        };
+    }, []);
 
     return (
         <div className="w-full h-full flex flex-col">
