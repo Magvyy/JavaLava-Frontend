@@ -7,7 +7,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     return (
         <SidebarProvider defaultOpen>
             <AppSideBar />
-            <main className="flex flex-col flex-1 overflow-auto">
+            <main className="flex flex-col flex-1 h-[100vh]">
                 <NavBar />
                 {children}
             </main>
