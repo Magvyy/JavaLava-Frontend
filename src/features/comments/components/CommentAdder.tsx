@@ -18,7 +18,7 @@ export function AddComment({ post_id, addComment }: AddCommentProps) {
         submitComment(post_id, addComment);
       }}>
         <Input
-          placeholder="Write something..."
+          placeholder="Comment..."
           value={content}
           onChange={e => setContent(e.target.value)}
         />

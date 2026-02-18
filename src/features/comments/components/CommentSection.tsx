@@ -9,9 +9,9 @@ interface CommentSectionProps {
 export default function CommentSection({ adderChild, commentsChild }: CommentSectionProps) {
     
     return (
-      <div className="flex flex-col items-center w-8/10 gap-[10px] p-[10px] no-scrollbars">
-        {adderChild}
+      <div className="flex flex-col items-center w-full gap-[10px] px-10 py-2">
         {commentsChild}
+        {adderChild}
       </div>
     )
 }
