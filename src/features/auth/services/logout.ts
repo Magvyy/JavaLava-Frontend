@@ -1,6 +1,8 @@
+import env from "@/env/environment.json";
+
 export async function logout() {
     try {
-        await fetch("http://localhost:8080/auth/logout", {
+        await fetch(env.backend + "/auth/logout", {
             credentials: "include",
             method: "GET",
             headers: {

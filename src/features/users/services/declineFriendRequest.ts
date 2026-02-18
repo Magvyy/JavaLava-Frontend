@@ -1,7 +1,9 @@
+import env from "@/env/environment.json";
+
 export const declineFriendRequest = async (userId: number): Promise<boolean> => {
     try {
         const res = await fetch(
-            `http://localhost:8080/friends/requests/${userId}`,
+            env.backend + `/friends/requests/${userId}`,
             {
                 method: "DELETE",
                 credentials: "include",

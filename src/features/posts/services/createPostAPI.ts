@@ -1,8 +1,9 @@
-import type { PostRequest, PostResponse } from "@/shared/types/ApiResponses";
+import type { PostRequest, PostResponse } from "@/shared/types/PostApi";
 
+import env from "@/env/environment.json";
 
 export async function createPostAPI(post: PostRequest, callback: (post: PostResponse) => void, onError: ((message: string) => void) | null) {
-    let response = await fetch("http://localhost:8080/post", {
+    let response = await fetch(env.backend + "/post", {
             credentials: "include",
             method: "POST",
             headers: {

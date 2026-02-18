@@ -1,6 +1,8 @@
 import type { ProfileUserResponse } from "@/shared/types/UserApi";
 import { useEffect, useState } from "react";
 
+import env from "@/env/environment.json";
+
 export const useProfileUser = (userId: number | null) => {
     const [profileUser, setProfileUser] = useState<ProfileUserResponse | null>(null);
     const [profileLoading, setProfileLoading] = useState<boolean>(userId !== null);
@@ -19,7 +21,7 @@ export const useProfileUser = (userId: number | null) => {
 
         const fetchUser = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/users/profile/${userId}`, {
+                const response = await fetch(env.backend + `/profile/${userId}`, {
                     credentials: "include",
                     method: "GET",
                     headers: {

@@ -7,7 +7,7 @@ export const useAuthenticateMe = () => {
     const { state, handleApiCall } = useApiCall<UserResponse>();
     if (!submit) {
         handleApiCall({
-            endpoint: "http://localhost:8080/auth/me",
+            endpoint: "/auth/me",
             credentials: true,
             method: "GET",
         });
