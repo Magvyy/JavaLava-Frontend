@@ -15,6 +15,5 @@ export interface PostResponse extends Id {
 export interface PostRequest {
   id: number | null
   content: string
-  published: string
   visible: boolean
 }

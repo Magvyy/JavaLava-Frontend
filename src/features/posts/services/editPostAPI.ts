@@ -1,9 +1,10 @@
-import type { PostRequest, PostResponse } from "@/shared/types/PostApi";
+import type { PostRequest } from "@/shared/types/PostApi";
 
 import env from "@/env/environment.json";
+import { displayError } from "@/shared/services/displayError";
 
-export async function editPostAPI(post: PostRequest, onEdit: (post: PostResponse) => void, onError: ((message: string) => void) | null) {
-    let response = await fetch(env.backend + "/post/" + post.id, {
+export async function editPostAPI(post: PostRequest) {
+    let response = await fetch(env.backend + "/posts/" + post.id, {
             credentials: "include",
             method: "PUT",
             headers: {
@@ -17,8 +18,6 @@ export async function editPostAPI(post: PostRequest, onEdit: (post: PostResponse
         let postDTOResponse = await response.json();
         return postDTOResponse;
     } else {
-        if (onError != null) {
-            onError(response.status.toString());
-        }
+        displayError(response.status.toString());
     }
 }

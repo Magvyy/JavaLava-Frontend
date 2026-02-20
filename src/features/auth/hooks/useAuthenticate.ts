@@ -1,4 +1,5 @@
 import { useApiCall } from "@/shared/hooks/useApiCall";
+import { displayError } from "@/shared/services/displayError";
 import { useState } from "react";
 
 
@@ -22,13 +23,7 @@ export const useAuthenticate = (endpoint: string) => {
     if (state.called && !state.loading) {
         let error = state.result?.error;
         if (error) {
-            let errorBox = document.getElementById("error-box");
-            if (errorBox) {
-                errorBox.innerHTML = error;
-                errorBox.classList.remove("hidden");
-                errorBox.classList.add("error-box");
-            }
-
+            displayError(error);
         } else {
             window.location.href = "/";
         }

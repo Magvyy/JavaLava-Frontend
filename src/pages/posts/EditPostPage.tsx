@@ -4,10 +4,10 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { PostResponse } from "@/shared/types/PostApi";
 import { PostHeader } from "@/features/posts/components/PostHeader";
-import { editPostAPI } from "@/features/posts/services/editPostAPI";
 import { PostContentEditor } from "@/features/posts/components/edit/PostContentEditor";
 import { PostFooterEditor } from "@/features/posts/components/edit/PostFooterEditor";
 import { Loader } from "@/shared/components/Loader";
+import { editPost } from "../feeds/services/editPost";
 
 
 export function EditPostPage() {
@@ -41,25 +41,10 @@ export function EditPostPage() {
             setContent(data.content);
             setVisible(data.visible);
         }
-    }, [state])
-      
-    function createPostRequest(post: PostResponse) {
-        return {
-            id: post.id,
-            content: content,
-            published: post.published,
-            visible: visible
-        };
-    }
-        
-    const editPost = async () => {
-        let postRequest = createPostRequest(post);
-        await editPostAPI(postRequest, onEdit, null);
-        window.location.href = "/post/" + post.id;
-    }
+    }, [state.result?.data])
 
     const onEdit = (post: PostResponse) => {
-        setPost(post);
+        window.location.href = "/posts/" + post.id;
     }
 
     const onDelete = (id: number) => {
@@ -72,19 +57,19 @@ export function EditPostPage() {
                 <div className="center-sidebar w-1/2 p-5">
                     <EditPost>
                         <PostHeader
-                            post_id={post.id}
+                            postId={post.id}
                             onDelete={onDelete}
                             user={post.user}
                         />
                         <PostContentEditor
                             content={content}
                             setContent={setContent}
-                            submitCallback={editPost}
+                            submitCallback={() => editPost(Number(id), content, visible, onEdit)}
                         />
                         <PostFooterEditor
                             visible={visible}
                             setVisible={setVisible}
-                            submitCallback={editPost}
+                            submitCallback={() => editPost(Number(id), content, visible, onEdit)}
                         />
                     </EditPost>
                 </div>

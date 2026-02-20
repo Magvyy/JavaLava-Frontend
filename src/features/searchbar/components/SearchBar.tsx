@@ -1,15 +1,15 @@
 import { Input } from "@/components/ui/input";
 import { useScrollToEnd } from "@/shared/hooks/useScrollToEnd";
-import type { UserResponse } from "@/types/ApiResponses";
 import { useEffect, useRef, useState } from "react";
 import { DropDown } from "./DropDown";
+import type { UserResponse } from "@/shared/types/UserApi";
 
 
 export function SearchBar() {
     const [search, setSearch] = useState<string>("");
 
     const containerRef = useRef<HTMLDivElement>(null);
-    const { data: users, reset } = useScrollToEnd<UserResponse>(
+    const { data: users, reset, resetData } = useScrollToEnd<UserResponse>(
         "/users/search",
         containerRef,
         true,
@@ -20,6 +20,7 @@ export function SearchBar() {
 
     useEffect(() => {
         reset();
+        resetData();
     }, [search])
 
     return (

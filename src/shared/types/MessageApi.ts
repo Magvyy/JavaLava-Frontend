@@ -13,5 +13,4 @@ export interface MessageRequest {
   id: number | null
   to_user_id: number
   content: string
-  sent: string
 }

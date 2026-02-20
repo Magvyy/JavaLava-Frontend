@@ -1,7 +1,7 @@
 import env from "@/env/environment.json";
 
-export async function likePostAPI(post_id: number, callback: (bool: boolean) => void) {
-    let response = await fetch(env.backend + "/likes/like/post/" + post_id, {
+export async function likePostAPI(postId: number, callback: (bool: boolean) => void) {
+    let response = await fetch(env.backend + "/likes/like/post/" + postId, {
             credentials: "include",
             method: "POST",
             headers: {

@@ -12,19 +12,29 @@ import {
 
 import dots from "./assets/dots.svg";
 import { useAuth } from "@/contexts/AuthContext";
+import { fetchPerms } from "../services/fetchPerms";
+import { useEffect, useState } from "react";
+import type { Perms } from "@/shared/types/Id";
 
 interface HeaderActionProps {
-    userId: number
+    postId: number
     editPostRedirect: () => void
     deletePost: () => void
 }
-export default function HeaderActions({ userId, editPostRedirect, deletePost }: HeaderActionProps) {
+export default function HeaderActions({ postId, editPostRedirect, deletePost }: HeaderActionProps) {
     const { authUser, authState } = useAuth();
+    if (!authState.result?.data) return;
+    const [perms, setPerms] = useState<Perms | undefined>(undefined);
 
-    const user = authState.result?.data;
+    useEffect(() => {
+        const getPerms = async () => {
+            setPerms(await fetchPerms(postId));
+        }
+        getPerms();
+    }, [])
 
-    if (!user) return <></> 
-    if (user.id != userId) return <></> 
+    if (!perms) return;
+    if (!perms.write && !perms.delete) return;
 
     return (
         <DropdownMenu>
@@ -38,14 +48,22 @@ export default function HeaderActions({ userId, editPostRedirect, deletePost }: 
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuGroup>
-                    <DropdownMenuItem onClick={(event) => {
-                        event.stopPropagation();
-                        editPostRedirect();
-                    }}>edit</DropdownMenuItem>
-                    <DropdownMenuItem onClick={(event) => {
-                        event.stopPropagation();
-                        deletePost()
-                    }}>delete</DropdownMenuItem>
+                    {perms.write &&
+                        <DropdownMenuItem onClick={(event) => {
+                            event.stopPropagation();
+                            editPostRedirect();
+                        }}>
+                            edit
+                        </DropdownMenuItem>
+                    }
+                    {perms.delete &&
+                        <DropdownMenuItem onClick={(event) => {
+                            event.stopPropagation();
+                            deletePost()
+                        }}>
+                            delete
+                        </DropdownMenuItem>
+                    }
                 </DropdownMenuGroup>
             </DropdownMenuContent>
         </DropdownMenu>

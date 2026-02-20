@@ -12,6 +12,5 @@ export interface CommentResponse extends Id {
 export interface CommentRequest {
   id: number | null
   content: string
-  published: string
   post_id: number
 }

@@ -5,17 +5,17 @@ import { useAddComment } from "../hooks/useAddComment";
 
 
 interface AddCommentProps {
-  post_id: number,
+  postId: number,
   addComment: (comment: CommentResponse) => void
 }
-export function AddComment({ post_id, addComment }: AddCommentProps) {
+export function AddComment({ postId, addComment }: AddCommentProps) {
   const { content, setContent, submitComment } = useAddComment();
   
   return (
     <div className="w-full p-[5px]">
       <form onSubmit={(e) => {
         e.preventDefault();
-        submitComment(post_id, addComment);
+        submitComment(postId, addComment);
       }}>
         <Input
           placeholder="Comment..."

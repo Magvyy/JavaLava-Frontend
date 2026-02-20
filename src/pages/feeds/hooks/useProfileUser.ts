@@ -21,7 +21,7 @@ export const useProfileUser = (userId: number | null) => {
 
         const fetchUser = async () => {
             try {
-                const response = await fetch(env.backend + `/profile/${userId}`, {
+                const response = await fetch(env.backend + `/users/profile/${userId}`, {
                     credentials: "include",
                     method: "GET",
                     headers: {

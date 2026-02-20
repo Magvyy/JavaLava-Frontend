@@ -7,12 +7,12 @@ export const useReadPost = (id: number) => {
     const { state, handleApiCall } = useApiCall<PostResponse>();
     if (!submit) {
         handleApiCall({
-            endpoint: "/post/" + id,
+            endpoint: "/posts/" + id,
             credentials: true,
             method: "GET",
         });
         setSubmit(true);
     }
 
-    return {  state };
+    return { state };
 }

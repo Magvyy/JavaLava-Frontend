@@ -1,18 +1,21 @@
 import type { CommentRequest, CommentResponse } from "@/shared/types/CommentApi";
 import { useState } from "react";
-import { getCurrentTime } from "../services/getCurrentTime";
 import { createComment } from "../services/createComment";
+import { displayError } from "@/shared/services/displayError";
 
 
 export function useAddComment() {
     const [content, setContent] = useState<string>("");
 
-    const submitComment = (post_id: number, addComment: (comment: CommentResponse) => void) => {
+    const submitComment = (postId: number, addComment: (comment: CommentResponse) => void) => {
+        if (content.trim().length === 0) {
+            displayError("Content is empty.");
+            return;
+        }
         let commentRequest: CommentRequest = {
             id: null,
             content: content,
-            published: getCurrentTime(),
-            post_id: post_id
+            post_id: postId
         };
         createComment(commentRequest, addComment);
         setContent("");

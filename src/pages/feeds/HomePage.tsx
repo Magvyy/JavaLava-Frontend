@@ -3,52 +3,26 @@ import { CreatePost, ReadPost } from "@/features/posts";
 import { PostHeader } from "@/features/posts/components/PostHeader";
 import { PostContentReader } from "@/features/posts/components/read/PostContentReader";
 import { PostFooterReader } from "@/features/posts/components/read/PostFooterReader";
-import { deletePostAPI } from "@/features/posts/services/deletePostAPI";
-import { createPostAPI } from "@/features/posts/services/createPostAPI";
-import { editPostAPI } from "@/features/posts/services/editPostAPI";
-import type { PostRequest, PostResponse } from "@/shared/types/PostApi";
+import type { PostResponse } from "@/shared/types/PostApi";
 import { Loader } from "@/shared/components/Loader";
 import { useRef, useState } from "react";
 import { PostContentCreator } from "@/features/posts/components/create/PostContentCreator";
-import { getCurrentTime } from "@/features/comments/services/getCurrentTime";
 import { PostFooterCreator } from "@/features/posts/components/create/PostFooterCreator";
 import { useAuth } from "@/contexts/AuthContext";
+import { createPost } from "./services/createPost";
 
 export function HomePage() {
     const { authUser, authState } = useAuth();
 
     const containerRef = useRef<HTMLDivElement>(null);
     const { data: posts, setData: setPosts, state } = useScrollToEnd<PostResponse>(
-        "/post/all",
+        "/posts/all",
         containerRef
     );
 
-    const createPost = async () => {
-        let postRequest = createPostRequest();
-        await createPostAPI(postRequest, onCreate, null);
-    }
-
     const onCreate = (post: PostResponse) => {
         setPosts([post, ...posts]);
-    }
-    
-    const editPost = async (post: PostRequest) => {
-        await editPostAPI(post, onEdit, null);
-    }
-
-    const onEdit = (edit: PostResponse) => {
-        let temp = posts.map(post => {
-        if (post.id === edit.id) {
-            return edit;
-        } else {
-            return post;
-        }
-        });
-        setPosts(temp);
-    }
-
-    const deletePost = async (id: number) => {
-        await deletePostAPI(id, onDelete, null);
+        setContent("");
     }
 
     const onDelete = (id: number) => {
@@ -61,42 +35,33 @@ export function HomePage() {
     }
 
     const onClickPost = (post: PostResponse) => {
-        window.location.href = "/post/" + post.id;
+        window.location.href = "/posts/" + post.id;
     }
 
     const [content, setContent] = useState<string>("")
     const [visible, setVisible] = useState<boolean>(false);
-        
-    function createPostRequest() {
-        return {
-            id: null,
-            content: content,
-            published: getCurrentTime(),
-            visible: visible
-        };
-    }
 
     return (
         <Loader state={state} data={posts} className="w-2/5 p-0 min-w-[350px]">
             {(posts, spinner) => 
                 <div
-                    className="w-fit h-full p-5 flex flex-col items-center gap-[20px] min-w-[200px] center-sidebar overflow-auto scrollbar-hide"
+                    className="w-full h-full p-5 flex flex-col items-center gap-[20px] min-w-[200px] center-sidebar overflow-auto scrollbar-hide"
                     ref={containerRef}
                 >
                     {authUser && <CreatePost
-                        className="w-full p-0 min-w-[350px]"
+                        className="w-1/3 p-0 min-w-[350px]"
                         contentChild={
                             <PostContentCreator
                                 content={content}
                                 setContent={setContent}
-                                submitCallback={createPost}
+                                submitCallback={() => createPost(content, visible, onCreate)}
                             />
                         }
                         footerChild={
                             <PostFooterCreator
                                 visible={visible}
                                 setVisible={setVisible}
-                                submitCallback={createPost}
+                                submitCallback={() => createPost(content, visible, onCreate)}
                             />
                         }
                     />}
@@ -105,10 +70,10 @@ export function HomePage() {
                                 key={post.id}
                                 post={post}
                                 onClick={onClickPost}
-                                className="w-full p-0 min-w-[350px]"
+                                className="w-1/3 p-0 min-w-[350px]"
                             >
                                 <PostHeader
-                                    post_id={post.id}
+                                    postId={post.id}
                                     onDelete={onDelete}
                                     user={post.user}
                                 />
@@ -116,8 +81,10 @@ export function HomePage() {
                                     post={post}
                                 />
                                 <PostFooterReader
-                                    post_id={post.id}
+                                    postId={post.id}
                                     liked={post.liked}
+                                    likeCount={post.like_count}
+                                    commentCount={post.comment_count}
                                 />
                             </ReadPost>
                         ))}

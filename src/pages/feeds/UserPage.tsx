@@ -23,7 +23,7 @@ export function UserPage() {
 
 	const containerRef = useRef<HTMLDivElement>(null);
 	const { data: posts, setData: setPosts, state, reset } = useScrollToEnd<PostResponse>(
-		"/post/user/" + Number(userId),
+		"/posts/user/" + Number(userId),
 		containerRef
 	);
 
@@ -56,7 +56,7 @@ export function UserPage() {
 	};
 
     const onClickPost = (post: PostResponse) => {
-        window.location.href = "/post/" + post.id;
+        window.location.href = "/posts/" + post.id;
     }
 
 
@@ -120,7 +120,7 @@ export function UserPage() {
 									className="w-full p-0 min-w-[350px]"
 								>
 									<PostHeader
-										post_id={post.id}
+										postId={post.id}
 										onDelete={onDelete}
 										user={post.user}
 									/>
@@ -128,8 +128,10 @@ export function UserPage() {
 										post={post}
 									/>
 									<PostFooterReader
-										post_id={post.id}
+										postId={post.id}
 										liked={post.liked}
+										likeCount={post.like_count}
+										commentCount={post.comment_count}
 									/>
 								</ReadPost>
 							))}

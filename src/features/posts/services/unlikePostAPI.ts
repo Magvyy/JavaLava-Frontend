@@ -1,7 +1,7 @@
 import env from "@/env/environment.json";
 
-export async function unlikePostAPI(post_id: number, callback: (bool: boolean) => void) {
-    let response = await fetch(env.backend + "/likes/unlike/post/" + post_id, {
+export async function unlikePostAPI(postId: number, callback: (bool: boolean) => void) {
+    let response = await fetch(env.backend + "/likes/unlike/post/" + postId, {
             credentials: "include",
             method: "DELETE",
             headers: {
