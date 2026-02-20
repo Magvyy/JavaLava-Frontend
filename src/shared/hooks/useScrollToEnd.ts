@@ -17,6 +17,10 @@ export const useScrollToEnd = <T extends Id> (endpoint: string, ref: RefObject<H
         setOffset(0);
     }
 
+    const resetData = () => {
+        setData([]);
+    }
+
     const update = () => {
         if (adding.current) return;
         setOffset(data.length);
@@ -72,5 +76,5 @@ export const useScrollToEnd = <T extends Id> (endpoint: string, ref: RefObject<H
         }
     });
 
-    return { data, setData, state, reset }
+    return { data, setData, state, reset, resetData }
 }

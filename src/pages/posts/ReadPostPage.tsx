@@ -31,10 +31,10 @@ export function ReadPostPage() {
     }
 
     return (
-        <Loader state={postState} className="w-full max-w-1/2 p-4">
+            <Loader state={postState} className="w-full max-w-1/2 p-4">
             {(post) =>
                 <div className="center-sidebar w-1/2 p-5">
-                    <ReadPost post={post} className="w-full p-0 min-w-[200px]">
+                    <ReadPost post={post} className="w-full p-0 min-w-[350px]">
                         <PostHeader
                             postId={post.id}
                             onDelete={onDelete}

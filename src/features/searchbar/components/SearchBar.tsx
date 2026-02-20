@@ -9,7 +9,7 @@ export function SearchBar() {
     const [search, setSearch] = useState<string>("");
 
     const containerRef = useRef<HTMLDivElement>(null);
-    const { data: users, reset } = useScrollToEnd<UserResponse>(
+    const { data: users, reset, resetData } = useScrollToEnd<UserResponse>(
         "/users/search",
         containerRef,
         true,
@@ -20,6 +20,7 @@ export function SearchBar() {
 
     useEffect(() => {
         reset();
+        resetData();
     }, [search])
 
     return (

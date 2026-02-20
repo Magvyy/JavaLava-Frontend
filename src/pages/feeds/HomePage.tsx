@@ -45,11 +45,11 @@ export function HomePage() {
         <Loader state={state} data={posts} className="w-2/5 p-0 min-w-[350px]">
             {(posts, spinner) => 
                 <div
-                    className="w-fit h-full p-5 flex flex-col items-center gap-[20px] min-w-[200px] center-sidebar overflow-auto scrollbar-hide"
+                    className="w-full h-full p-5 flex flex-col items-center gap-[20px] min-w-[200px] center-sidebar overflow-auto scrollbar-hide"
                     ref={containerRef}
                 >
                     {authUser && <CreatePost
-                        className="w-full p-0 min-w-[350px]"
+                        className="w-1/3 p-0 min-w-[350px]"
                         contentChild={
                             <PostContentCreator
                                 content={content}
@@ -70,7 +70,7 @@ export function HomePage() {
                                 key={post.id}
                                 post={post}
                                 onClick={onClickPost}
-                                className="w-full p-0 min-w-[350px]"
+                                className="w-1/3 p-0 min-w-[350px]"
                             >
                                 <PostHeader
                                     postId={post.id}
