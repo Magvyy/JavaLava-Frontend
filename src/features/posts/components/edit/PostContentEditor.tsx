@@ -26,13 +26,13 @@ export function PostContentEditor({ submitCallback, content, setContent, classNa
                     value={content}
                     onKeyDown={(e) => {
                         if (e.key === "Enter" && !e.shiftKey) {
-                        e.preventDefault();
-                        submitCallback();
-                        setContent("");
+                            e.preventDefault();
+                            submitCallback();
                         }
                     }}
                 />
             </form>
+            <p id="error-box" className="hidden"></p>
         </CardContent>
     )
 }

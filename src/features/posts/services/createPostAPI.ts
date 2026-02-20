@@ -1,9 +1,10 @@
-import type { PostRequest, PostResponse } from "@/shared/types/PostApi";
+import type { PostRequest } from "@/shared/types/PostApi";
 
 import env from "@/env/environment.json";
+import { displayError } from "@/shared/services/displayError";
 
-export async function createPostAPI(post: PostRequest, callback: (post: PostResponse) => void, onError: ((message: string) => void) | null) {
-    let response = await fetch(env.backend + "/post", {
+export async function createPostAPI(post: PostRequest) {
+    let response = await fetch(env.backend + "/posts", {
             credentials: "include",
             method: "POST",
             headers: {
@@ -15,10 +16,8 @@ export async function createPostAPI(post: PostRequest, callback: (post: PostResp
         });
     if (response.ok) {
         let postDTOResponse = await response.json();
-        callback(postDTOResponse);
+        return postDTOResponse;
     } else {
-        if (onError != null) {
-            onError(response.status.toString());
-        }
+        displayError(response.status.toString());
     }
 }

@@ -28,11 +28,11 @@ export function PostContentCreator({ submitCallback, content, setContent, classN
                         if (e.key === "Enter" && !e.shiftKey) {
                             e.preventDefault();
                             submitCallback();
-                            setContent("");
                         }
                     }}
                 />
             </form>
+            <p id="error-box" className="hidden"></p>
         </CardContent>
     )
 }

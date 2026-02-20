@@ -8,20 +8,21 @@ import { deletePostAPI } from "../services/deletePostAPI";
 
 
 interface PostHeaderProps {
-  post_id: number
+  postId: number
   onDelete: (id: number) => void
   user: UserResponse
   onError?: ((message: string) => void) | null
   className?: string
 }
-export function PostHeader({ post_id, onDelete, user, onError, className }: PostHeaderProps) {
+export function PostHeader({ postId, onDelete, user, onError, className }: PostHeaderProps) {
 
   const editPostRedirect = () => {
-    window.location.href = "/post/edit/" + post_id;
+    window.location.href = "/posts/edit/" + postId;
   }
 
   const deletePost = async () => {
-      await deletePostAPI(post_id, onDelete, null);
+      let id = await deletePostAPI(postId);
+      if (id) onDelete(id);
   }
 
   return (
@@ -36,7 +37,7 @@ export function PostHeader({ post_id, onDelete, user, onError, className }: Post
         />
       </CardTitle>
       <HeaderActions
-        userId={user.id}
+        postId={postId}
         editPostRedirect={editPostRedirect}
         deletePost={deletePost}
       />

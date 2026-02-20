@@ -1,8 +1,9 @@
 import env from "@/env/environment.json";
+import { displayError } from "@/shared/services/displayError";
 
-export async function deletePostAPI(id: number, onDelete: ((id: number) => void), onError: ((message: string) => void) | null) {
+export async function deletePostAPI(id: number) {
     const response = await
-        fetch(env.backend + "/post/" + id, {
+        fetch(env.backend + "/posts/" + id, {
             credentials: "include",
             method: "DELETE",
             headers: {
@@ -12,10 +13,8 @@ export async function deletePostAPI(id: number, onDelete: ((id: number) => void)
             }
         });
     if (response.ok) {
-        onDelete(id);
+        return id;
     } else {
-        if (onError != null) {
-            onError(response.status.toString());
-        }
+        displayError(response.status.toString());
     }
 }
