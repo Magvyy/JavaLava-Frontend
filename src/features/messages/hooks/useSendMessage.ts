@@ -1,8 +1,8 @@
-import { getCurrentTime } from "@/features/comments/services/getCurrentTime";
 import type { MessageRequest, MessageResponse } from "@/shared/types/MessageApi";
 import { useState } from "react";
 import { createMessage } from "../services/createMessage";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { displayError } from "@/shared/services/displayError";
 
 
 export function useSendMessage(addMessage: (messageResponse: MessageResponse) => void) {
@@ -21,12 +21,15 @@ export function useSendMessage(addMessage: (messageResponse: MessageResponse) =>
         },
     });
 
-    const sendMessage = async (user_id: number) => {
+    const sendMessage = async (userId: number) => {
+        if (content.trim().length === 0) {
+            displayError("Content is empty.");
+            return;
+        }
         let messageRequest: MessageRequest = {
             id: null,
-            to_user_id: user_id,
-            content: content,
-            sent: getCurrentTime()
+            to_user_id: userId,
+            content: content
         };
         mutate(messageRequest)
         setContent("");
