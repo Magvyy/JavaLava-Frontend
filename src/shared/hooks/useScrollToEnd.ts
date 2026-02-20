@@ -4,7 +4,7 @@ import type { Id } from "../types/Id";
 
 
 export const useScrollToEnd = <T extends Id> (endpoint: string, ref: RefObject<HTMLElement | null>, bottom = true, offset = 0, reversed = false, query?: string) => {
-    const { data, setData, setPage, state, empty, setEmpty, added } = usePaginatedData<T>(endpoint, reversed, query);
+    const { data, setData, setOffset, state, empty, setEmpty, adding } = usePaginatedData<T>(endpoint, reversed, query);
     
     const scrollPosition = useRef(0);
     const previousHeight = useRef(0);
@@ -12,14 +12,14 @@ export const useScrollToEnd = <T extends Id> (endpoint: string, ref: RefObject<H
     const interval = 500;
 
     const reset = () => {
-        added.current = false;
+        adding.current = false;
         setEmpty(false);
-        setPage(0);
+        setOffset(0);
     }
 
     const update = () => {
-        if (added.current) return;
-        setPage(prev => prev + 1);
+        if (adding.current) return;
+        setOffset(data.length);
         lastScrollTime.current = Date.now();
     }
     

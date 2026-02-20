@@ -4,7 +4,7 @@ import { HomePage } from '@/pages/feeds/HomePage';
 import { LoginPage } from '@/pages/auth/LoginPage';
 import { RegisterPage } from '@/pages/auth/RegisterPage';
 import { ReadPostPage } from '@/pages/posts/ReadPostPage';
-import { UserPage } from '@/pages/user-profile/UserPage';
+import { UserPage } from '@/pages/feeds/UserPage';
 import { EditPostPage } from '@/pages/posts/EditPostPage';
 import Layout from './Layout';
 import Secret from '@/features/secret/Secret';
@@ -27,8 +27,8 @@ export default function App() {
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/profile" element={<UserPage />} />
               <Route path="/user/:userId" element={<UserPage />} />
-              <Route path="/post/:id" element={<ReadPostPage />} />
-              <Route path="/post/edit/:id" element={<EditPostPage />} />
+              <Route path="/posts/:id" element={<ReadPostPage />} />
+              <Route path="/posts/edit/:id" element={<EditPostPage />} />
               <Route path="/empty" element={<Secret />} />
               <Route path="/conversation/:id" element={<Conversation />} />
             </Routes>

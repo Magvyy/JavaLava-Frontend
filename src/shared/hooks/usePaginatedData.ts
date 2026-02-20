@@ -5,22 +5,23 @@ import type { Id } from "../types/Id";
 
 export const usePaginatedData = <T extends Id> (endpoint: string, reversed?: boolean, query?: string) => {
     const [empty, setEmpty] = useState<boolean>(false);
-    const [page, setPage] = useState<number>(0);
     const [data, setData] = useState<T[]>([]);
+    const [offset, setOffset] = useState<number>(0);
     const { state, handleApiCall } = useApiCall<T[]>();
 
-    const added = useRef(false);
+    const adding = useRef(false);
 
     useEffect(() => {
+        if (endpoint === "/users/search" && !query) return;
         if (query && query === "") return;
         handleApiCall({
-            endpoint: endpoint + "?page=" + page + (query ? "&q=" + query : ""),
+            endpoint: endpoint + "?offset=" + offset + (query ? "&q=" + query : ""),
             credentials: true,
             method: "GET",
         });
-        added.current = false;
-    }, [page, query])
-    
+        adding.current = true;
+    }, [offset, query])
+
     useEffect(() => {
         const addData = state.result?.data;
         if (!addData) return;
@@ -45,10 +46,10 @@ export const usePaginatedData = <T extends Id> (endpoint: string, reversed?: boo
             if (reversed) {
                 return [...newItems, ...updatedItems as T[]];
             }
-            added.current = true;
             return [...updatedItems as T[], ...newItems];
         })
+        adding.current = false;
     }, [state.result?.data])
 
-    return { data, setData, page, setPage, state, empty, setEmpty, added };
+    return { data, setData, offset, setOffset, state, empty, setEmpty, adding };
 }
