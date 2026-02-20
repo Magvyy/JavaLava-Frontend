@@ -3,48 +3,16 @@ import { ReadPost } from "@/features/posts";
 import { PostHeader } from "@/features/posts/components/PostHeader";
 import { PostContentReader } from "@/features/posts/components/read/PostContentReader";
 import { PostFooterReader } from "@/features/posts/components/read/PostFooterReader";
-import { deletePostAPI } from "@/features/posts/services/deletePostAPI";
-import { createPostAPI } from "@/features/posts/services/createPostAPI";
-import { editPostAPI } from "@/features/posts/services/editPostAPI";
-import type { PostRequest, PostResponse } from "@/shared/types/PostApi";
+import type { PostResponse } from "@/shared/types/PostApi";
 import { Loader } from "@/shared/components/Loader";
-import { useRef, useState } from "react";
-import { getCurrentTime } from "@/features/comments/services/getCurrentTime";
+import { useRef } from "react";
 
 export function FriendFeed() {
     const containerRef = useRef<HTMLDivElement>(null);
     const { data: posts, setData: setPosts, state } = useScrollToEnd<PostResponse>(
-        "/post/friends",
+        "/posts/friends",
         containerRef
     );
-
-    const createPost = async () => {
-        let postRequest = createPostRequest();
-        await createPostAPI(postRequest, onCreate, null);
-    }
-
-    const onCreate = (post: PostResponse) => {
-        setPosts([post, ...posts]);
-    }
-    
-    const editPost = async (post: PostRequest) => {
-        await editPostAPI(post, onEdit, null);
-    }
-
-    const onEdit = (edit: PostResponse) => {
-        let temp = posts.map(post => {
-        if (post.id === edit.id) {
-            return edit;
-        } else {
-            return post;
-        }
-        });
-        setPosts(temp);
-    }
-
-    const deletePost = async (id: number) => {
-        await deletePostAPI(id, onDelete, null);
-    }
 
     const onDelete = (id: number) => {
         let temp = posts.filter(post => {
@@ -56,19 +24,7 @@ export function FriendFeed() {
     }
 
     const onClickPost = (post: PostResponse) => {
-        window.location.href = "/post/" + post.id;
-    }
-
-    const [content, setContent] = useState<string>("")
-    const [visible, setVisible] = useState<boolean>(false);
-        
-    function createPostRequest() {
-        return {
-            id: null,
-            content: content,
-            published: getCurrentTime(),
-            visible: visible
-        };
+        window.location.href = "/posts/" + post.id;
     }
 
     return (
@@ -86,7 +42,7 @@ export function FriendFeed() {
                                 className="w-full p-0 min-w-[350px]"
                             >
                                 <PostHeader
-                                    post_id={post.id}
+                                    postId={post.id}
                                     onDelete={onDelete}
                                     user={post.user}
                                 />
@@ -94,8 +50,10 @@ export function FriendFeed() {
                                     post={post}
                                 />
                                 <PostFooterReader
-                                    post_id={post.id}
+                                    postId={post.id}
                                     liked={post.liked}
+                                    likeCount={post.like_count}
+                                    commentCount={post.comment_count}
                                 />
                             </ReadPost>
                         ))}

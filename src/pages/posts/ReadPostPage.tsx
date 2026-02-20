@@ -22,7 +22,7 @@ export function ReadPostPage() {
     const { state: postState } = useReadPost(Number(id));
     const containerRef = useRef<HTMLDivElement>(null);
     const { data: comments, setData: setComments, state: commentsState } = useScrollToEnd<CommentResponse>(
-        "/post/" + Number(id) + "/comments",
+        "/posts/" + Number(id) + "/comments",
         containerRef
     );
  
@@ -36,7 +36,7 @@ export function ReadPostPage() {
                 <div className="center-sidebar w-1/2 p-5">
                     <ReadPost post={post} className="w-full p-0 min-w-[200px]">
                         <PostHeader
-                            post_id={post.id}
+                            postId={post.id}
                             onDelete={onDelete}
                             user={post.user}
                         />
@@ -44,7 +44,7 @@ export function ReadPostPage() {
                             post={post}
                         />
                         <PostFooterReader
-                            post_id={post.id}
+                            postId={post.id}
                             liked={post.liked}
                             comments={comments}
                             setComments={setComments}
@@ -52,7 +52,7 @@ export function ReadPostPage() {
                                 <CommentSection
                                     adderChild={
                                         <AddComment
-                                            post_id={post.id}
+                                            postId={post.id}
                                             addComment={(comment: CommentResponse) => setComments([comment, ...comments])}
                                         />
                                     }
