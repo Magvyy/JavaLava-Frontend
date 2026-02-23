@@ -42,6 +42,18 @@
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
+  
+.error-box {
+  color: #c51244;
+  text-align: center;
+  background-color: #f8d7da;
+  border: 1px solid #c51244;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  display: block;
+}
 
 @keyframes logo-spin {
   from {
