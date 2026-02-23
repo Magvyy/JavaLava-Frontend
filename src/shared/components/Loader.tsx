@@ -37,7 +37,7 @@ export function Loader <T> ({ state, data, children, className }: LoaderProps <T
     if (!result) return null;
 
     if (result.error) return (
-        <div className={className ? "flex justify-center items-center " + className : "flex justify-center items-center"}>
+        <div className={className ? "flex w-full h-full justify-center items-center center-sidebar " + className : "flex justify-center items-center"}>
             {result.error}
         </div>
     )
