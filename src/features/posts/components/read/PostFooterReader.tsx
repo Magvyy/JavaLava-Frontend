@@ -32,11 +32,14 @@ export function PostFooterReader({ postId, likeCount, commentCount, comments, se
               src={(liked) ? likedIcon : heart}
               onClick={(e) => {
                 e.stopPropagation();
-                (liked) ? setLiked(false) : setLiked(true);
                 if (liked) {
-                  unlikePostAPI(postId, () => {});
+                  unlikePostAPI(postId, (success: boolean) => {
+                    if (success) setLiked(false);
+                  });
                 } else {
-                  likePostAPI(postId, () => {});
+                  likePostAPI(postId, (success: boolean) => {
+                    if (success) setLiked(true);
+                  });
                 }
             }}/>
             {likeCount && <p className="text-center text-[14px]">{likeCount}</p>}
