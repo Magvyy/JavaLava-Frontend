@@ -4,7 +4,7 @@ import HeaderActions from "@/features/header-actions/components/HeaderActions";
 
 import { ProfilePic, User } from "@/features/users";
 import type { UserResponse } from "@/shared/types/UserApi";
-import { deletePostAPI } from "../services/deletePostAPI";
+import { deletePostAPI } from "../../../shared/services/posts/deletePostAPI";
 
 
 interface PostHeaderProps {
@@ -31,7 +31,9 @@ export function PostHeader({ postId, onDelete, user, onError, className }: PostH
         <User
           onClick={() => window.location.href = "/user/" + user.id}
           profilePicChild={
-              <ProfilePic/>
+              <ProfilePic
+                user={user}
+              />
           }
           user={user}
         />
