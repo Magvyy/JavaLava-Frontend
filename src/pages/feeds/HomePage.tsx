@@ -40,28 +40,31 @@ export function HomePage() {
 
     const [content, setContent] = useState<string>("")
     const [visible, setVisible] = useState<boolean>(false);
+    const [file, setFile] = useState<File | undefined>(undefined);
 
     return (
-        <Loader state={state} data={posts} className="w-2/5 p-0 min-w-[350px]">
+        <Loader state={state} data={posts}>
             {(posts, spinner) => 
                 <div
                     className="w-full h-full p-5 flex flex-col items-center gap-[20px] min-w-[200px] center-sidebar overflow-auto scrollbar-hide"
                     ref={containerRef}
                 >
                     {authUser && <CreatePost
-                        className="w-1/3 p-0 min-w-[350px]"
+                        className="w-1/3"
                         contentChild={
                             <PostContentCreator
                                 content={content}
                                 setContent={setContent}
-                                submitCallback={() => createPost(content, visible, onCreate)}
+                                submitCallback={() => createPost(content, visible, onCreate, file)}
+                                file={file}
+                                setFile={setFile}
                             />
                         }
                         footerChild={
                             <PostFooterCreator
                                 visible={visible}
                                 setVisible={setVisible}
-                                submitCallback={() => createPost(content, visible, onCreate)}
+                                submitCallback={() => createPost(content, visible, onCreate, file)}
                             />
                         }
                     />}
@@ -70,7 +73,7 @@ export function HomePage() {
                                 key={post.id}
                                 post={post}
                                 onClick={onClickPost}
-                                className="w-1/3 p-0 min-w-[350px]"
+                                className="w-1/3"
                             >
                                 <PostHeader
                                     postId={post.id}
