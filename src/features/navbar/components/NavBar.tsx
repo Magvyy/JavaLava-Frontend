@@ -35,7 +35,7 @@ export function NavBar() {
                 <div className="flex flex-1 justify-end">
                 {(authUser) ? (
                     <>
-                        <NavigationMenuItem className="right-[46px]">
+                        <NavigationMenuItem className="right-[56px]">
                             <Logout/>
                         </NavigationMenuItem>
                         <NavigationMenuItem>

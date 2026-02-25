@@ -15,7 +15,9 @@ export function Comment({ comment }: CommentProps) {
         user={user}
 				onClick={() => window.location.href = "/user/" + user.id}
         profilePicChild={
-          <ProfilePic/>
+          <ProfilePic
+            user={user}
+          />
         }
       />
       <p className="comment-content">{content}</p>

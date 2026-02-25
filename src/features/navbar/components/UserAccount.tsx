@@ -1,6 +1,6 @@
 import type { UserResponse } from "@/shared/types/UserApi";
 
-import user_img from "./assets/user.svg";
+import { ProfilePic } from "@/features/users";
 interface UserAccountProps {
     user: UserResponse
 }
@@ -8,8 +8,11 @@ export function UserAccount({ user }: UserAccountProps) {
     
     
     return (
-        <div className="w-[20px] h-[20px]">
-            <img className="w-[20px] h-[20px]" src={user_img}/>
+        <div className="w-[40px] h-[40px]">
+            <ProfilePic
+                className="w-[40px] h-[40px]"
+                user={user}
+            />
         </div>
     )
 }

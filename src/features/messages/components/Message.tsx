@@ -21,7 +21,9 @@ export function Message({ message, className }: MessageProps) {
         ? <p className={"p-1 border-1 rounded-[10px]" + color}>{message.content}</p>
         :
         <>
-            <ProfilePic/>
+            <ProfilePic
+                user={message.from}
+            />
             <div className="flex flex-col gap-[5px]">
                 <p className="text-[12px]">{message.from.user_name}</p>
                 <p className={"p-1 border-1 rounded-[10px]" + color}>{message.content}</p>

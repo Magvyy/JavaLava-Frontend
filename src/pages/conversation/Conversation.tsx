@@ -47,16 +47,12 @@ export function Conversation() {
 
     return (
         <div className="w-full h-full flex flex-col">
-            <Loader state={friendState} className="p-5 border-b-1">
-                {(user) => 
-                    <ConversationUser
-                        user={user}
-                        className="flex gap-[10px] p-5 border-b-1"
-                    />
-                }
-            </Loader>
+            <ConversationUser
+                userId={Number(id)}
+                className="flex gap-[10px] p-5 border-b-1"
+            />
             <div ref={containerRef} className="p-5 flex-1 flex flex-col gap-[10px] overflow-auto scrollbar-hide">
-                <Loader state={messagesState} data={messages} className="p-5 flex-1">
+                <Loader state={messagesState} data={messages}>
                     {(messages, spinner) =>
                         messages.length !== 0 ? (
                             <>
