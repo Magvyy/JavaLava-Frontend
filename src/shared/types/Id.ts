@@ -1,5 +1,5 @@
 export interface Id {
-    id: Number
+    id: number
 }
 
 export interface Perms extends Id {

@@ -1,3 +1,4 @@
+import type { AttachmentResponse } from "./AttachmentApi"
 import type { Id } from "./Id"
 import type { UserResponse } from "./UserApi"
 
@@ -10,6 +11,7 @@ export interface PostResponse extends Id {
   visible: boolean
   like_count: number
   comment_count: number
+  attachment?: AttachmentResponse
 }
 
 export interface PostRequest {
