@@ -27,10 +27,10 @@ export function SideBarConversation({ message }: SideBarConversationProps) {
                     }}
                 />
             </div>
-            <div className="flex flex-col gap-[5px] w-full">
+            <div className="flex flex-col gap-[5px] w-full flex-1">
                 <p className="flex justify-start items-center">{friendData.user_name}</p>
                 <div className="flex justify-between">
-                    <p className="flex items-center">{message.content}</p>
+                    <p className="flex items-center text-[12px]">{message.content}</p>
                     <p className="flex items-center text-[8px]">{timeSince}</p>
                 </div>
             </div>
