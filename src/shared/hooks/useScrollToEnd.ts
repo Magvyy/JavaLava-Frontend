@@ -26,6 +26,14 @@ export const useScrollToEnd = <T extends Id> (endpoint: string, ref: RefObject<H
         setOffset(data.length);
         lastScrollTime.current = Date.now();
     }
+
+    const updateScrollPosition = (element: HTMLElement) => {
+        if (bottom) {
+            scrollPosition.current = element.scrollTop;
+        } else {
+            previousHeight.current = element.scrollHeight;
+        }
+    }
     
     useEffect(() => {
         if (empty || !ref) return;
@@ -34,6 +42,7 @@ export const useScrollToEnd = <T extends Id> (endpoint: string, ref: RefObject<H
         if (!element) return;
         
         const handleScroll = () => {
+            updateScrollPosition(element);
             if (state.loading) return;
 
             if (bottom) {
@@ -41,13 +50,11 @@ export const useScrollToEnd = <T extends Id> (endpoint: string, ref: RefObject<H
                 const scrollHeight = element.scrollHeight;
                 if ((scrollBottom >= scrollHeight - (offset + 2)) && (Date.now() - lastScrollTime.current) > interval) {
                     update();
-                    scrollPosition.current = element.scrollTop;
                 }
             } else {
                 const scrollTop = element.scrollTop;
                 if (scrollTop <= (offset + 2) && (Date.now() - lastScrollTime.current) > interval) {
                     update();
-                    previousHeight.current = element.scrollHeight;
                 }
             }
         }
