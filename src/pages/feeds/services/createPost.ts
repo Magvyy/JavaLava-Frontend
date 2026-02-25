@@ -1,14 +1,14 @@
-import { createPostAPI } from "@/features/posts/services/createPostAPI";
+import { createPostAPI } from "@/shared/services/posts/createPostAPI";
 import { createPostRequest } from "./createPostRequest";
 import type { PostResponse } from "@/shared/types/PostApi";
 import { displayError } from "@/shared/services/displayError";
 
-export async function createPost(content: string, visible: boolean, onCreate: (post: PostResponse) => void) {
+export async function createPost(content: string, visible: boolean, onCreate: (post: PostResponse) => void, file?: File) {
     if (content.trim().length === 0) {
         displayError("Content is empty.");
         return;
     }
     let postRequest = createPostRequest(null, content, visible);
-    let postResponse = await createPostAPI(postRequest);
+    let postResponse = await createPostAPI(postRequest, file);
     onCreate(postResponse);
 }
