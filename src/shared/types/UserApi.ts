@@ -5,7 +5,7 @@ import type { Id } from "./Id"
 
 export interface UserResponse extends Id {
   user_name: string
-  attachment: AttachmentResponse
+  attachment?: AttachmentResponse
 }
 
 export interface UserRequest extends Id {
