@@ -8,13 +8,12 @@ import type { ProfileUserResponse } from "@/shared/types/UserApi";
 import { useAuth } from "@/contexts/AuthContext";
 
 type Props = {
-    profileUser: ProfileUserResponse;
-    isSelf: boolean;
-    onFriendStatusChange: (status: ProfileUserResponse["friend_status"]) => void;
-    onVisibilityChange: () => void; // reset + refetch posts
+    profileUser: ProfileUserResponse
+    onFriendStatusChange: (status: ProfileUserResponse["friend_status"]) => void
+    onVisibilityChange: () => void // reset + refetch posts
 };
 
-export function FriendActions({ profileUser, isSelf, onFriendStatusChange, onVisibilityChange }: Props) {
+export function FriendActions({ profileUser, onFriendStatusChange, onVisibilityChange }: Props) {
     const [loading, setLoading] = useState(false);
     const { authUser, authState } = useAuth();
     if (!authUser) {
@@ -26,8 +25,6 @@ export function FriendActions({ profileUser, isSelf, onFriendStatusChange, onVis
             </div>
         )
     }
-
-    if (isSelf) return null;
 
     const accept = async () => {
         setLoading(true);

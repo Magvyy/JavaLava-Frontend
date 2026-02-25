@@ -1,14 +1,14 @@
 import { createPostRequest } from "./createPostRequest";
 import type { PostResponse } from "@/shared/types/PostApi";
-import { editPostAPI } from "@/features/posts/services/editPostAPI";
+import { editPostAPI } from "@/shared/services/posts/editPostAPI";
 import { displayError } from "@/shared/services/displayError";
 
-export async function editPost(id: number, content: string, visible: boolean, onEdit: (post: PostResponse) => void) {
+export async function editPost(id: number, content: string, visible: boolean, onEdit: (post: PostResponse) => void, file?: File) {
     if (content.trim().length === 0) {
         displayError("Content is empty.");
         return;
     }
     let postRequest = createPostRequest(id, content, visible);
-    let postResponse = await editPostAPI(postRequest);
+    let postResponse = await editPostAPI(postRequest, file);
     onEdit(postResponse);
 }

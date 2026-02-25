@@ -54,7 +54,7 @@ export function SideBarConversations({  }: SideBarConversationsProps) {
     }, []);
 
     return (
-        <Loader state={state} data={conversations} className="w-full p-4">
+        <Loader state={state} data={conversations}>
             {(conversations) => 
                 <div className="flex flex-col gap-[10px] w-full" ref={containerRef}>
                     {conversations.map(conversation => 

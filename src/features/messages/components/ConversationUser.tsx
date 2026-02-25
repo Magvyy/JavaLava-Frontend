@@ -1,17 +1,27 @@
 import { ProfilePic } from "@/features/users";
-import type { UserResponse } from "@/shared/types/UserApi";
+import { Loader } from "@/shared/components/Loader";
+import { useUser } from "@/shared/hooks/useUser";
 
 
 interface ConversationUserProps {
-    user: UserResponse
+    userId: number
     className?: string
 }
-export function ConversationUser({ user, className }: ConversationUserProps) {
+export function ConversationUser({ userId, className }: ConversationUserProps) {
+    const { state: friendState } = useUser(userId);
     
     return (
         <div className={className ? className : "flex"}>
-            <ProfilePic/>
-            <p>{user.user_name}</p>
+            <Loader state={friendState}>
+                {(user) => 
+                    <>
+                        <ProfilePic
+                            user={user}
+                        />
+                        <p>{user.user_name}</p>
+                    </>
+                }
+            </Loader>
         </div>
     )
 }

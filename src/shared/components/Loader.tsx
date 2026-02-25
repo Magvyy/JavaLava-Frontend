@@ -7,12 +7,11 @@ interface LoaderProps <T> {
     state: ApiState<T>
     data?: T
     children: (data: T, spinner?: ReactNode) => ReactNode
-    className?: string
 }
-export function Loader <T> ({ state, data, children, className }: LoaderProps <T>) {
+export function Loader <T> ({ state, data, children }: LoaderProps <T>) {
 
     const spinner = 
-        <div className={className ? "flex justify-center items-center " + className : "flex justify-center items-center"}>
+        <div className="flex w-full h-full justify-center items-center">
             <TailSpin
                 height="40"
                 width="40"
@@ -37,7 +36,7 @@ export function Loader <T> ({ state, data, children, className }: LoaderProps <T
     if (!result) return null;
 
     if (result.error) return (
-        <div className={className ? "flex w-full h-full justify-center items-center center-sidebar " + className : "flex justify-center items-center"}>
+        <div className="flex w-full h-full justify-center items-center">
             {result.error}
         </div>
     )

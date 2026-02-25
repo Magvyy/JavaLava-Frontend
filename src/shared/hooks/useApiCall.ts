@@ -24,7 +24,7 @@ export const useApiCall = <T> () => {
                 result: undefined
             })
             const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-            await sleep(100)
+            // await sleep(1000)
             const response = (credentials)
                 ? await fetch(env.backend + endpoint, {
                     credentials: "include",

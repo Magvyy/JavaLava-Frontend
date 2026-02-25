@@ -1,6 +1,6 @@
 import { createPostRequest } from "./createPostRequest";
 import type { PostResponse } from "@/shared/types/PostApi";
-import { editPostAPI } from "@/features/posts/services/editPostAPI";
+import { editPostAPI } from "@/shared/services/posts/editPostAPI";
 import { displayError } from "@/shared/services/displayError";
 
 export async function editPost(id: number, content: string, visible: boolean, onEdit: (post: PostResponse) => void) {

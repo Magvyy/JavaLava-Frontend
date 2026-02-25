@@ -1,5 +1,5 @@
 import { ProfilePic, User } from "@/features/users";
-import type { UserResponse } from "@/types/ApiResponses";
+import type { UserResponse } from "@/shared/types/UserApi";
 import type { RefObject } from "react";
 
 
@@ -24,7 +24,9 @@ export function DropDown({ users, open, ref }: DropDownProps) {
                     <User
                         key={user.id}
                         profilePicChild={
-                            <ProfilePic/>
+                            <ProfilePic
+                                user={user}
+                            />
                         }
                         user={user}
                         onClick={() => window.location.href = "/user/" + user.id}

@@ -4,8 +4,8 @@ import "./css/post-footer-reader.css"
 import comment from "../assets/comment.svg";
 import heart from "../assets/heart.svg";
 import likedIcon from "../assets/liked.svg";
-import { likePostAPI } from "../../services/likePostAPI";
-import { unlikePostAPI } from "../../services/unlikePostAPI";
+import { likePostAPI } from "../../../../shared/services/posts/likePostAPI";
+import { unlikePostAPI } from "../../../../shared/services/posts/unlikePostAPI";
 import { CardFooter } from "@/components/ui/card";
 import type { CommentResponse } from "@/shared/types/CommentApi";
 

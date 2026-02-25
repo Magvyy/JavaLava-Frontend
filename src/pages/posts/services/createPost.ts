@@ -1,4 +1,4 @@
-import { createPostAPI } from "@/features/posts/services/createPostAPI";
+import { createPostAPI } from "@/shared/services/posts/createPostAPI";
 import { createPostRequest } from "./createPostRequest";
 import type { PostResponse } from "@/shared/types/PostApi";
 import { displayError } from "@/shared/services/displayError";

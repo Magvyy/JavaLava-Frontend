@@ -33,6 +33,7 @@ export function EditPostPage() {
     })
     const [content, setContent] = useState<string>(post.content)
     const [visible, setVisible] = useState<boolean>(post.visible);
+    const [file, setFile] = useState<File | undefined>(undefined);
     
     useEffect(() => {
         let data = state.result?.data;
@@ -64,12 +65,14 @@ export function EditPostPage() {
                         <PostContentEditor
                             content={content}
                             setContent={setContent}
-                            submitCallback={() => editPost(Number(id), content, visible, onEdit)}
+                            submitCallback={() => editPost(Number(id), content, visible, onEdit, file)}
+                            file={file}
+                            setFile={setFile}
                         />
                         <PostFooterEditor
                             visible={visible}
                             setVisible={setVisible}
-                            submitCallback={() => editPost(Number(id), content, visible, onEdit)}
+                            submitCallback={() => editPost(Number(id), content, visible, onEdit, file)}
                         />
                     </EditPost>
                 </div>
