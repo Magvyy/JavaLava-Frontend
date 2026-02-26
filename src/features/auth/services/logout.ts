@@ -1,8 +1,8 @@
-import env from "@/env/environment.json";
+
 
 export async function logout() {
     try {
-        await fetch(env.backend + "/auth/logout", {
+        await fetch(import.meta.env.VITE_API_URL + "/auth/logout", {
             credentials: "include",
             method: "GET",
             headers: {

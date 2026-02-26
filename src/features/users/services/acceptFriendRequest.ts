@@ -1,7 +1,7 @@
-import env from "@/env/environment.json";
+
 
 export async function acceptFriendRequest(userId: number) {
-    const response = await fetch(env.backend + "/friends/requests/" + userId + "/accept", {
+    const response = await fetch(import.meta.env.VITE_API_URL + "/friends/requests/" + userId + "/accept", {
         credentials: "include",
         method: "POST",
         headers: {

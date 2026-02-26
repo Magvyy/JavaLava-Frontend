@@ -1,6 +1,6 @@
 import type { PostResponse } from "@/shared/types/PostApi";
 import { CardContent } from "@/components/ui/card";
-import env from "@/env/environment.json";
+
 
 interface PostContentReaderProps {
     post: PostResponse,
@@ -14,7 +14,7 @@ export function PostContentReader({ post, className }: PostContentReaderProps) {
             {post.attachment && (
                     <img
                         className="max-w-[300px] max-h-[300px] self-center"
-                        src={env.backend + post.attachment.url}
+                        src={import.meta.env.VITE_API_URL + post.attachment.url}
                     />
                 )
             }

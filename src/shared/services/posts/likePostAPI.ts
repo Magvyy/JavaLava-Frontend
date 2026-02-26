@@ -1,7 +1,7 @@
-import env from "@/env/environment.json";
+
 
 export async function likePostAPI(postId: number, callback: (bool: boolean) => void) {
-    let response = await fetch(env.backend + "/likes/like/post/" + postId, {
+    let response = await fetch(import.meta.env.VITE_API_URL + "/likes/like/post/" + postId, {
             credentials: "include",
             method: "POST",
             headers: {

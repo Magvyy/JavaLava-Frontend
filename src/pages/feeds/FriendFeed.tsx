@@ -28,7 +28,7 @@ export function FriendFeed() {
     }
 
     return (
-        <Loader state={state} data={posts} className="w-2/5 p-0 min-w-[350px]">
+        <Loader state={state} data={posts}>
             {(posts, spinner) => 
                 <div
                     className="w-fit h-full p-5 flex flex-col items-center gap-[20px] min-w-[200px] center-sidebar overflow-auto scrollbar-hide"

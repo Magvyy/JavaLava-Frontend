@@ -1,9 +1,9 @@
 import type { MessageRequest, MessageResponse } from "@/shared/types/MessageApi";
 
-import env from "@/env/environment.json";
+
 
 export async function createMessage(messageRequest: MessageRequest): Promise<MessageResponse>  {
-    let response = await fetch(env.backend + "/messages/" + messageRequest.to_user_id, {
+    let response = await fetch(import.meta.env.VITE_API_URL + "/messages/" + messageRequest.to_user_id, {
         credentials: "include",
         method: "POST",
         headers: {

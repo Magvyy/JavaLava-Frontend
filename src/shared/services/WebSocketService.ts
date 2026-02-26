@@ -1,4 +1,4 @@
-import env from "@/env/environment.json";
+
 import type { Id } from "../types/Id";
 import { Client, type IMessage } from "@stomp/stompjs";
 
@@ -7,7 +7,7 @@ export class WebSocketService <T extends Id> {
 
     constructor(handleData: (data: T) => void, endpoint: string) {
         this.ws = new Client({
-            brokerURL: env.ws + "/websocket",
+            brokerURL: import.meta.env.VITE_API_URL + "/websocket",
             reconnectDelay: 10000,
 
             onConnect: () => {

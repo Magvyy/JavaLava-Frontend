@@ -1,7 +1,7 @@
 import { useState } from "react"
 import type { ApiState } from "../types/ApiResult"
 
-import env from "@/env/environment.json";
+
 
 interface HandleApiResponseProps {
     endpoint: string
@@ -23,10 +23,10 @@ export const useApiCall = <T> () => {
                 loading: true,
                 result: undefined
             })
-            const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+            // const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
             // await sleep(1000)
             const response = (credentials)
-                ? await fetch(env.backend + endpoint, {
+                ? await fetch(import.meta.env.VITE_API_URL + endpoint, {
                     credentials: "include",
                     method: method,
                     headers: {

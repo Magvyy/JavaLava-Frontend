@@ -1,9 +1,9 @@
 import type { CommentRequest, CommentResponse } from "@/shared/types/CommentApi";
 
-import env from "@/env/environment.json";
+
 
 export async function createComment(commentRequest: CommentRequest, addComment: (comment: CommentResponse) => void) {
-    let response = await fetch(env.backend + "/posts/" + commentRequest.post_id + "/comments", {
+    let response = await fetch(import.meta.env.VITE_API_URL + "/posts/" + commentRequest.post_id + "/comments", {
         credentials: "include",
         method: "POST",
         headers: {

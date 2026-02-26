@@ -2,8 +2,11 @@ services:
   app:
     build:
       context: .
+      dockerfile: Dockerfile
     restart: unless-stopped
     profiles: ["prod"]
+    environment:
+      VITE_API_URL: ${VITE_API_URL}
 
   app-dev:
     build:
@@ -16,3 +19,19 @@ services:
       - /app/node_modules
     restart: unless-stopped
     profiles: ["dev"]
+    environment:
+      VITE_API_URL: http://localhost:8081
+
+  app-local:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    restart: unless-stopped
+    profiles: ["local"]
+    environment:
+      VITE_API_URL: https://avenly-backend-app.azurewebsites.net
