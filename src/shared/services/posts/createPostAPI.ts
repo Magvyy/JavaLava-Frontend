@@ -1,6 +1,6 @@
 import type { PostRequest } from "@/shared/types/PostApi";
 
-import env from "@/env/environment.json";
+
 import { displayError } from "@/shared/services/displayError";
 
 export async function createPostAPI(post: PostRequest, file?: File) {
@@ -10,7 +10,7 @@ export async function createPostAPI(post: PostRequest, file?: File) {
 
     if (file) formData.append("attachment", file);
 
-    let response = await fetch(env.backend + "/posts", {
+    let response = await fetch(import.meta.env.VITE_API_URL + "/posts", {
             credentials: "include",
             method: "POST",
             headers: {

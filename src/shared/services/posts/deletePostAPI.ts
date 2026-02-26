@@ -1,9 +1,9 @@
-import env from "@/env/environment.json";
+
 import { displayError } from "@/shared/services/displayError";
 
 export async function deletePostAPI(id: number) {
     const response = await
-        fetch(env.backend + "/posts/" + id, {
+        fetch(import.meta.env.VITE_API_URL + "/posts/" + id, {
             credentials: "include",
             method: "DELETE",
             headers: {

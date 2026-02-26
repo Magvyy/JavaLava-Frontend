@@ -1,9 +1,9 @@
-import env from "@/env/environment.json";
+
 
 export const declineFriendRequest = async (userId: number): Promise<boolean> => {
     try {
         const res = await fetch(
-            env.backend + `/friends/requests/${userId}`,
+            import.meta.env.VITE_API_URL + `/friends/requests/${userId}`,
             {
                 method: "DELETE",
                 credentials: "include",

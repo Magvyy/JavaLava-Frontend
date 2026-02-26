@@ -1,4 +1,4 @@
-import env from "@/env/environment.json";
+
 import { displayError } from "@/shared/services/displayError";
 import type { UserRequest } from "@/shared/types/UserApi";
 
@@ -11,7 +11,7 @@ export async function updateProfileApi(user: UserRequest, file?: File) {
 
     if (file) formData.append("attachment", file);
 
-    let response = await fetch(env.backend + "/users/" + user.id, {
+    let response = await fetch(import.meta.env.VITE_API_URL + "/users/" + user.id, {
             credentials: "include",
             method: "PUT",
             headers: {

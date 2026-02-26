@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 
-import env from "@/env/environment.json";
+
 
 export default function Secret() {
   const [secret, setSecret] = useState("Hi, it is not me, the not secret.")
 
   useEffect(() => {
-    fetch(env.backend + "/secret", {
+    fetch(import.meta.env.VITE_API_URL + "/secret", {
       credentials: "include",
       method: "GET",
       headers: {
