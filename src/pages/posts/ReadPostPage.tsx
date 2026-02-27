@@ -31,7 +31,7 @@ export function ReadPostPage() {
     }
 
     return (
-            <Loader state={postState}>
+        <Loader state={postState}>
             {(post) =>
                 <div className="center-sidebar w-1/2 p-5">
                     <ReadPost post={post} className="w-full p-0 min-w-[350px]">
