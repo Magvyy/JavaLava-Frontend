@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     env:
-      REACT_APP_API_URL: ${{ secrets.VITE_API_URL }}
+      VITE_API_URL: ${{ secrets.VITE_API_URL }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -32,7 +32,7 @@ jobs:
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
           app_location: "/" # App source code path
           api_location: "" # Api source code path - optional
-          output_location: "build" # Built app content directory - optional
+          output_location: "dist" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
@@ -46,4 +46,5 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_WONDERFUL_WATER_0C284DD03 }}
           action: "close"
+
 
