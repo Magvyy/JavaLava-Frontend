@@ -9,8 +9,8 @@ export const useAuthenticate = (endpoint: string) => {
     const { state, handleApiCall } = useApiCall<string>()
 
     function isValidUsername(username: string) {
-        const forbidden = /[\u200E\u200F\u202A-\u202E\u2060-\u206F]/;
-        return !forbidden.test(username);
+        const forbidden = /[\u200B\u200E\u200F\u202A-\u202E\u2060-\u206F]/;
+        return !forbidden.test(username) && username.replace("\t", "").replace("\n", "").trim().length == 0;
     }
 
     const authenticate = () => {
