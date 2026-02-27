@@ -14,7 +14,7 @@ interface PostHeaderProps {
   onError?: ((message: string) => void) | null
   className?: string
 }
-export function PostHeader({ postId, onDelete, user, onError, className }: PostHeaderProps) {
+export function PostHeader({ postId, onDelete, user, className }: PostHeaderProps) {
 
   const editPostRedirect = () => {
     window.location.href = "/posts/edit/" + postId;

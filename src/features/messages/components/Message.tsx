@@ -1,5 +1,5 @@
 import { useAuth } from "@/contexts/AuthContext";
-import { ProfilePic, User } from "@/features/users";
+import { ProfilePic } from "@/features/users";
 import type { MessageResponse } from "@/shared/types/MessageApi";
 
 
@@ -10,7 +10,7 @@ interface MessageProps {
 }
 
 export function Message({ message, className }: MessageProps) {
-    const { authUser, authState } = useAuth();
+    const { authUser } = useAuth();
     if (!authUser) return null;
 
     const isSender = authUser.id === message.from.id

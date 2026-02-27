@@ -22,7 +22,7 @@ interface HeaderActionProps {
     deletePost: () => void
 }
 export default function HeaderActions({ postId, editPostRedirect, deletePost }: HeaderActionProps) {
-    const { authUser, authState } = useAuth();
+    const { authState } = useAuth();
     if (!authState.result?.data) return;
     const [perms, setPerms] = useState<Perms | undefined>(undefined);
 

@@ -48,9 +48,7 @@ export function PostFooterReader({ postId, likeCount, commentCount, comments, se
             <img
               className="w-[25px] h-[25px]"
               src={comment}
-              onClick={(e) => {
-              // e.stopPropagation();
-            }}/>
+            />
             {commentCount && <p className="text-center text-[14px]">{commentCount}</p>}
           </div>
         </div>

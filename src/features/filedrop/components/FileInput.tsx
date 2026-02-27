@@ -1,13 +1,12 @@
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
+import { Field, FieldDescription } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 
 interface FileInputProps {
-  file?: File
   setFile: (value: File | undefined) => void
   description?: string
   className?: string
 }
-export function FileInput({ file, setFile, description, className }: FileInputProps) {
+export function FileInput({ setFile, description, className }: FileInputProps) {
   return (
     <Field className={className}>
       <FieldDescription>{description ? description : "Select a picture to upload."}</FieldDescription>

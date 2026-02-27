@@ -37,7 +37,6 @@ export function PostContentEditor({ submitCallback, content, setContent, file, s
                 />
                 <FileInput
                     className="w-full h-full flex text-center gap-[5px]"
-                    file={file}
                     setFile={setFile}
                 />
             </form>

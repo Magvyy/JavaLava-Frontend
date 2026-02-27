@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type MouseEvent } from "react";
+import { useRef, useState, type MouseEvent } from "react";
 import { useParams } from "react-router-dom";
 import { useScrollToEnd } from "@/shared/hooks/useScrollToEnd";
 import { useProfileUser } from "./hooks/useProfileUser";
@@ -14,13 +14,13 @@ import { Loader } from "@/shared/components/Loader";
 import { FileInput } from "@/features/filedrop/components/FileInput";
 import { Button } from "@/components/ui/button";
 import { updateProfileApi } from "@/shared/services/users/updateProfileApi";
-import type { ProfileUserResponse, UserRequest, UserResponse } from "@/shared/types/UserApi";
+import type { ProfileUserResponse, UserRequest } from "@/shared/types/UserApi";
 
 export function UserPage() {
 	const { userId } = useParams();
 	const profileId = Number(userId);
 	
-    const { authUser, authState } = useAuth();
+    const { authUser } = useAuth();
 	const authUserId = (authUser) ? authUser.id : null
 
 	const isSelf = authUserId != null && authUserId === profileId;
@@ -85,7 +85,6 @@ export function UserPage() {
 							<>
 								<FileInput
 									className="w-full h-full flex text-center gap-[5px]"
-									file={file}
 									setFile={setFile}
 									description="Upload profile picture"
 								/>

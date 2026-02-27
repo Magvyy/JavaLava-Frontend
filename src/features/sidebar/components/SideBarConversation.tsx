@@ -10,7 +10,7 @@ interface SideBarConversationProps {
 }
 
 export function SideBarConversation({ message }: SideBarConversationProps) {
-    const { authUser, authState } = useAuth();
+    const { authUser } = useAuth();
     if (!authUser) return null;
 
     const friendData = (authUser.id === message.from.id) ? message.to : message.from;

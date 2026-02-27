@@ -13,7 +13,7 @@ import { SearchBar } from "@/features/searchbar";
 
 
 export function NavBar() {
-    const { authUser, authState } = useAuth();
+    const { authUser } = useAuth();
 
     return (
         <NavigationMenu className="w-full max-w-full h-[68px] border-b flex-0" id="navbar">

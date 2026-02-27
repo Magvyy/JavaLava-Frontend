@@ -7,7 +7,7 @@ interface CommentProps {
   comment: CommentResponse
 }
 export function Comment({ comment }: CommentProps) {
-  const { id, user, content, published, post_id } = comment;
+  const { user, content } = comment;
   
   return (
     <div className="w-full flex flex-col items-start gap-[5px]">
