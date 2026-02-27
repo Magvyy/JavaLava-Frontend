@@ -56,7 +56,7 @@ export function EditPostPage() {
         <Loader state={state}>
             {(post) => 
                 <div className="center-sidebar w-1/2 p-5">
-                    <EditPost>
+                    <EditPost className="w-full p-0 min-w-[350px]">
                         <PostHeader
                             postId={post.id}
                             onDelete={onDelete}
