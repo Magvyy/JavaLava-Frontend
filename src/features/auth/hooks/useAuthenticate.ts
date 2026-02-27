@@ -8,7 +8,16 @@ export const useAuthenticate = (endpoint: string) => {
     const [password, setPassword] = useState<string>("")
     const { state, handleApiCall } = useApiCall<string>()
 
+    function isValidUsername(username: string) {
+        const forbidden = /[\u200E\u200F\u202A-\u202E\u2060-\u206F]/;
+        return !forbidden.test(username);
+    }
+
     const authenticate = () => {
+        if (!isValidUsername(username)) {
+            displayError("Don't try to register with an invisible name or you'll get banned!!!");
+            return;
+        }
         handleApiCall({
             credentials: true,
             endpoint: endpoint,
