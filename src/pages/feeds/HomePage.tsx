@@ -14,6 +14,8 @@ import { createPost } from "./services/createPost";
 export function HomePage() {
     const { authUser } = useAuth();
 
+    console.log(import.meta.env.VITE_API_URL);
+
     const containerRef = useRef<HTMLDivElement>(null);
     const { data: posts, setData: setPosts, state } = useScrollToEnd<PostResponse>(
         "/posts/all",
