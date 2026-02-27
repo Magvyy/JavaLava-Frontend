@@ -7,7 +7,7 @@ interface AppSideBarProps {
 }
 
 export function AppSideBar({  }: AppSideBarProps) {
-    const { authUser, authState } = useAuth();
+    const { authUser } = useAuth();
 
     const conversations = (!authUser)
     ? (

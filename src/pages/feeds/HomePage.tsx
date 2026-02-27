@@ -12,7 +12,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { createPost } from "./services/createPost";
 
 export function HomePage() {
-    const { authUser, authState } = useAuth();
+    const { authUser } = useAuth();
 
     const containerRef = useRef<HTMLDivElement>(null);
     const { data: posts, setData: setPosts, state } = useScrollToEnd<PostResponse>(

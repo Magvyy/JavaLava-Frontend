@@ -7,7 +7,7 @@ interface EditPostProps {
   className?: string
   children: ReactNode
 }
-export function EditPost({ onError, className, children}: EditPostProps) {
+export function EditPost({ className, children}: EditPostProps) {
 
   return (
     <Card className={className ? className + " p-0 min-w-[350px] gap-[5px]" : "w-2/5 p-0 min-w-[350px] gap-[5px]"}>

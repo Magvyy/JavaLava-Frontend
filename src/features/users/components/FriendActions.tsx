@@ -15,7 +15,7 @@ type Props = {
 
 export function FriendActions({ profileUser, onFriendStatusChange, onVisibilityChange }: Props) {
     const [loading, setLoading] = useState(false);
-    const { authUser, authState } = useAuth();
+    const { authUser } = useAuth();
     if (!authUser) {
         return (
             <div className="flex justify-center">

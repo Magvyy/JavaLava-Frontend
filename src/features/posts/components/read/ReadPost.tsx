@@ -11,7 +11,7 @@ interface ReadPostProps {
   children: ReactNode
   className?: string
 }
-export function ReadPost({ post, onError, onClick, children, className }: ReadPostProps) {
+export function ReadPost({ post, onClick, children, className }: ReadPostProps) {
   return  (
       <Card className={className ? className + " p-0 min-w-[350px] gap-[5px]" : "w-2/5 p-0 min-w-[350px] gap-[5px]"} onClick={() => {onClick ? onClick(post) : {}}}>
         {children}

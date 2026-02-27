@@ -1,6 +1,5 @@
 import { ConversationUser } from "@/features/messages/components/ConversationUser";
 import { Loader } from "@/shared/components/Loader";
-import { useUser } from "@/shared/hooks/useUser";
 import { useParams } from "react-router-dom";
 import { Message } from "@/features/messages";
 import { MessageSender } from "@/features/messages/components/MessageSender";
@@ -14,10 +13,8 @@ export function Conversation() {
     const { id } = useParams<{ id: string }>();
     if (id === undefined) window.location.href = "/"
 
-    const { authUser, authState } = useAuth();
+    const { authUser } = useAuth();
     if (authUser && Number(id) == authUser.id) window.location.href = "/";
-
-    const { state: friendState } = useUser(Number(id));
 
     const containerRef = useRef<HTMLDivElement>(null);
     const { data: messages, setData: setMessages, state: messagesState } = useScrollToEnd<MessageResponse>(

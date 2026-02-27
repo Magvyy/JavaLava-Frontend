@@ -13,7 +13,7 @@ interface SideBarConversationsProps {
 }
 
 export function SideBarConversations({  }: SideBarConversationsProps) {
-    const { authUser, authState } = useAuth();
+    const { authUser } = useAuth();
 
     if (!authUser) return;
     
